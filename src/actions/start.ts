@@ -7,6 +7,7 @@ import Timer from '../utils/timer';
 import coloredString from '../utils/coloredString';
 import { build } from './build';
 import { getPath } from '../utils/getPath';
+import startWatchingDirs from '../utils/startWatchingDirs';
 
 export async function start() {
 
@@ -52,11 +53,7 @@ export async function start() {
     if (config.openBrowser) {
       open(hostURLHTTP);
     }
-    if (process.env.DISABLE_WATCH === 'false') {
-      import('../utils/startWatchingDirs').then(startWatchingDirs => {
-        startWatchingDirs.default(sendRefresh);
-      })
-    }
+    startWatchingDirs(sendRefresh);
   });
 
   const wsServer = new WebSocketServer({
