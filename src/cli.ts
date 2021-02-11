@@ -18,12 +18,17 @@ export async function cli() {
     .option('env', {
       type: 'string'
     })
+    .option('disable-watch', {
+      type: 'boolean',
+      default: false
+    })
     .help()
     .alias('help', 'h')
     .argv;
 
 
   process.env.NODE_ENV = args.env || (args.build ? 'PRODUCTION' : 'DEVELOPMENT');
+  process.env.DISABLE_WATCH = args['disable-watch'].toString();
 
   console.log(coloredString(`  Running in ${process.env.NODE_ENV} mode`));
   if (args.start) {
