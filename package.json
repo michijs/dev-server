@@ -1,0 +1,49 @@
+{
+  "name": "@lsegurado/ls-server",
+  "license": "MIT",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lsegurado/ls-server.git"
+  },
+  "main": "bin/index",
+  "bin": {
+    "ls-server": "./bin/index.js"
+  },
+  "description": "Development server based on esBuild",
+  "files": [
+    "bin/"
+  ],
+  "baseUrl": "./src",
+  "scripts": {
+    "build": "tsc",
+    "link": "tsc && npm link --force && tsc -w",
+    "publish-patch-version": "npm version patch && npm run publish-npm",
+    "publish-npm": "npm run build && npm publish --access public",
+    "lint": "eslint --fix src/**/*{.ts,.tsx}"
+  },
+  "eslintConfig": {
+    "extends": "ls-element"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.25",
+    "@types/yargs": "^16.0.0",
+    "@types/websocket": "^1.0.1",
+    "eslint": "^7.19.0",
+    "eslint-config-ls-element": "0.0.1"
+  },
+  "dependencies": {
+    "@lsegurado/ls-convert-css-to-js-module": "0.0.25",
+    "esbuild": "^0.8.43",
+    "husky": "^5.0.9",
+    "open": "^7.4.0",
+    "typescript": "^4.1.4",
+    "websocket": "^1.0.33",
+    "yargs": "^16.2.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  }
+}
