@@ -15,12 +15,8 @@ function startWatchingDirs(onChangeCallback?: Function) {
         }, 1000);
       });
     });
-  } catch (e) {
-    if (e.code == 'ERR_FEATURE_UNAVAILABLE_ON_PLATFORM') {
-      console.log('  Watching dirs is not supported in this operating system');
-    } else {
-      throw e;
-    }
+  } catch {
+    console.log('  Watching dirs is not supported in this operating system');
   }
 }
 
