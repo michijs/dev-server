@@ -1,6 +1,6 @@
 import { BuildOptions } from 'esbuild';
 
-type LsConfig = {
+export type LsConfig = {
     hostname: string;
     port: number;
     publicPath: string;
