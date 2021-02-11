@@ -6,7 +6,6 @@ import { config, hostURLHTTP, localURLHTTP, linkedPackages } from '../config/con
 import Timer from '../utils/timer';
 import coloredString from '../utils/coloredString';
 import { build } from './build';
-import startWatchingDirs from '../utils/startWatchingDirs';
 import { getPath } from '../utils/getPath';
 
 export async function start() {
@@ -53,7 +52,11 @@ export async function start() {
     if (config.openBrowser) {
       open(hostURLHTTP);
     }
-    startWatchingDirs(sendRefresh);
+    if (process.env.DISABLE_WATCH === 'false') {
+      import('../utils/startWatchingDirs').then(startWatchingDirs => {
+        startWatchingDirs.default(sendRefresh);
+      })
+    }
   });
 
   const wsServer = new WebSocketServer({
