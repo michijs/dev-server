@@ -1,5 +1,5 @@
 import { config } from '../config/config';
-import { build as esbuild } from 'esbuild';
+import { build as esbuild, WatchMode } from 'esbuild';
 import fs from 'fs';
 import Timer from '../utils/timer';
 import coloredString from '../utils/coloredString';
@@ -10,8 +10,22 @@ export function build(callback?: Function) {
   timer.startTimer();
   fs.rmdirSync(config.esbuildOptions.outdir, { recursive: true });
 
+  const configWatch = config.esbuildOptions.watch;
+
+  const watch: boolean | WatchMode = callback ? {
+    onRebuild: (error, result) => {
+      callback();
+      if (configWatch && typeof configWatch !== 'boolean') {
+        configWatch.onRebuild(error, result)
+      }
+      if (!error) {
+        console.log(coloredString(`  Rebuild finished`));
+      }
+    }
+  } : configWatch;
+
   return new Promise((resolve) =>
-    esbuild(config.esbuildOptions).then(() => {
+    esbuild({ ...config.esbuildOptions, watch }).then(() => {
       copy(config.publicPath, config.esbuildOptions.outdir);
       if (callback) {
         callback();

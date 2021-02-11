@@ -7,7 +7,7 @@ import Timer from '../utils/timer';
 import coloredString from '../utils/coloredString';
 import { build } from './build';
 import { getPath } from '../utils/getPath';
-import startWatchingDirs from '../utils/startWatchingDirs';
+// import startWatchingDirs from '../utils/startWatchingDirs';
 
 export async function start() {
 
@@ -26,7 +26,8 @@ export async function start() {
     });
   };
 
-  await build();
+  // await build();
+  await build(sendRefresh);
 
   const server = http.createServer((req, res) => {
     try {
@@ -53,7 +54,7 @@ export async function start() {
     if (config.openBrowser) {
       open(hostURLHTTP);
     }
-    startWatchingDirs(sendRefresh);
+    // startWatchingDirs(sendRefresh);
   });
 
   const wsServer = new WebSocketServer({
