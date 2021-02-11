@@ -16,7 +16,7 @@ export const DEFAULT_CONFIG: LsConfig = {
   openBrowser: true,
   watchLinkedPackages: true,
   esbuildOptions: {
-    inject: process.env.NODE_ENV === 'PRODUCTION' ? [getPath(`${__dirname}/public/client.js`)] : [],
+    inject: process.env.NODE_ENV === 'DEVELOPMENT' ? [getPath(`${__dirname}/public/client.js`)] : [],
     outdir: 'build',
     define: {
       'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`
