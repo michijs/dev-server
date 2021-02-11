@@ -1,14 +1,14 @@
 {
   "name": "@lsegurado/ls-server",
   "license": "MIT",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "repository": {
     "type": "git",
     "url": "https://github.com/lsegurado/ls-server.git"
   },
   "main": "bin/index",
   "bin": {
-    "ls-server": "./bin/index.js"
+    "ls-server": "bin/index.js"
   },
   "description": "Development server based on esBuild",
   "files": [
