@@ -7,14 +7,10 @@ export const DEFAULT_CONFIG: LsConfig = {
   hostname: '127.0.0.1',
   port: 3000,
   publicPath: 'public',
-  watchDir: [
-    'src',
-    'public'
-  ],
   tsconfigPath: 'tsconfig.json',
   importCssAsCSSStyleSheet: true,
   openBrowser: true,
-  watchLinkedPackages: true,
+  showLinkedPackages: true,
   esbuildOptions: {
     inject: process.env.NODE_ENV === 'DEVELOPMENT' ? [getPath(`${__dirname}/public/client.js`)] : [],
     outdir: 'build',

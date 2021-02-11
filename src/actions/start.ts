@@ -2,21 +2,16 @@ import http from 'http';
 import fs from 'fs';
 import { server as WebSocketServer } from 'websocket';
 import open from 'open';
-import { config, hostURLHTTP, localURLHTTP, linkedPackages } from '../config/config';
+import { config, hostURLHTTP, localURLHTTP } from '../config/config';
 import Timer from '../utils/timer';
 import coloredString from '../utils/coloredString';
 import { build } from './build';
 import { getPath } from '../utils/getPath';
-// import startWatchingDirs from '../utils/startWatchingDirs';
 
 export async function start() {
 
   const timer = new Timer();
   timer.startTimer();
-
-  linkedPackages.forEach((path) => {
-    console.log(coloredString(`  Linked package found at "${path}"`));
-  });
 
   let connections = [];
 
@@ -26,7 +21,6 @@ export async function start() {
     });
   };
 
-  // await build();
   await build(sendRefresh);
 
   const server = http.createServer((req, res) => {
@@ -54,7 +48,6 @@ export async function start() {
     if (config.openBrowser) {
       open(hostURLHTTP);
     }
-    // startWatchingDirs(sendRefresh);
   });
 
   const wsServer = new WebSocketServer({

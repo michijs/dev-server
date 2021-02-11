@@ -4,11 +4,10 @@ export type LsConfig = {
     hostname: string;
     port: number;
     publicPath: string;
-    watchDir: string[];
     tsconfigPath: string;
     importCssAsCSSStyleSheet: boolean;
     openBrowser: boolean;
-    watchLinkedPackages: boolean;
+    showLinkedPackages: boolean;
     esbuildOptions: BuildOptions
 }
 

@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { LsConfig } from '../types';
+import coloredString from '../utils/coloredString';
 import { getPath } from '../utils/getPath';
 import { DEFAULT_CONFIG } from './constants';
 import { userConfig } from './userConfig';
@@ -28,8 +29,6 @@ const config: LsConfig = {
 const hostURLHTTP = `http://${config.hostname}:${config.port}`;
 const localURLHTTP = `http://localhost:${config.port}`;
 
-const linkedPackages = [];
-
 function findSymbolickLinkRealPath(path) {
   if (fs.lstatSync(path).isSymbolicLink()) {
     return findSymbolickLinkRealPath(fs.readlinkSync(path));
@@ -38,7 +37,7 @@ function findSymbolickLinkRealPath(path) {
     
 }
 
-if (config.watchLinkedPackages) {
+if (config.showLinkedPackages) {
   const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
   const dependencies = Object.keys(packageJson.dependencies || {});
   const devDependencies = Object.keys(packageJson.devDependencies || {});
@@ -47,10 +46,9 @@ if (config.watchLinkedPackages) {
     const packagePathOnNodeModules = getPath(`node_modules/${packagePath}`);
     if (fs.lstatSync(packagePathOnNodeModules).isSymbolicLink()) {
       const pathToWatch = findSymbolickLinkRealPath(packagePathOnNodeModules);
-      linkedPackages.push(pathToWatch);
-      config.watchDir.push(pathToWatch);
+      console.log(coloredString(`  Linked package found at "${pathToWatch}"`));
     }
   });
 }
 
-export { config, hostURLHTTP, localURLHTTP, linkedPackages };
+export { config, hostURLHTTP, localURLHTTP };
