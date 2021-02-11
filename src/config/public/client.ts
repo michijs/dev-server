@@ -1,7 +1,8 @@
 import { w3cwebsocket as WebSocketClient } from 'websocket';
 
 const connect = () => {
-  const hostURLWS = `ws://${location.hostname}:${location.port}`;
+  const protocol = location.protocol === 'http:' ? 'ws': 'wss';
+  const hostURLWS = `${protocol}://${location.hostname}:${location.port}`;
   const client = new WebSocketClient(hostURLWS, 'echo-protocol');
 
   client.onerror = function () {
