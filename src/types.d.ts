@@ -1,4 +1,4 @@
-import { BuildOptions } from "esbuild";
+import { BuildOptions } from 'esbuild';
 
 type LsConfig = {
     hostname: string;

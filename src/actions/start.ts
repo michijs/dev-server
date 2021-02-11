@@ -15,16 +15,16 @@ export async function start() {
   timer.startTimer();
 
   linkedPackages.forEach((path) => {
-    console.log(coloredString(`  Linked package found at "${path}"`))
-  })
+    console.log(coloredString(`  Linked package found at "${path}"`));
+  });
 
   let connections = [];
 
   const sendRefresh = () => {
     connections.forEach(connection => {
       connection.sendUTF('refresh');
-    })
-  }
+    });
+  };
 
   await build();
 
@@ -40,7 +40,7 @@ export async function start() {
     } catch (ex) {
       res.statusCode = 404;
     }
-  })
+  });
   server.listen(config.port, config.hostname, () => {
     console.log(`
   LS-Server running at:
@@ -61,10 +61,10 @@ export async function start() {
     autoAcceptConnections: false
   });
 
-  wsServer.on('request', function (request) {
+  wsServer.on('request', (request) => {
     const connection = request.accept('echo-protocol', request.origin);
     connections.push(connection);
-    connection.on('close', function () {
+    connection.on('close', () => {
       connections = connections.filter(x => x !== connection);
     });
   });

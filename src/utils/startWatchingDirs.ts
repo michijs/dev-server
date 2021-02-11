@@ -12,8 +12,8 @@ function startWatchingDirs(onChangeCallback?: Function) {
       setTimeout(() => {
         watching = false;
       }, 1000);
-    })
-  })
+    });
+  });
 }
 
 export default startWatchingDirs;

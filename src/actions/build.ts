@@ -6,20 +6,20 @@ import coloredString from '../utils/coloredString';
 import { copy } from '../utils/copy';
 
 export function build(callback?: Function) {
-    const timer = new Timer();
-    timer.startTimer();
-    fs.rmdirSync(config.esbuildOptions.outdir, { recursive: true });
+  const timer = new Timer();
+  timer.startTimer();
+  fs.rmdirSync(config.esbuildOptions.outdir, { recursive: true });
 
-    return new Promise((resolve) =>
-        esbuild(config.esbuildOptions).then(() => {
-            copy(config.publicPath, config.esbuildOptions.outdir);
-            if (callback) {
-                callback();
-            }
-            console.log(coloredString(`  Build finished in ${timer.endTimer()}ms`));
-            resolve(true);
-        }).catch(() => {
-            return Promise.resolve();
-        })
-    )
+  return new Promise((resolve) =>
+    esbuild(config.esbuildOptions).then(() => {
+      copy(config.publicPath, config.esbuildOptions.outdir);
+      if (callback) {
+        callback();
+      }
+      console.log(coloredString(`  Build finished in ${timer.endTimer()}ms`));
+      resolve(true);
+    }).catch(() => {
+      return Promise.resolve();
+    })
+  );
 }
