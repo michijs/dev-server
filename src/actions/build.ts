@@ -16,11 +16,11 @@ export function build(callback?: Function) {
   let firstTime = true;
   const watch: boolean | WatchMode = callback ? {
     onRebuild: (error, result) => {
-      callback();
-      if (configWatch && typeof configWatch !== 'boolean') {
-        configWatch.onRebuild(error, result)
-      }
       if (!error && !firstTime) {
+        callback();
+        if (configWatch && typeof configWatch !== 'boolean') {
+          configWatch.onRebuild(error, result)
+        }
         console.log(coloredString(`  Rebuild finished`));
       }
       firstTime = false;
