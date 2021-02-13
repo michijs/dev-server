@@ -5,6 +5,7 @@ import { config, hostURLHTTP, localURLHTTP } from '../config/config';
 import coloredString from '../utils/coloredString';
 import { build } from './build';
 import { getPath } from '../utils/getPath';
+import open from 'open';
 
 export const start = () => new Promise(async resolve => {
   let connections = [];
@@ -15,7 +16,7 @@ export const start = () => new Promise(async resolve => {
     });
   };
 
-  await build(sendRefresh);
+  const buildPromise = build(sendRefresh);
 
   const server = http.createServer((req, res) => {
     try {
@@ -36,11 +37,12 @@ export const start = () => new Promise(async resolve => {
   
   > Network:  ${coloredString(hostURLHTTP)}
   > Local:    ${coloredString(localURLHTTP)}`);
-    if (config.openBrowser) {
-      const open = await import('open');
-      open.default(hostURLHTTP);
-    }
-    resolve(true);
+    buildPromise.then(() => {
+      if (config.openBrowser) {
+        open(hostURLHTTP);
+      }
+      resolve(true);
+    })
   });
 
   const wsServer = new WebSocketServer({

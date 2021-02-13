@@ -29,16 +29,16 @@ export async function cli() {
 
   console.log(coloredString(`  Running in ${process.env.NODE_ENV} mode`));
   if (args.start) {
-    const start = await import('./actions/start');
-    await start.start();
+    const action = await import('./actions/start');
+    await action.start();
   }
   if (args.build) {
-    const build = await import('./actions/build');
-    await build.build();
+    const action = await import('./actions/build');
+    await action.build();
   }
   if (args.dist) {
-    const dist = await import('./actions/dist');
-    dist.dist();
+    const action = await import('./actions/dist');
+    action.dist();
   }
   console.log(`
   ${coloredString(`Ready in ${timer.endTimer()}ms.`)}`)
