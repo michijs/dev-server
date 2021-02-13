@@ -1,6 +1,9 @@
 import coloredString from './utils/coloredString';
 import * as yargs from 'yargs';
+import Timer from './utils/timer';
 export async function cli() {
+  const timer = new Timer();
+  timer.startTimer();
 
   const args = yargs
     .option('start', {
@@ -27,15 +30,16 @@ export async function cli() {
   console.log(coloredString(`  Running in ${process.env.NODE_ENV} mode`));
   if (args.start) {
     const start = await import('./actions/start');
-    start.start();
+    await start.start();
   }
   if (args.build) {
     const build = await import('./actions/build');
-    build.build();
+    await build.build();
   }
   if (args.dist) {
     const dist = await import('./actions/dist');
     dist.dist();
   }
-
+  console.log(`
+  ${coloredString(`Ready in ${timer.endTimer()}ms.`)}`)
 }

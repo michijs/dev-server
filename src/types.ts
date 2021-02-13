@@ -1,9 +1,15 @@
 import { BuildOptions } from 'esbuild';
 
+export type PublicOptions = {
+    path: string;
+    indexName: string;
+    minifyIndex: boolean;
+}
+
 export type LsConfig = {
     hostname: string;
     port: number;
-    publicPath: string;
+    public: PublicOptions;
     tsconfigPath: string;
     importCssAsCSSStyleSheet: boolean;
     openBrowser: boolean;
@@ -11,4 +17,10 @@ export type LsConfig = {
     esbuildOptions: BuildOptions
 }
 
-export type LsServerConfig = (environment: string) => Partial<LsConfig>;
+type DeepPartial<T> = {
+    [P in keyof T]?: DeepPartial<T[P]>;
+};
+
+export type UserConfig = Omit<DeepPartial<LsConfig>, 'esbuildOptions'> & { esbuildOptions?: BuildOptions };
+
+export type LsServerConfig = (environment: string) => UserConfig;

@@ -8,6 +8,10 @@ import { userConfig } from './userConfig';
 const config: LsConfig = {
   ...DEFAULT_CONFIG,
   ...userConfig,
+  public: {
+    ...DEFAULT_CONFIG.public,
+    ...(userConfig.public || {}),
+  },
   esbuildOptions: {
     ...DEFAULT_CONFIG.esbuildOptions,
     ...userConfig.esbuildOptions,

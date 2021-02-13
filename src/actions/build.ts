@@ -1,9 +1,10 @@
 import { config } from '../config/config';
 import { build as esbuild, WatchMode } from 'esbuild';
 import fs from 'fs';
-import Timer from '../utils/timer';
 import coloredString from '../utils/coloredString';
 import { copy } from '../utils/copy';
+import { minifyHTML } from '../utils/minifyHTML';
+import Timer from '../utils/timer';
 
 export function build(callback?: Function) {
   const timer = new Timer();
@@ -28,7 +29,13 @@ export function build(callback?: Function) {
 
   return new Promise((resolve) =>
     esbuild({ ...config.esbuildOptions, watch }).then(() => {
-      copy(config.publicPath, config.esbuildOptions.outdir);
+      const indexTranformer = config.public.minifyIndex ? (fileName: string, fileContent: string) => {
+        if (fileName === config.public.indexName) {
+          return minifyHTML(fileContent);
+        }
+        return fileContent;
+      } : undefined;
+      copy(config.public.path, config.esbuildOptions.outdir, indexTranformer);
       if (callback) {
         callback();
       }

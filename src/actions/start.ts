@@ -1,18 +1,12 @@
 import http from 'http';
 import fs from 'fs';
 import { server as WebSocketServer } from 'websocket';
-import open from 'open';
 import { config, hostURLHTTP, localURLHTTP } from '../config/config';
-import Timer from '../utils/timer';
 import coloredString from '../utils/coloredString';
 import { build } from './build';
 import { getPath } from '../utils/getPath';
 
-export async function start() {
-
-  const timer = new Timer();
-  timer.startTimer();
-
+export const start = () => new Promise(async resolve => {
   let connections = [];
 
   const sendRefresh = () => {
@@ -25,8 +19,8 @@ export async function start() {
 
   const server = http.createServer((req, res) => {
     try {
-      if (req.url === '/' || req.url === '/index.html') {
-        res.write(fs.readFileSync(getPath(`${config.esbuildOptions.outdir}/index.html`), 'utf8'));
+      if (req.url === '/' || req.url === `/${config.public.indexName}`) {
+        res.write(fs.readFileSync(getPath(`${config.esbuildOptions.outdir}/${config.public.indexName}`)));
       } else {
         res.write(fs.readFileSync(getPath(`${config.esbuildOptions.outdir}/${req.url}`)));
       }
@@ -36,18 +30,17 @@ export async function start() {
       res.statusCode = 404;
     }
   });
-  server.listen(config.port, config.hostname, () => {
+  server.listen(config.port, config.hostname, async () => {
     console.log(`
   LS-Server running at:
   
   > Network:  ${coloredString(hostURLHTTP)}
-  > Local:    ${coloredString(localURLHTTP)}
-
-  ${coloredString(`Ready in ${timer.endTimer()}ms.`)}
-  `);
+  > Local:    ${coloredString(localURLHTTP)}`);
     if (config.openBrowser) {
-      open(hostURLHTTP);
+      const open = await import('open');
+      open.default(hostURLHTTP);
     }
+    resolve(true);
   });
 
   const wsServer = new WebSocketServer({
@@ -63,4 +56,4 @@ export async function start() {
     });
   });
 
-}
+})

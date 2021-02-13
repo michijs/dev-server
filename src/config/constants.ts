@@ -6,7 +6,11 @@ const minify = process.env.NODE_ENV !== 'DEVELOPMENT';
 export const DEFAULT_CONFIG: LsConfig = {
   hostname: '127.0.0.1',
   port: 3000,
-  publicPath: 'public',
+  public: {
+    path: 'public',
+    indexName: 'index.html',
+    minifyIndex: minify
+  },
   tsconfigPath: 'tsconfig.json',
   importCssAsCSSStyleSheet: true,
   openBrowser: true,

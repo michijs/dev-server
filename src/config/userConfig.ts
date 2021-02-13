@@ -1,9 +1,9 @@
 import { getPath } from '../utils/getPath';
 import ts from 'typescript';
 import fs from 'fs';
-import { LsConfig, LsServerConfig } from '../types';
+import { LsServerConfig, UserConfig } from '../types';
 
-let config: Partial<LsConfig> = {};
+let config: UserConfig = {};
 if (fs.existsSync('lsconfig.ts')) {
   const configTs = fs.readFileSync('lsconfig.ts', 'utf8');
   const transpiledConfigTs = ts.transpileModule(configTs, {});
