@@ -31,7 +31,7 @@ export const start = () => new Promise(async resolve => {
       res.statusCode = 404;
     }
   });
-  server.listen(config.port, config.hostname, async () => {
+  server.listen(config.port, config.hostname, () => {
     console.log(`
   LS-Server running at:
   

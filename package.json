@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@lsegurado/ls-convert-css-to-js-module": "0.0.25",
-    "esbuild": "^0.8.44",
+    "esbuild": "^0.8.46",
     "husky": "^5.0.9",
     "open": "^7.4.0",
     "typescript": "^4.1.5",

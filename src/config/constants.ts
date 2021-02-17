@@ -1,10 +1,11 @@
 import { LsConfig } from '../types';
 import { getPath } from '../utils/getPath';
 import resolveCssLSElementPlugin from '../utils/resolveCssLSElementPlugin';
+import { getIPAddress } from './getIPAddress';
 
 const minify = process.env.NODE_ENV !== 'DEVELOPMENT';
 export const DEFAULT_CONFIG: LsConfig = {
-  hostname: '127.0.0.1',
+  hostname: getIPAddress(),
   port: 3000,
   public: {
     path: 'public',
