@@ -1,5 +1,17 @@
 import { config } from './config';
-import fs from 'fs';
-import { CompilerOptions } from 'typescript';
+import { findConfigFile, readConfigFile, sys, parseJsonConfigFileContent } from 'typescript';
+const configFileName = findConfigFile(
+    "./",
+    sys.fileExists,
+    config.esbuildOptions.tsconfig
+);
+const { config: typescriptConfig } = readConfigFile(configFileName, sys.readFile);
+const { raw, options } = parseJsonConfigFileContent(
+    typescriptConfig,
+    sys,
+    "./"
+);
 
-export const tsconfig: { compilerOptions: CompilerOptions, include: string[] } = JSON.parse(fs.readFileSync(config.esbuildOptions.tsconfig, 'utf8'));
+const include = (raw.include as string[]).filter((el) => (raw.exclude as string[]).indexOf(el) < 0);
+
+export const tsconfig = { compilerOptions: options, include };
