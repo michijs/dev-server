@@ -3,7 +3,7 @@ import { getPath } from '../utils/getPath';
 import resolveCssLSElementPlugin from '../utils/resolveCssLSElementPlugin';
 import { getIPAddress } from './getIPAddress';
 
-const minify = process.env.NODE_ENV !== 'DEVELOPMENT';
+const minify = process.env.NODE_ENV === 'PRODUCTION';
 export const DEFAULT_CONFIG: LsConfig = {
   hostname: getIPAddress(),
   port: 3000,
@@ -12,7 +12,6 @@ export const DEFAULT_CONFIG: LsConfig = {
     indexName: 'index.html',
     minifyIndex: minify
   },
-  tsconfigPath: 'tsconfig.json',
   importCssAsCSSStyleSheet: true,
   openBrowser: true,
   showLinkedPackages: true,
@@ -22,9 +21,10 @@ export const DEFAULT_CONFIG: LsConfig = {
     define: {
       'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`
     },
+    tsconfig: 'tsconfig.json',
     minifySyntax: minify,
     minifyWhitespace: minify,
-    sourcemap: process.env.NODE_ENV === 'DEVELOPMENT',
+    sourcemap: process.env.NODE_ENV !== 'PRODUCTION',
     bundle: true,
     keepNames: true,
     entryPoints: [

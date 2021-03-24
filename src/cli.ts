@@ -25,7 +25,7 @@ export async function cli() {
     .alias('help', 'h')
     .argv;
 
-  process.env.NODE_ENV = args.env || (args.build ? 'PRODUCTION' : 'DEVELOPMENT');
+  process.env.NODE_ENV = args.env || (args.build ? 'PRODUCTION' : args.dist ? 'DISTRIBUTION' : 'DEVELOPMENT');
 
   console.log(coloredString(`  Running in ${process.env.NODE_ENV} mode`));
   if (args.start) {

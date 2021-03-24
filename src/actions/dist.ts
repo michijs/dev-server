@@ -9,5 +9,5 @@ export function dist(watch = false){
   tsconfig.include.forEach(srcDir => {
     transpile(srcDir, tsconfig.compilerOptions.outDir, watch, config.importCssAsCSSStyleSheet);
   });
-  exec(`tsc ${watch ? '-w': ''}`);
+  exec(`tsc ${watch ? '-w': ''} --project ${config.esbuildOptions.tsconfig}`);
 }
