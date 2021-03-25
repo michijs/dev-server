@@ -48,6 +48,6 @@
     "pre-commit": "npx lint-staged"
   },
   "lint-staged": {
-    "src/**/*{ts,tsx}": "eslint --cache --fix"
+    "*.ts": "eslint --cache --fix"
   }
 }
