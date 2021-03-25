@@ -6,7 +6,7 @@ import { copy } from '../utils/copy';
 import { minifyHTML } from '../utils/minifyHTML';
 import Timer from '../utils/timer';
 
-export function build(callback?: Function) {
+export function build(callback?: Function, watchOption: boolean = false) {
   const timer = new Timer();
   timer.startTimer();
   fs.rmdirSync(config.esbuildOptions.outdir, { recursive: true });
@@ -14,14 +14,14 @@ export function build(callback?: Function) {
   const configWatch = config.esbuildOptions.watch;
 
   let firstTime = true;
-  const watch: boolean | WatchMode = callback ? {
+  const watch: boolean | WatchMode = watchOption ? {
     onRebuild: (error, result) => {
       if (!error && !firstTime) {
         callback();
         if (configWatch && typeof configWatch !== 'boolean') {
-          configWatch.onRebuild(error, result)
+          configWatch.onRebuild(error, result);
         }
-        console.log(coloredString(`  Rebuild finished`));
+        console.log(coloredString('  Rebuild finished'));
       }
       firstTime = false;
     }
