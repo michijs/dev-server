@@ -28,7 +28,7 @@
     }
   },
   "devDependencies": {
-    "@lsegurado/eslint-config-ls-element": "0.0.3",
+    "@lsegurado/eslint-config-ls-element": "0.0.4",
     "@types/node": "^14.14.25",
     "@types/websocket": "^1.0.1",
     "@types/yargs": "^16.0.0",
@@ -48,6 +48,6 @@
     "pre-commit": "npx lint-staged"
   },
   "lint-staged": {
-    "*.ts": "eslint --cache --fix"
+    "src/**/*{.ts,.tsx}": "eslint --cache --fix"
   }
 }
