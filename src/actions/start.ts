@@ -19,12 +19,12 @@ export const start = (callback: () => void) => {
           res.write(fs.readFileSync(getPath(`${config.esbuildOptions.outdir}/${req.url}`)));
         }
         res.statusCode = 200;
-        res.end();
       } catch (ex) {
         res.statusCode = 404;
       }
+      res.end();
     });
-    server.listen(config.port, config.hostname, () => {
+    server.listen(config.port, () => {
       console.log(`
 LS-Server running at:
 
