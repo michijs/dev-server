@@ -1,6 +1,5 @@
 import { LsConfig } from '../types';
 import { getPath } from '../utils/getPath';
-import resolveCssLSElementPlugin from '../utils/resolveCssLSElementPlugin';
 import { getIPAddress } from './getIPAddress';
 
 const minify = process.env.NODE_ENV === 'PRODUCTION';
@@ -12,8 +11,7 @@ export const DEFAULT_CONFIG: LsConfig = {
     indexName: 'index.html',
     minifyIndex: minify
   },
-  importCssAsCSSStyleSheet: true,
-  openBrowser: true,
+  openBrowser: process.env.NODE_ENV === 'DEVELOPMENT',
   showLinkedPackages: true,
   esbuildOptions: {
     inject: process.env.NODE_ENV === 'DEVELOPMENT' ? [getPath(`${__dirname}/public/client.js`)] : [],
@@ -26,12 +24,12 @@ export const DEFAULT_CONFIG: LsConfig = {
     minifyWhitespace: minify,
     sourcemap: process.env.NODE_ENV !== 'PRODUCTION',
     bundle: true,
-    keepNames: true,
+    keepNames: minify,
     entryPoints: [
       'src/index.ts'
     ],
-    plugins: [
-      resolveCssLSElementPlugin
-    ]
+    splitting: true,
+    format: 'esm',
+    target: ['esnext']
   }
 };

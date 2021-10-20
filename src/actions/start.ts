@@ -7,19 +7,36 @@ import { build } from './build';
 import { getPath } from '../utils/getPath';
 import open from 'open';
 
+const mimeTypes = {
+  html: 'text/html',
+  jpeg: 'image/jpeg',
+  jpg: 'image/jpeg',
+  png: 'image/png',
+  svg: 'image/svg+xml',
+  json: 'application/json',
+  js: 'text/javascript',
+  css: 'text/css'
+};
+
 export const start = (callback: () => void) => {
   let connections = [];
+  let server: http.Server | undefined;
 
   const createServer = () => {
-    const server = http.createServer((req, res) => {
+    server = http.createServer((req, res) => {
       try {
-        if (req.url === '/' || req.url === `/${config.public.indexName}`) {
+        const mimeType = mimeTypes[req.url.split('.').pop()];
+        if (mimeType) {
+          res.setHeader('Content-Type', mimeType);
+        }
+        if (req.url === '/' || req.url === `/${config.public.indexName}` || req.url.split('.').length === 1) {
           res.write(fs.readFileSync(getPath(`${config.esbuildOptions.outdir}/${config.public.indexName}`)));
         } else {
           res.write(fs.readFileSync(getPath(`${config.esbuildOptions.outdir}/${req.url}`)));
         }
         res.statusCode = 200;
       } catch (ex) {
+        console.log(ex);
         res.statusCode = 404;
       }
       res.end();
@@ -51,7 +68,7 @@ LS-Server running at:
   };
 
   const successfullyBuilt = () => {
-    if (connections.length === 0) {
+    if (!server && connections.length === 0) {
       createServer();
     } else {
       connections.forEach(connection => {

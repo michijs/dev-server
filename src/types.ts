@@ -10,7 +10,6 @@ export type LsConfig = {
         hostname: string;
         port: number;
         public: PublicOptions;
-        importCssAsCSSStyleSheet: boolean;
         openBrowser: boolean;
         showLinkedPackages: boolean;
         esbuildOptions: BuildOptions

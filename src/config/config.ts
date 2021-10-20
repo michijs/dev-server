@@ -23,10 +23,6 @@ const config: LsConfig = {
       ...DEFAULT_CONFIG.esbuildOptions.define,
       ...(userConfig.esbuildOptions?.define || {}),
     },
-    plugins: [
-      ...DEFAULT_CONFIG.esbuildOptions.plugins,
-      ...(userConfig.esbuildOptions?.plugins || []),
-    ]
   }
 };
 

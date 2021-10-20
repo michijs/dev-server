@@ -10,16 +10,12 @@ export async function cli() {
   ${coloredString(`Ready in ${timer.endTimer()}ms.`)}`);
   timer.startTimer();
 
-  const args = yargs
+  const args = await yargs
     .option('start', {
       type: 'boolean',
       default: false
     })
     .option('build', {
-      type: 'boolean',
-      default: false
-    })
-    .option('dist', {
       type: 'boolean',
       default: false
     })
