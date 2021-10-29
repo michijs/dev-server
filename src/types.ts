@@ -1,23 +1,24 @@
 import { BuildOptions } from 'esbuild';
 
 export type PublicOptions = {
-        path: string;
-        indexName: string;
-        minifyIndex: boolean;
-    }
+    path: string;
+    indexName: string;
+    minifyIndex: boolean;
+}
 
 export type LsConfig = {
-        hostname: string;
-        port: number;
-        public: PublicOptions;
-        openBrowser: boolean;
-        showLinkedPackages: boolean;
-        esbuildOptions: BuildOptions
-    }
+    hostname: string;
+    protocol: 'http' | 'https';
+    port: number;
+    public: PublicOptions;
+    openBrowser: boolean;
+    showLinkedPackages: boolean;
+    esbuildOptions: BuildOptions
+}
 
-    type DeepPartial<T> = {
-        [P in keyof T]?: DeepPartial<T[P]>;
-    };
+type DeepPartial<T> = {
+    [P in keyof T]?: DeepPartial<T[P]>;
+};
 
 export type UserConfig = Omit<DeepPartial<LsConfig>, 'esbuildOptions'> & { esbuildOptions?: BuildOptions };
 

@@ -6,6 +6,7 @@ const minify = process.env.NODE_ENV === 'PRODUCTION';
 export const DEFAULT_CONFIG: LsConfig = {
   hostname: getIPAddress(),
   port: 3000,
+  protocol: 'https',
   public: {
     path: 'public',
     indexName: 'index.html',

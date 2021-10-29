@@ -26,15 +26,14 @@ const config: LsConfig = {
   }
 };
 
-const hostURLHTTP = `http://${config.hostname}:${config.port}`;
-const localURLHTTP = `http://localhost:${config.port}`;
+const hostURL = `${config.protocol}://${config.hostname}:${config.port}`;
+const localURL = `${config.protocol}://localhost:${config.port}`;
 
 function findSymbolickLinkRealPath(path) {
   if (fs.lstatSync(path).isSymbolicLink()) {
     return findSymbolickLinkRealPath(fs.readlinkSync(path));
   } 
   return path;
-    
 }
 
 if (config.showLinkedPackages) {
@@ -51,4 +50,4 @@ if (config.showLinkedPackages) {
   });
 }
 
-export { config, hostURLHTTP, localURLHTTP };
+export { config, hostURL, localURL };
