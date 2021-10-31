@@ -6,12 +6,13 @@ const configFileName = findConfigFile(
   config.esbuildOptions.tsconfig
 );
 const { config: typescriptConfig } = readConfigFile(configFileName, sys.readFile);
-const { raw, options } = parseJsonConfigFileContent(
+// const { raw, options } = parseJsonConfigFileContent(
+const { options } = parseJsonConfigFileContent(
   typescriptConfig,
   sys,
   './'
 );
 
-const include = (raw.include as string[]).filter((el) => (raw.exclude as string[]).indexOf(el) < 0);
+// const include = ((raw.include ?? []) as string[]).filter((el) => (raw.exclude as string[]).indexOf(el) < 0);
 
-export const tsconfig = { compilerOptions: options, include };
+export const tsconfig = { compilerOptions: options };
