@@ -26,8 +26,10 @@ const config: LsConfig = {
   }
 };
 
-const hostURL = `${config.protocol}://${config.hostname}:${config.port}`;
-const localURL = `${config.protocol}://localhost:${config.port}`;
+const hostURL = `http://${config.hostname}:${config.port}`;
+const localURL = `http://localhost:${config.port}`;
+// const hostURL = `${config.protocol}://${config.hostname}:${config.port}`;
+// const localURL = `${config.protocol}://localhost:${config.port}`;
 
 function findSymbolickLinkRealPath(path) {
   if (fs.lstatSync(path).isSymbolicLink()) {
