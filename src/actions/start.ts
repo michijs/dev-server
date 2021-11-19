@@ -43,17 +43,17 @@ export const start = (callback: () => void) => {
   };
 
   const createServer = () => {
-    if (config.protocol === 'https') {
-      const keysPath = `${__dirname}/https-keys`;
-      const options = {
-        key: fs.readFileSync(getPath(`${keysPath}/key.pem`)),
-        cert: fs.readFileSync(getPath(`${keysPath}/cert.pem`))
-      };
+    // if (config.protocol === 'https') {
+    //   const keysPath = `${__dirname}/https-keys`;
+    //   const options = {
+    //     key: fs.readFileSync(getPath(`${keysPath}/key.pem`)),
+    //     cert: fs.readFileSync(getPath(`${keysPath}/cert.pem`))
+    //   };
 
-      server = https.createServer(options, serverCallback);
-    } else {
-      server = http.createServer(serverCallback);
-    }
+    //   server = https.createServer(options, serverCallback);
+    // } else {
+    server = http.createServer(serverCallback);
+    // }
     server.listen(config.port, () => {
       console.log(`
 LS-Server running at:
@@ -62,7 +62,7 @@ LS-Server running at:
 > Local:    ${coloredString(localURL)}`);
       callback();
       if (config.openBrowser) {
-        open(hostURL);
+        open(localURL);
       }
     });
 

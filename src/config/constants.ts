@@ -6,7 +6,7 @@ const minify = process.env.NODE_ENV === 'PRODUCTION';
 export const DEFAULT_CONFIG: LsConfig = {
   hostname: getIPAddress(),
   port: 3000,
-  protocol: 'http',
+  // protocol: 'http',
   public: {
     path: 'public',
     indexName: 'index.html',
@@ -29,7 +29,6 @@ export const DEFAULT_CONFIG: LsConfig = {
     entryPoints: [
       'src/index.ts'
     ],
-    splitting: true,
     format: 'esm',
     target: ['esnext']
   }

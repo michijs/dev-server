@@ -8,7 +8,7 @@ export type PublicOptions = {
 
 export type LsConfig = {
     hostname: string;
-    protocol: 'http' | 'https';
+    // protocol: 'http' | 'https';
     port: number;
     public: PublicOptions;
     openBrowser: boolean;
