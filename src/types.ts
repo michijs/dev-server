@@ -4,6 +4,7 @@ export type PublicOptions = {
     path: string;
     indexName: string;
     minifyIndex: boolean;
+    serviceWorkerName?: string;
 }
 
 export type LsConfig = {

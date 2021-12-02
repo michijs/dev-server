@@ -10,18 +10,18 @@ const config: LsConfig = {
   ...userConfig,
   public: {
     ...DEFAULT_CONFIG.public,
-    ...(userConfig.public || {}),
+    ...(userConfig.public ?? {}),
   },
   esbuildOptions: {
     ...DEFAULT_CONFIG.esbuildOptions,
     ...userConfig.esbuildOptions,
     inject: [
       ...DEFAULT_CONFIG.esbuildOptions.inject,
-      ...(userConfig.esbuildOptions?.inject || []),
+      ...(userConfig.esbuildOptions?.inject ?? []),
     ],
     define: {
       ...DEFAULT_CONFIG.esbuildOptions.define,
-      ...(userConfig.esbuildOptions?.define || {}),
+      ...(userConfig.esbuildOptions?.define ?? {}),
     },
   }
 };

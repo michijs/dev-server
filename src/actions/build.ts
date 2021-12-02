@@ -5,6 +5,7 @@ import coloredString from '../utils/coloredString';
 import { copy } from '../utils/copy';
 import { minifyHTML } from '../utils/minifyHTML';
 import Timer from '../utils/timer';
+import { injectServiceWorker } from '../utils/injectServiceWorker';
 
 export function build(callback?: Function, watchOption: boolean = false) {
   const timer = new Timer();
@@ -16,7 +17,8 @@ export function build(callback?: Function, watchOption: boolean = false) {
   const watch: boolean | WatchMode = watchOption ? {
     onRebuild: (error, result) => {
       if (!error) {
-        callback();
+        injectServiceWorker();
+        callback?.();
         if (configWatch && typeof configWatch !== 'boolean') {
           configWatch.onRebuild(error, result);
         }
@@ -34,9 +36,8 @@ export function build(callback?: Function, watchOption: boolean = false) {
         return fileContent;
       } : undefined;
       copy(config.public.path, config.esbuildOptions.outdir, indexTranformer);
-      if (callback) {
-        callback();
-      }
+      injectServiceWorker();
+      callback?.();
       console.log(coloredString(`  Build finished in ${timer.endTimer()}ms`));
       resolve(true);
     }).catch(() => {
