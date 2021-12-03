@@ -29,13 +29,8 @@ export function build(callback?: Function, watchOption: boolean = false) {
 
   return new Promise((resolve) =>
     esbuild({ ...config.esbuildOptions, watch }).then(() => {
-      const indexTranformer = config.public.minifyIndex ? (fileName: string, fileContent: string) => {
-        if (fileName === config.public.indexName) {
-          return minifyHTML(fileContent);
-        }
-        return fileContent;
-      } : undefined;
-      copy(config.public.path, config.esbuildOptions.outdir, indexTranformer);
+      const indexTranformer = (fileContent: string) => config.public.minifyIndex ? minifyHTML(fileContent): fileContent;
+      copy(config.public.path, config.esbuildOptions.outdir, [{ fileName: config.public.indexName, transformer: indexTranformer }]);
       injectServiceWorker();
       callback?.();
       console.log(coloredString(`  Build finished in ${timer.endTimer()}ms`));
