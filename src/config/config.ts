@@ -71,6 +71,5 @@ if (config.showLinkedPackages) {
     }
   });
 }
-console.log(config);
 
 export { config, hostURL, localURL };
