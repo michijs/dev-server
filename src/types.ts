@@ -21,6 +21,6 @@ type DeepPartial<T> = {
     [P in keyof T]?: DeepPartial<T[P]>;
 };
 
-export type UserConfig = Omit<DeepPartial<LsConfig>, 'esbuildOptions'> & { esbuildOptions?: BuildOptions };
+export type UserConfig = Omit<DeepPartial<LsConfig>, 'esbuildOptions'> & { esbuildOptions?: BuildOptions, env?: {[key: string]: any} };
 
 export type LsServerConfig = (environment: string) => UserConfig;

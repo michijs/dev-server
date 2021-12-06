@@ -2,27 +2,47 @@ import fs from 'fs';
 import { LsConfig } from '../types';
 import coloredString from '../utils/coloredString';
 import { getPath } from '../utils/getPath';
-import { DEFAULT_CONFIG } from './constants';
+import { getIPAddress } from './getIPAddress';
 import { userConfig } from './userConfig';
 
+const minify = process.env.NODE_ENV === 'PRODUCTION';
+const devServerListener = process.env.NODE_ENV === 'DEVELOPMENT' ? [getPath(`${__dirname}/public/client.js`)] : [];
 const config: LsConfig = {
-  ...DEFAULT_CONFIG,
+  hostname: getIPAddress(),
+  port: 3000,
+  openBrowser: process.env.NODE_ENV === 'DEVELOPMENT',
+  showLinkedPackages: true,
   ...userConfig,
+  // protocol: 'http',
   public: {
-    ...DEFAULT_CONFIG.public,
-    ...(userConfig.public ?? {}),
+    path: 'public',
+    indexName: 'index.html',
+    minifyIndex: minify,
+    ...(userConfig.public ?? {})
   },
   esbuildOptions: {
-    ...DEFAULT_CONFIG.esbuildOptions,
-    ...userConfig.esbuildOptions,
-    inject: [
-      ...DEFAULT_CONFIG.esbuildOptions.inject,
-      ...(userConfig.esbuildOptions?.inject ?? []),
-    ],
+    ...(userConfig.esbuildOptions ?? {}),
+    inject: [...devServerListener, ...(userConfig.esbuildOptions?.inject ?? [])],
+    outdir: 'build',
     define: {
-      ...DEFAULT_CONFIG.esbuildOptions.define,
       ...(userConfig.esbuildOptions?.define ?? {}),
+      // Intentionally added before process
+      process: JSON.stringify({env: {
+        NODE_ENV: process.env.NODE_ENV,
+        ...(userConfig.env ?? {})
+      }})
     },
+    tsconfig: 'tsconfig.json',
+    minifySyntax: minify,
+    minifyWhitespace: minify,
+    sourcemap: process.env.NODE_ENV !== 'PRODUCTION',
+    bundle: true,
+    keepNames: minify,
+    entryPoints: [
+      'src/index.ts'
+    ],
+    format: 'esm',
+    target: ['esnext']
   }
 };
 
@@ -51,5 +71,6 @@ if (config.showLinkedPackages) {
     }
   });
 }
+console.log(config);
 
 export { config, hostURL, localURL };
