@@ -10,7 +10,8 @@ import { injectServiceWorker } from '../utils/injectServiceWorker';
 export function build(callback?: Function, watchOption: boolean = false) {
   const timer = new Timer();
   timer.startTimer();
-  fs.rmdirSync(config.esbuildOptions.outdir, { recursive: true });
+  if (fs.existsSync(config.esbuildOptions.outdir))
+    fs.rmdirSync(config.esbuildOptions.outdir, { recursive: true });
 
   const configWatch = config.esbuildOptions.watch;
 
@@ -29,7 +30,7 @@ export function build(callback?: Function, watchOption: boolean = false) {
 
   return new Promise((resolve) =>
     esbuild({ ...config.esbuildOptions, watch }).then(() => {
-      const indexTranformer = (fileContent: string) => config.public.minifyIndex ? minifyHTML(fileContent): fileContent;
+      const indexTranformer = (fileContent: string) => config.public.minifyIndex ? minifyHTML(fileContent) : fileContent;
       copy(config.public.path, config.esbuildOptions.outdir, [{ fileName: config.public.indexName, transformer: indexTranformer }]);
       injectServiceWorker();
       callback?.();

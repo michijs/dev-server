@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import { LsConfig } from '../types';
 import coloredString from '../utils/coloredString';
 import { getPath } from '../utils/getPath';
@@ -21,17 +22,7 @@ const config: LsConfig = {
     ...(userConfig.public ?? {})
   },
   esbuildOptions: {
-    ...(userConfig.esbuildOptions ?? {}),
-    inject: [...devServerListener, ...(userConfig.esbuildOptions?.inject ?? [])],
     outdir: 'build',
-    define: {
-      ...(userConfig.esbuildOptions?.define ?? {}),
-      // Intentionally added before process
-      process: JSON.stringify({env: {
-        NODE_ENV: process.env.NODE_ENV,
-        ...(userConfig.env ?? {})
-      }})
-    },
     tsconfig: 'tsconfig.json',
     minifySyntax: minify,
     minifyWhitespace: minify,
@@ -42,7 +33,38 @@ const config: LsConfig = {
       'src/index.ts'
     ],
     format: 'esm',
-    target: ['esnext']
+    target: 'esnext',
+    ...(userConfig.esbuildOptions ?? {}),
+    plugins: [
+      {
+        name: 'css-assert-import',
+        setup(build) {
+          build.onResolve({ filter: /\.css$/ }, (args) => {
+            const splittedPath = args.path.split('/');
+            const fileName = splittedPath[splittedPath.length - 1];
+            const splittedFileName = fileName.split('.');
+            const fileNameOnBuild = `${splittedFileName[0]}-${new Date().getTime()}.${splittedFileName.splice(1).join('.')}`;
+            const srcPath = path.resolve(args.resolveDir, args.path);
+            const destPath = path.resolve(build.initialOptions.outdir, fileNameOnBuild);
+            if (!fs.existsSync(build.initialOptions.outdir))
+              fs.mkdirSync(build.initialOptions.outdir);
+            fs.copyFileSync(srcPath, destPath);
+            return { path: `./${fileNameOnBuild}`, external: true, watchFiles: [srcPath] };
+          });
+        },
+      }
+    ],
+    define: {
+      // Intentionally added before process
+      process: JSON.stringify({
+        env: {
+          NODE_ENV: process.env.NODE_ENV,
+          ...(userConfig.env ?? {})
+        }
+      })
+    },
+    inject: [...devServerListener, ...(userConfig.esbuildOptions?.inject ?? [])],
+    ...(userConfig.esbuildOptions?.define ?? {}),
   }
 };
 
@@ -54,7 +76,7 @@ const localURL = `http://localhost:${config.port}`;
 function findSymbolickLinkRealPath(path) {
   if (fs.lstatSync(path).isSymbolicLink()) {
     return findSymbolickLinkRealPath(fs.readlinkSync(path));
-  } 
+  }
   return path;
 }
 

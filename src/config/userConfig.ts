@@ -8,9 +8,8 @@ if (fs.existsSync('lsconfig.ts')) {
   const configTs = fs.readFileSync('lsconfig.ts', 'utf8');
   const transpiledConfigTs = ts.transpileModule(configTs, {});
   const transpiledConfigPath = getPath(`${__dirname}/lsconfig.js`);
-  try {
-    fs.rmdirSync(transpiledConfigPath);
-  } catch { }
+  if (fs.existsSync(transpiledConfigPath))
+    fs.rmSync(transpiledConfigPath);
   fs.writeFileSync(transpiledConfigPath, transpiledConfigTs.outputText);
   config = (require('./lsconfig.js').default as LsServerConfig)(process.env.NODE_ENV);
 }
