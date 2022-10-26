@@ -6,15 +6,15 @@ const connect = () => {
   const client = new WebSocketClient(hostURLWS, 'echo-protocol');
 
   client.onerror = function () {
-    console.log('LS-Server Error');
+    console.log('Server Error');
   };
 
   client.onopen = function () {
-    console.log('LS-Server Connected');
+    console.log('Server Connected');
   };
 
   client.onclose = function () {
-    console.log('LS-Server Connection Closed');
+    console.log('Server Connection Closed');
     setTimeout(() => {
       connect();
     }, 5000);

@@ -1,14 +1,14 @@
 {
-  "name": "@lsegurado/ls-server",
+  "name": "@michijs/server",
   "license": "MIT",
   "version": "0.0.30",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lsegurado/ls-server.git"
+    "url": "https://github.com/michijs/server.git"
   },
   "main": "bin/index",
   "bin": {
-    "ls-server": "bin/index.js"
+    "server": "bin/index.js"
   },
   "description": "Development server based on esBuild",
   "files": [
@@ -22,13 +22,13 @@
     "publish-npm": "npm run build && npm publish --access public"
   },
   "eslintConfig": {
-    "extends": "@lsegurado/eslint-config-ls-element",
+    "extends": "@michijs/eslint-config",
     "rules": {
       "@typescript-eslint/no-var-requires": 0
     }
   },
   "devDependencies": {
-    "@lsegurado/eslint-config-ls-element": "0.1.0",
+    "@michijs/eslint-config": "0.1.0",
     "@types/node": "^17.0.2",
     "@types/websocket": "^1.0.4",
     "@types/yargs": "^17.0.0",

@@ -1,16 +1,16 @@
 import { getPath } from '../utils/getPath';
 import ts from 'typescript';
 import fs from 'fs';
-import { LsServerConfig, UserConfig } from '../types';
+import { ServerConfig, UserConfig } from '../types';
 
 let config: UserConfig = {};
-if (fs.existsSync('lsconfig.ts')) {
-  const configTs = fs.readFileSync('lsconfig.ts', 'utf8');
+if (fs.existsSync('michi.config.ts')) {
+  const configTs = fs.readFileSync('michi.config.ts', 'utf8');
   const transpiledConfigTs = ts.transpileModule(configTs, {});
-  const transpiledConfigPath = getPath(`${__dirname}/lsconfig.js`);
+  const transpiledConfigPath = getPath(`${__dirname}/michi.config.js`);
   if (fs.existsSync(transpiledConfigPath))
     fs.rmSync(transpiledConfigPath);
   fs.writeFileSync(transpiledConfigPath, transpiledConfigTs.outputText);
-  config = (require('./lsconfig.js').default as LsServerConfig)(process.env.NODE_ENV);
+  config = (require('./michi.config.js').default as ServerConfig)(process.env.NODE_ENV);
 }
 export const userConfig = config;

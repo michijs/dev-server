@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { LsConfig } from '../types';
+import { Config } from '../types';
 import coloredString from '../utils/coloredString';
 import { getPath } from '../utils/getPath';
 import { getIPAddress } from './getIPAddress';
@@ -8,7 +8,7 @@ import { userConfig } from './userConfig';
 
 const minify = process.env.NODE_ENV === 'PRODUCTION';
 const devServerListener = process.env.NODE_ENV === 'DEVELOPMENT' ? [getPath(`${__dirname}/public/client.js`)] : [];
-const config: LsConfig = {
+const config: Config = {
   hostname: getIPAddress(),
   port: 3000,
   openBrowser: process.env.NODE_ENV === 'DEVELOPMENT',

@@ -7,7 +7,7 @@ export type PublicOptions = {
     serviceWorkerName?: string;
 }
 
-export type LsConfig = {
+export type Config = {
     hostname: string;
     // protocol: 'http' | 'https';
     port: number;
@@ -21,6 +21,6 @@ type DeepPartial<T> = {
     [P in keyof T]?: DeepPartial<T[P]>;
 };
 
-export type UserConfig = Omit<DeepPartial<LsConfig>, 'esbuildOptions'> & { esbuildOptions?: BuildOptions, env?: {[key: string]: any} };
+export type UserConfig = Omit<DeepPartial<Config>, 'esbuildOptions'> & { esbuildOptions?: BuildOptions, env?: {[key: string]: any} };
 
-export type LsServerConfig = (environment: string) => UserConfig;
+export type ServerConfig = (environment: string) => UserConfig;

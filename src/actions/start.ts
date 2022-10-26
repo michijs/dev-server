@@ -56,7 +56,7 @@ export const start = (callback: () => void) => {
     // }
     server.listen(config.port, () => {
       console.log(`
-LS-Server running at:
+Server running at:
 
 > Network:  ${coloredString(hostURL)}
 > Local:    ${coloredString(localURL)}`);
