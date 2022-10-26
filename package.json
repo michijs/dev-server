@@ -8,7 +8,7 @@
   },
   "main": "bin/index",
   "bin": {
-    "server": "bin/index.js"
+    "michi-server": "bin/index.js"
   },
   "description": "Development server based on esBuild",
   "files": [
