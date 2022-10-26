@@ -1,7 +1,7 @@
 {
   "name": "@michijs/server",
   "license": "MIT",
-  "version": "0.0.30",
+  "version": "0.0.31",
   "repository": {
     "type": "git",
     "url": "https://github.com/michijs/server.git"
