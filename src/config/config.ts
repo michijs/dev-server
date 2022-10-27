@@ -35,25 +35,27 @@ const config: Config = {
     format: 'esm',
     target: 'esnext',
     ...(userConfig.esbuildOptions ?? {}),
-    plugins: [
-      {
-        name: 'css-assert-import',
-        setup(build) {
-          build.onResolve({ filter: /\.css$/ }, (args) => {
-            const splittedPath = args.path.split('/');
-            const fileName = splittedPath[splittedPath.length - 1];
-            const splittedFileName = fileName.split('.');
-            const fileNameOnBuild = `${splittedFileName[0]}-${new Date().getTime()}.${splittedFileName.splice(1).join('.')}`;
-            const srcPath = path.resolve(args.resolveDir, args.path);
-            const destPath = path.resolve(build.initialOptions.outdir, fileNameOnBuild);
-            if (!fs.existsSync(build.initialOptions.outdir))
-              fs.mkdirSync(build.initialOptions.outdir);
-            fs.copyFileSync(srcPath, destPath);
-            return { path: `./${fileNameOnBuild}`, external: true, watchFiles: [srcPath] };
-          });
-        },
-      }
-    ],
+    // Still not supported
+    // bug .css.ts
+    // plugins: [
+    //   {
+    //     name: 'css-assert-import',
+    //     setup(build) {
+    //       build.onResolve({ filter: /\.css$/ }, (args) => {
+    //         const splittedPath = args.path.split('/');
+    //         const fileName = splittedPath[splittedPath.length - 1];
+    //         const splittedFileName = fileName.split('.');
+    //         const fileNameOnBuild = `${splittedFileName[0]}-${new Date().getTime()}.${splittedFileName.splice(1).join('.')}`;
+    //         const srcPath = path.resolve(args.resolveDir, args.path);
+    //         const destPath = path.resolve(build.initialOptions.outdir, fileNameOnBuild);
+    //         if (!fs.existsSync(build.initialOptions.outdir))
+    //           fs.mkdirSync(build.initialOptions.outdir);
+    //         fs.copyFileSync(srcPath, destPath);
+    //         return { path: `./${fileNameOnBuild}`, external: true, watchFiles: [srcPath] };
+    //       });
+    //     },
+    //   }
+    // ],
     define: {
       // Intentionally added before process
       process: JSON.stringify({
