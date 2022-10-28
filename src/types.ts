@@ -23,16 +23,6 @@ type DeepPartial<T> = {
 
 export type DefaultEnvironment = 'PRODUCTION' | 'DISTRIBUTION' | 'DEVELOPMENT';
 
-declare global {
-    interface process {
-        env: {
-            NODE_ENV: DefaultEnvironment,
-            BUILD_FILES: string[],
-            CACHE_NAME: string
-        }
-    }
-}
-
 export type UserConfig = Omit<DeepPartial<Config>, 'esbuildOptions'> & { esbuildOptions?: BuildOptions, env?: {[key: string]: any} };
 
 export type ServerConfig = (environment: DefaultEnvironment) => UserConfig;
