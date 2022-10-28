@@ -10,8 +10,9 @@ import { injectServiceWorker } from '../utils/injectServiceWorker';
 export function build(callback?: Function, watchOption: boolean = false) {
   const timer = new Timer();
   timer.startTimer();
-  if (fs.existsSync(config.esbuildOptions.outdir))
-    fs.rmdirSync(config.esbuildOptions.outdir, { recursive: true });
+  if (fs.existsSync(config.esbuildOptions.outdir)) {
+    fs.rmSync(config.esbuildOptions.outdir, { recursive: true });
+  }
 
   const configWatch = config.esbuildOptions.watch;
 
