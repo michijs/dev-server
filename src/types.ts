@@ -21,7 +21,7 @@ type DeepPartial<T> = {
     [P in keyof T]?: DeepPartial<T[P]>;
 };
 
-type DefaultEnvironment = 'PRODUCTION' | 'DISTRIBUTION' | 'DEVELOPMENT';
+export type DefaultEnvironment = 'PRODUCTION' | 'DISTRIBUTION' | 'DEVELOPMENT';
 
 declare global {
     interface process {

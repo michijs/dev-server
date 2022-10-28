@@ -1,5 +1,4 @@
 import fs from 'fs';
-import path from 'path';
 import { Config } from '../types';
 import coloredString from '../utils/coloredString';
 import { getPath } from '../utils/getPath';
