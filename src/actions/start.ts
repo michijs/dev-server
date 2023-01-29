@@ -27,7 +27,7 @@ export const start = (callback: () => void) => {
       // Forward each incoming request to esbuild
       const proxyReq = http.request(esbuildProxyRequestOptions, proxyRes => {
         // If esbuild returns "not found", send a custom 404 page
-        if (proxyRes.statusCode === 404) {
+        if (!proxyRes.statusCode || proxyRes.statusCode === 404) {
           res.writeHead(200, { 'Content-Type': 'text/html' })
           // TODO: Find a better way to do this
           res.end(fs.readFileSync(getPath(`${config.esbuildOptions.outdir}/${config.public.indexName}`)));

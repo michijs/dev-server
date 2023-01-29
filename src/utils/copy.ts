@@ -15,7 +15,7 @@ export function copy(src, dest, fileTransformers?: Tranformer[]) {
       fs.mkdirSync(destPath);
       copy(srcPath, destPath, fileTransformers);
     } else {
-      const fileTransformer = fileTransformers.find(x => x.fileName === fileName);
+      const fileTransformer = fileTransformers?.find(x => x.fileName === fileName);
       if (fileTransformer) {
         const srcFileContent = fs.readFileSync(srcPath, { encoding: 'utf-8' });
         const transformedFile = fileTransformer.transformer(srcFileContent);

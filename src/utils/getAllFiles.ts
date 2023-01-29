@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { getPath } from './getPath';
 
-export const getAllFiles = function (dirPath: string, dirToShow: string = dirPath, arrayOfFiles = []) {
+export const getAllFiles = function (dirPath: string, dirToShow: string = dirPath, arrayOfFiles: string[] = []) {
   const files = fs.readdirSync(dirPath);
 
   files.forEach((file) => {

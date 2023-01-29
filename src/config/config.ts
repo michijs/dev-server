@@ -8,7 +8,7 @@ import { userConfig } from './userConfig';
 
 const minify = process.env.NODE_ENV === 'PRODUCTION';
 const devServerListener = process.env.NODE_ENV === 'DEVELOPMENT' ? [getPath(`${__dirname}/public/client.js`)] : [];
-const config: Config = {
+const config: Required<Config> = {
   port: 3000,
   openBrowser: process.env.NODE_ENV === 'DEVELOPMENT',
   showLinkedPackages: true,

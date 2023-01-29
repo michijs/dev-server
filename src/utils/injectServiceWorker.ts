@@ -5,9 +5,9 @@ import { getPath } from './getPath';
 import * as fs from 'fs';
 
 export const injectServiceWorker = () => {
-  if (config.public.serviceWorkerName) {
+  const { outdir, minify, minifyIdentifiers, minifySyntax, minifyWhitespace, keepNames, define } = config.esbuildOptions;
+  if (config.public.serviceWorkerName && outdir) {
     try {
-      const { outdir, minify, minifyIdentifiers, minifySyntax, minifyWhitespace, keepNames, define } = config.esbuildOptions;
       const allFiles = getAllFiles(outdir, '.');
       const serviceWorkerPath = getPath(`${config.public.path}/${config.public.serviceWorkerName}`);
       const outServiceWorkerPath = getPath(`${outdir}/${config.public.serviceWorkerName}`);
@@ -16,7 +16,7 @@ export const injectServiceWorker = () => {
         define: {
           'process.env.BUILD_FILES': `${JSON.stringify(allFiles)}`,
           // Time at GMT+0
-          'process.env.CACHE_NAME': `"${new Date(new Date().toLocaleString('en-US', {timeZone: 'Etc/GMT'})).getTime()}"`,
+          'process.env.CACHE_NAME': `"${new Date(new Date().toLocaleString('en-US', { timeZone: 'Etc/GMT' })).getTime()}"`,
           ...define
         },
         logLevel: 'debug',
