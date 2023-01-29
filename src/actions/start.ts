@@ -1,94 +1,58 @@
 import http from 'http';
-import https from 'https';
 import fs from 'fs';
-import { server as WebSocketServer } from 'websocket';
 import { config, hostURL, localURL } from '../config/config';
 import coloredString from '../utils/coloredString';
-import { build } from './build';
 import { getPath } from '../utils/getPath';
 import open from 'open';
-
-const mimeTypes = {
-  html: 'text/html',
-  jpeg: 'image/jpeg',
-  jpg: 'image/jpeg',
-  png: 'image/png',
-  svg: 'image/svg+xml',
-  json: 'application/json',
-  js: 'text/javascript',
-  css: 'text/css'
-};
+import { context } from 'esbuild';
+import { setupBuild } from '../utils/setupBuild';
 
 export const start = (callback: () => void) => {
-  let connections = [];
-  let server: https.Server | http.Server | undefined;
+  setupBuild()
 
-  const serverCallback: http.RequestListener = (req, res) => {
-    try {
-      const mimeType = mimeTypes[req.url.split('.').pop()];
-      if (mimeType) {
-        res.setHeader('Content-Type', mimeType);
+  context(config.esbuildOptions).then(async buildContext => {
+    const { host: esbuildHost, port: esbuildPort } = await buildContext.serve({
+      servedir: config.esbuildOptions.outdir,
+    })
+
+    http.createServer(async (req, res) => {
+      const esbuildProxyRequestOptions = {
+        hostname: esbuildHost,
+        port: esbuildPort,
+        path: req.url,
+        method: req.method,
+        headers: req.headers,
       }
-      if (req.url === '/' || req.url === `/${config.public.indexName}` || req.url.split('.').length === 1) {
-        res.write(fs.readFileSync(getPath(`${config.esbuildOptions.outdir}/${config.public.indexName}`)));
-      } else {
-        res.write(fs.readFileSync(getPath(`${config.esbuildOptions.outdir}/${req.url}`)));
-      }
-      res.statusCode = 200;
-    } catch (ex) {
-      console.log(ex);
-      res.statusCode = 404;
-    }
-    res.end();
-  };
 
-  const createServer = () => {
-    // if (config.protocol === 'https') {
-    //   const keysPath = `${__dirname}/https-keys`;
-    //   const options = {
-    //     key: fs.readFileSync(getPath(`${keysPath}/key.pem`)),
-    //     cert: fs.readFileSync(getPath(`${keysPath}/cert.pem`))
-    //   };
+      // Forward each incoming request to esbuild
+      const proxyReq = http.request(esbuildProxyRequestOptions, proxyRes => {
+        // If esbuild returns "not found", send a custom 404 page
+        if (proxyRes.statusCode === 404) {
+          res.writeHead(200, { 'Content-Type': 'text/html' })
+          // TODO: Find a better way to do this
+          res.end(fs.readFileSync(getPath(`${config.esbuildOptions.outdir}/${config.public.indexName}`)));
+          return
+        }
 
-    //   server = https.createServer(options, serverCallback);
-    // } else {
-    server = http.createServer(serverCallback);
-    // }
-    server.listen(config.port, () => {
-      console.log(`
-Server running at:
+        // Otherwise, forward the response from esbuild to the client
+        res.writeHead(proxyRes.statusCode, proxyRes.headers)
+        proxyRes.pipe(res, { end: true })
+      })
 
-> Network:  ${coloredString(hostURL)}
-> Local:    ${coloredString(localURL)}`);
-      callback();
-      if (config.openBrowser) {
-        open(localURL);
-      }
-    });
+      // Forward the body of the request to esbuild
+      req.pipe(proxyReq, { end: true })
 
-    const wsServer = new WebSocketServer({
-      httpServer: server,
-      autoAcceptConnections: false
-    });
+    }).listen(config.port)
 
-    wsServer.on('request', (request) => {
-      const connection = request.accept('echo-protocol', request.origin);
-      connections.push(connection);
-      connection.on('close', () => {
-        connections = connections.filter(x => x !== connection);
-      });
-    });
-  };
+    console.log(`
+  Server running at:
+  
+  > Network:  ${coloredString(hostURL)}
+  > Local:    ${coloredString(localURL)}`);
+    callback();
+    buildContext.watch()
+    if (config.openBrowser)
+      open(localURL);
 
-  const successfullyBuilt = () => {
-    if (!server && connections.length === 0) {
-      createServer();
-    } else {
-      connections.forEach(connection => {
-        connection.sendUTF('refresh');
-      });
-    }
-  };
-
-  build(successfullyBuilt, true);
+  })
 };

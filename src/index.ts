@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import type { ServerConfig, UserConfig } from './types';
-export type { ServerConfig, UserConfig };
+export type { ServerConfigFactory, ServerConfig, PublicOptions, DefaultEnvironment } from './types';
 import { cli } from './cli';
 cli();

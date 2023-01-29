@@ -1,18 +1,13 @@
 import { config } from './config';
-import { findConfigFile, readConfigFile, sys, parseJsonConfigFileContent } from 'typescript';
-const configFileName = findConfigFile(
-  './',
-  sys.fileExists,
-  config.esbuildOptions.tsconfig
-);
-const { config: typescriptConfig } = readConfigFile(configFileName, sys.readFile);
-// const { raw, options } = parseJsonConfigFileContent(
-const { options } = parseJsonConfigFileContent(
-  typescriptConfig,
-  sys,
-  './'
-);
+import fs from 'fs';
+import type { CompilerOptions } from 'typescript'
 
-// const include = ((raw.include ?? []) as string[]).filter((el) => (raw.exclude as string[]).indexOf(el) < 0);
+let tsconfig: { compilerOptions: CompilerOptions };
 
-export const tsconfig = { compilerOptions: options };
+if (fs.existsSync(config.esbuildOptions.tsconfig)) {
+  tsconfig = JSON.parse(fs.readFileSync(config.esbuildOptions.tsconfig, 'utf-8'))
+} else {
+  throw `Unable to find tsconfig at ${config.esbuildOptions.tsconfig}`
+}
+
+export { tsconfig }

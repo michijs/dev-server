@@ -1,17 +1,23 @@
 import { getPath } from '../utils/getPath';
-import ts from 'typescript';
 import fs from 'fs';
-import { DefaultEnvironment, ServerConfig, UserConfig } from '../types';
+import { DefaultEnvironment, ServerConfigFactory, ServerConfig } from '../types';
+import { transformSync as esbuild } from 'esbuild';
 
-let config: UserConfig = {};
+let config: ServerConfig = {};
 if (fs.existsSync('michi.config.ts')) {
-  const configTs = fs.readFileSync('michi.config.ts', 'utf8');
-  const transpiledConfigTs = ts.transpileModule(configTs, {});
+  const configTs = fs.readFileSync('michi.config.ts', 'utf-8');
+  const transpiledConfigTs = esbuild(configTs, {
+    loader: 'ts',
+    logLevel: 'debug',
+    format: 'cjs',
+    platform: 'node',
+    target: ['node16'],
+  });
   const transpiledConfigPath = getPath(`${__dirname}/michi.config.js`);
   if (fs.existsSync(transpiledConfigPath)) {
     fs.rmSync(transpiledConfigPath);
   }
-  fs.writeFileSync(transpiledConfigPath, transpiledConfigTs.outputText);
-  config = (require('./michi.config.js').default as ServerConfig)(process.env.NODE_ENV as DefaultEnvironment);
+  fs.writeFileSync(transpiledConfigPath, transpiledConfigTs.code);
+  config = (require('./michi.config.js').default as ServerConfigFactory)(process.env.NODE_ENV as DefaultEnvironment);
 }
 export const userConfig = config;

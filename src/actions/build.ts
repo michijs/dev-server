@@ -1,44 +1,19 @@
 import { config } from '../config/config';
-import { build as esbuild, WatchMode } from 'esbuild';
-import fs from 'fs';
-import coloredString from '../utils/coloredString';
-import { copy } from '../utils/copy';
-import { minifyHTML } from '../utils/minifyHTML';
+import { build as esbuild } from 'esbuild';
 import Timer from '../utils/timer';
-import { injectServiceWorker } from '../utils/injectServiceWorker';
+import { setupBuild } from '../utils/setupBuild';
 
-export function build(callback?: Function, watchOption: boolean = false) {
+export function build(callback?: Function) {
   const timer = new Timer();
   timer.startTimer();
-  if (fs.existsSync(config.esbuildOptions.outdir)) {
-    fs.rmSync(config.esbuildOptions.outdir, { recursive: true });
-  }
 
-  const configWatch = config.esbuildOptions.watch;
-
-  const watch: boolean | WatchMode = watchOption ? {
-    onRebuild: (error, result) => {
-      if (!error) {
-        injectServiceWorker();
-        callback?.();
-        if (configWatch && typeof configWatch !== 'boolean') {
-          configWatch.onRebuild(error, result);
-        }
-        console.log(coloredString('  Rebuild finished'));
-      }
-    }
-  } : configWatch;
-
-  return new Promise((resolve) =>
-    esbuild({ ...config.esbuildOptions, watch }).then(() => {
-      const indexTranformer = (fileContent: string) => config.public.minifyIndex ? minifyHTML(fileContent) : fileContent;
-      copy(config.public.path, config.esbuildOptions.outdir, [{ fileName: config.public.indexName, transformer: indexTranformer }]);
-      injectServiceWorker();
+  setupBuild();
+  return new Promise((resolve) => {
+    esbuild(config.esbuildOptions).then(() => {
       callback?.();
-      console.log(coloredString(`  Build finished in ${timer.endTimer()}ms`));
       resolve(true);
     }).catch(() => {
       return Promise.resolve();
     })
-  );
+  });
 }

@@ -2,13 +2,13 @@ import fs from 'fs';
 import { Config } from '../types';
 import coloredString from '../utils/coloredString';
 import { getPath } from '../utils/getPath';
+import Timer from '../utils/timer';
 import { getIPAddress } from './getIPAddress';
 import { userConfig } from './userConfig';
 
 const minify = process.env.NODE_ENV === 'PRODUCTION';
 const devServerListener = process.env.NODE_ENV === 'DEVELOPMENT' ? [getPath(`${__dirname}/public/client.js`)] : [];
 const config: Config = {
-  hostname: getIPAddress(),
   port: 3000,
   openBrowser: process.env.NODE_ENV === 'DEVELOPMENT',
   showLinkedPackages: true,
@@ -28,9 +28,7 @@ const config: Config = {
     sourcemap: process.env.NODE_ENV !== 'PRODUCTION',
     bundle: true,
     keepNames: minify,
-    entryPoints: [
-      'src/index.ts'
-    ],
+    entryPoints: ['src/index.ts'],
     format: 'esm',
     target: 'esnext',
     ...(userConfig.esbuildOptions ?? {}),
@@ -55,6 +53,19 @@ const config: Config = {
     //     },
     //   }
     // ],
+    plugins: [
+      ...(userConfig.esbuildOptions?.plugins ?? []),
+      {
+        name: 'track-build-time',
+        setup(build) {
+          let timer = new Timer();
+          build.onStart(() => timer.startTimer())
+          build.onEnd(() => {
+            console.log(coloredString(`  Build finished in ${timer.endTimer()}ms`))
+          })
+        }
+      }
+    ],
     define: {
       // Intentionally added before process
       process: JSON.stringify({
@@ -69,7 +80,7 @@ const config: Config = {
   }
 };
 
-const hostURL = `http://${config.hostname}:${config.port}`;
+const hostURL = `http://${getIPAddress()}:${config.port}`;
 const localURL = `http://localhost:${config.port}`;
 // const hostURL = `${config.protocol}://${config.hostname}:${config.port}`;
 // const localURL = `${config.protocol}://localhost:${config.port}`;

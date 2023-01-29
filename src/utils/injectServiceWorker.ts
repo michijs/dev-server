@@ -11,7 +11,7 @@ export const injectServiceWorker = () => {
       const allFiles = getAllFiles(outdir, '.');
       const serviceWorkerPath = getPath(`${config.public.path}/${config.public.serviceWorkerName}`);
       const outServiceWorkerPath = getPath(`${outdir}/${config.public.serviceWorkerName}`);
-      const file = fs.readFileSync(serviceWorkerPath, { encoding: 'utf-8' });
+      const file = fs.readFileSync(serviceWorkerPath, 'utf-8');
       const result = esbuild(file, {
         define: {
           'process.env.BUILD_FILES': `${JSON.stringify(allFiles)}`,

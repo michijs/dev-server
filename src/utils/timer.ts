@@ -1,5 +1,5 @@
 export default class Timer {
-    start;
+    start: number;
 
     startTimer() {
       this.start = Date.now();
