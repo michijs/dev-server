@@ -1,4 +1,4 @@
-# Michi Dev Server
+# Michijs Dev Server
 Development server built on top of esbuild.
 
 ![npm][version] [![license][github-license]][github-license-url] ![npm][npm-downloads] ![npm][repo-size]
