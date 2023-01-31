@@ -18,6 +18,10 @@ export async function cli() {
       type: 'boolean',
       default: false
     })
+    .option('dist', {
+      type: 'boolean',
+      default: false
+    })
     .option('env', {
       type: 'string'
     })

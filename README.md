@@ -11,8 +11,14 @@ Development server built with ESBuild.
 - Custom environments
 - Packages distribution
 
-## Server configuration
-To configure the server you just need to create a file called michi.config.ts at the root of your project. This file would look like this:
+## Getting started
+
+You can use the following [test project](https://github.com/michijs/michijs-template) or setup a project from scratch:
+
+    npm install -D @michijs/dev-server
+
+
+To configure the server you just need to create an optional file called michi.config.ts at the root of your project. This file would look like this:
 
 ```ts
 import { ServerConfig, ServerConfigFactory, DefaultEnvironment } from '@michijs/server';
@@ -43,7 +49,7 @@ export default config;
     <tr>
       <td>esbuildOptions</td>
       <td colspan="2">All the options available at <a href="https://esbuild.github.io/plugins/#build-options">esbuild documentation</a></td>
-      <td></td>
+      <td>Can be chequed <a href="#esbuild-default-options">here</a></td>
     </tr>
     <tr>
       <td>openBrowser</td>
@@ -77,6 +83,62 @@ export default config;
     </tr>
   </tbody>
 </table>
+
+## ESBuild default options
+
+<table>
+  <thead>
+    <tr>
+      <th>Field</th>
+      <th>Default value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>outdir</td>
+      <td>"build"</td>
+    </tr>
+    <tr>
+      <td>tsconfig</td>
+      <td>"tsconfig.json"</td>
+    </tr>
+    <tr>
+      <td>minifySyntax</td>
+      <td>"true" if environment is PRODUCTION</td>
+    </tr>
+    <tr>
+      <td>minifyWhitespace</td>
+      <td>"true" if environment is PRODUCTION</td>
+    </tr>
+    <tr>
+      <td>sourcemap</td>
+      <td>"true" if environment is <b>NOT</b> PRODUCTION</td>
+    </tr>
+    <tr>
+      <td>bundle</td>
+      <td>"true"</td>
+    </tr>
+    <tr>
+      <td>keepNames</td>
+      <td>"true" if environment is PRODUCTION</td>
+    </tr>
+    <tr>
+      <td>entryPoints</td>
+      <td>['src/index.ts']</td>
+    </tr>
+    <tr>
+      <td>format</td>
+      <td>"esm"</td>
+    </tr>
+    <tr>
+      <td>target</td>
+      <td>"esnext"</td>
+    </tr>
+  </tbody>
+</table>
+
+## Distribution
+At the moment ESBuild does not support .d.ts files so we still use the Typescript compiler with the tsconfig provided by esbuildOptions field.
 
 ## License
  - [MIT](https://github.com/michijs/dev-server/blob/master/LICENSE.md)
