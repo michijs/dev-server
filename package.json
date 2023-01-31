@@ -28,6 +28,21 @@
     "rome": "11.0.0",
     "simple-git-hooks": "2.8.1"
   },
+  "keywords": [
+    "react",
+    "javascript",
+    "css",
+    "bundler",
+    "typescript",
+    "compiler",
+    "jsx",
+    "commonjs",
+    "minifier",
+    "tsx",
+    "esm",
+    "server",
+    "development"
+  ],
   "dependencies": {
     "typescript": "4.9.4",
     "esbuild": "0.17.4",
