@@ -1,5 +1,5 @@
 # Michi Dev Server
-Development server built with ESBuild.
+Development server built with esbuild.
 
 ![npm][version] [![license][github-license]][github-license-url] ![npm][npm-downloads] ![npm][repo-size]
   [![CodeQL](https://github.com/michijs/dev-server/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/michijs/dev-server/actions/workflows/codeql-analysis.yml)
@@ -84,7 +84,7 @@ export default config;
   </tbody>
 </table>
 
-## ESBuild default options
+## Esbuild default options
 
 <table>
   <thead>
