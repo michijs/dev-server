@@ -17,7 +17,33 @@ You can use the following [test project](https://github.com/michijs/michijs-temp
 
     npm install -D @michijs/dev-server
 
+## CLI commands
+You have the following CLI commands:
+<table>
+  <thead>
+    <tr>
+      <th>CLI command</th>
+      <th>Default environment</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>start</td>
+      <td>DEVELOPMENT</td>
+    </tr>
+    <tr>
+      <td>build</td>
+      <td>PRODUCTION</td>
+    </tr>
+    <tr>
+      <td>dist</td>
+      <td>DISTRIBUTION</td>
+    </tr>
+  </tbody>
+</table>
 
+
+## Configure the server
 To configure the server you just need to create an optional file called michi.config.ts at the root of your project. This file would look like this:
 
 ```ts
