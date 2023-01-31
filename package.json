@@ -1,5 +1,5 @@
 {
-  "name": "@michijs/server",
+  "name": "@michijs/dev-server",
   "license": "MIT",
   "version": "0.0.34",
   "repository": {
@@ -18,7 +18,6 @@
   "scripts": {
     "dist": "tsc",
     "link": "npm run dist && npm link --force && tsc -w",
-    "test-tsc": "tsc --noEmit --skipLibCheck",
     "publish-patch-version": "npm version patch && npm run publish-npm",
     "publish-npm": "npm run dist && npm publish --access public"
   },
