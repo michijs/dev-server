@@ -1,4 +1,5 @@
 import { BuildOptions } from 'esbuild';
+import type { WebAppManifest } from 'web-app-manifest'
 
 export type PublicOptions = {
   /**
@@ -12,12 +13,17 @@ export type PublicOptions = {
    * */
   indexName?: string;
   /**
-   * If the main html needs to be minified
+   * If html/svg/json/xml files to be minified
    * @default true if environment is PRODUCTION 
   */
-  minifyIndex?: boolean;
-  /**Service worker name in public folder */
-  serviceWorkerName?: string;
+  minify?: boolean;
+  /**
+   * A `manifest` is a JSON document that contains startup parameters and application defaults for
+   * when a web application is launched.
+   *
+   * @see https://w3c.github.io/manifest/#webappmanifest-dictionary
+   */
+  manifest?: WebAppManifest
 }
 
 export type Config = {
@@ -50,11 +56,23 @@ export type Config = {
 export type DefaultEnvironment = 'PRODUCTION' | 'DISTRIBUTION' | 'DEVELOPMENT';
 
 
-export type ServerConfig = Config & { 
+export type ServerConfig = Config & {
   /**
    * Allows to add environment variables
    */
-  env?: { [key: string]: any } 
+  env?: { [key: string]: any }
+};
+
+export type ProcessType = {
+  env: {
+    NODE_ENV: DefaultEnvironment;
+  };
+};
+export type ProcessSWType = {
+  env: {
+    BUILD_FILES: string[];
+    CACHE_NAME: string;
+  };
 };
 
 export type ServerConfigFactory<T extends string = DefaultEnvironment> = (environment: T) => ServerConfig;

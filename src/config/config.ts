@@ -1,13 +1,20 @@
 import fs from 'fs';
 import { Config } from '../types';
 import coloredString from '../utils/coloredString';
+import { copy } from '../utils/copy';
 import { getPath } from '../utils/getPath';
 import Timer from '../utils/timer';
 import { getIPAddress } from './getIPAddress';
 import { userConfig } from './userConfig';
+import http from 'http';
+import { jsAndTsRegex, notJsAndTsRegex, transformers } from '../utils/transformers';
 
 const minify = process.env.NODE_ENV === 'PRODUCTION';
 const devServerListener = process.env.NODE_ENV === 'DEVELOPMENT' ? [getPath(`${__dirname}/public/client.js`)] : [];
+
+export const connections: (http.ServerResponse<http.IncomingMessage> & {
+  req: http.IncomingMessage;
+})[] = [];
 const config: Required<Config> = {
   port: 3000,
   openBrowser: process.env.NODE_ENV === 'DEVELOPMENT',
@@ -17,7 +24,7 @@ const config: Required<Config> = {
   public: {
     path: 'public',
     indexName: 'index.html',
-    minifyIndex: minify,
+    minify: minify,
     ...(userConfig.public ?? {})
   },
   esbuildOptions: {
@@ -26,11 +33,13 @@ const config: Required<Config> = {
     minifySyntax: minify,
     minifyWhitespace: minify,
     sourcemap: process.env.NODE_ENV !== 'PRODUCTION',
+    splitting: true,
     bundle: true,
     keepNames: minify,
     entryPoints: ['src/index.ts'],
     format: 'esm',
     target: 'esnext',
+    logLevel: 'error',
     ...(userConfig.esbuildOptions ?? {}),
     // Still not supported
     // bug .css.ts
@@ -56,12 +65,28 @@ const config: Required<Config> = {
     plugins: [
       ...(userConfig.esbuildOptions?.plugins ?? []),
       {
-        name: 'track-build-time',
+        name: 'michijs-dev-server',
         setup(build) {
-          let timer = new Timer();
-          build.onStart(() => timer.startTimer())
+          // Clean outdir
+          if (build.initialOptions.outdir) {
+            if (fs.existsSync(build.initialOptions.outdir)) {
+              fs.rmSync(build.initialOptions.outdir, { recursive: true });
+            }
+            fs.mkdirSync(build.initialOptions.outdir, { recursive: true })
+          }
+          // Copy public path - Omit to copy service worker - will be transformed after
+          if (config.public.path && build.initialOptions.outdir)
+            copy(config.public.path, build.initialOptions.outdir, transformers, [jsAndTsRegex]);
+
+          const buildTimer = new Timer();
+          let firstLoad = true;
+          build.onStart(() => buildTimer.startTimer())
           build.onEnd(() => {
-            console.log(coloredString(`  Build finished in ${timer.endTimer()}ms`))
+            // first-load sw - Omit to copy any other non-js file
+            if (firstLoad && config.public.path && build.initialOptions.outdir)
+              copy(config.public.path, build.initialOptions.outdir, transformers, [notJsAndTsRegex]);
+            console.log(coloredString(`  Build finished in ${buildTimer.endTimer()}ms`))
+            firstLoad = false;
           })
         }
       }

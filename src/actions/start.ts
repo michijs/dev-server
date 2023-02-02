@@ -1,14 +1,49 @@
 import http from 'http';
 import fs from 'fs';
-import { config, hostURL, localURL } from '../config/config';
+import { config, hostURL, localURL, connections } from '../config/config';
 import coloredString from '../utils/coloredString';
 import { getPath } from '../utils/getPath';
 import open from 'open';
 import { context } from 'esbuild';
-import { setupBuild } from '../utils/setupBuild';
+import watch from 'node-watch';
+import { copyFile } from '../utils/copy';
+import { sep } from 'path';
+import { transformers } from '../utils/transformers';
 
 export const start = (callback: () => void) => {
-  setupBuild()
+
+  config.esbuildOptions.plugins?.push({
+    name: 'michijs-dev-server-watch-public-folder',
+    setup(build) {
+      if (config.public.path)
+        watch(config.public.path, {
+          encoding: 'utf-8',
+          persistent: true,
+          recursive: true,
+        }, (event, fileChangedPath) => {
+          const updated = new Array<string>();
+          const removed = new Array<string>();
+          const added = new Array<string>();
+          const splittedPath = fileChangedPath.split(sep);
+          const srcDir = splittedPath.slice(0, -1).join(sep)
+          const fileName = splittedPath.at(-1)!
+          const outDir = srcDir.replace(config.public.path!, build.initialOptions.outdir!)
+
+          fs.rmSync(getPath(`${outDir}/${transformers.find(x => x.fileRegex.test(fileName))?.pathTransformer?.(fileName) ?? fileName}`), { force: true, recursive: true })
+          if (event === 'remove')
+            removed.push(fileChangedPath);
+          else {
+            updated.push(fileChangedPath);
+            copyFile(srcDir, fileName, outDir, transformers)
+          }
+
+          // Refresh browser
+          connections.forEach(x => x.write(`event: change\ndata: ${JSON.stringify({
+            added, removed, updated
+          })}\n\n`))
+        })
+    }
+  })
 
   context(config.esbuildOptions).then(async buildContext => {
     const { host: esbuildHost, port: esbuildPort } = await buildContext.serve({
@@ -16,6 +51,8 @@ export const start = (callback: () => void) => {
     })
 
     http.createServer(async (req, res) => {
+      if (req.url === '/esbuild')
+        connections.push(res)
       const esbuildProxyRequestOptions = {
         hostname: esbuildHost,
         port: esbuildPort,

@@ -80,31 +80,27 @@ export default config;
     <tr>
       <td>openBrowser</td>
       <td colspan="2">If the browser should open at localhost url when server starts</td>
-      <td>true</td>
+      <td>"true"</td>
     </tr>
     <tr>
       <td>port</td>
       <td colspan="2">Port to run dev server on</td>
-      <td>3000</td>
+      <td>"3000"</td>
     </tr>
     <tr>
       <td rowspan="5">public</td>
       <td rowspan="5">Public folder - will be copied at server start</td>
       <tr>
         <td>path</td>
-        <td>public</td>
+        <td>"public"</td>
       </tr>
       <tr>
         <td>indexName</td>
-        <td>index.html</td>
+        <td>"index.html"</td>
       </tr>
       <tr>
-        <td>minifyIndex</td>
-        <td>true if environment is PRODUCTION</td>
-      </tr>
-      <tr>
-        <td>serviceWorkerName</td>
-        <td></td>
+        <td>minify</td>
+        <td>"true" if environment is PRODUCTION</td>
       </tr>
     </tr>
   </tbody>
@@ -145,6 +141,10 @@ export default config;
       <td>"true"</td>
     </tr>
     <tr>
+      <td>splitting</td>
+      <td>"true"</td>
+    </tr>
+    <tr>
       <td>keepNames</td>
       <td>"true" if environment is PRODUCTION</td>
     </tr>
@@ -159,6 +159,10 @@ export default config;
     <tr>
       <td>target</td>
       <td>"esnext"</td>
+    </tr>
+    <tr>
+      <td>logLevel</td>
+      <td>"error"</td>
     </tr>
   </tbody>
 </table>

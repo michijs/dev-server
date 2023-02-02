@@ -1,27 +1,33 @@
 import fs from 'fs';
 import { getPath } from './getPath';
 
-type Tranformer = {
-  fileName: string,
-  transformer: (fileContent: string) => Buffer | string
+export type Tranformer = {
+  fileRegex: RegExp,
+  transformer: (fileContent: string) => Buffer | string,
+  pathTransformer?: (destPath: string) => string
 }
 
-export function copy(src, dest, fileTransformers?: Tranformer[]) {
-  const srcDir = fs.readdirSync(src);
-  srcDir.forEach(fileName => {
+export function copyFile(src: string, fileName: string, dest: string, fileTransformers?: Tranformer[], omit?: RegExp[]) {
+  if (!omit?.find(x => x.test(fileName))) {
     const srcPath = getPath(`${src}/${fileName}`);
     const destPath = getPath(`${dest}/${fileName}`);
     if (fs.lstatSync(srcPath).isDirectory()) {
       fs.mkdirSync(destPath);
       copy(srcPath, destPath, fileTransformers);
     } else {
-      const fileTransformer = fileTransformers?.find(x => x.fileName === fileName);
+      const fileTransformer = fileTransformers?.find(x => x.fileRegex.test(fileName));
       if (fileTransformer) {
         const srcFileContent = fs.readFileSync(srcPath, { encoding: 'utf-8' });
+        const finalDestPath = fileTransformer.pathTransformer?.(destPath) ?? destPath
         const transformedFile = fileTransformer.transformer(srcFileContent);
-        fs.writeFileSync(destPath, transformedFile);
+        fs.writeFileSync(finalDestPath, transformedFile);
       } else
-        fs.copyFileSync(srcPath, destPath);
+        fs.copyFileSync(srcPath, destPath, fs.constants.COPYFILE_FICLONE);
     }
-  });
+  }
+}
+
+export function copy(src: string, dest: string, fileTransformers?: Tranformer[], omit?: RegExp[]) {
+  const srcDir = fs.readdirSync(src);
+  srcDir.forEach(fileName => copyFile(src, fileName, dest, fileTransformers, omit));
 }
