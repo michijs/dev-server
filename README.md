@@ -1,5 +1,5 @@
-# Michi Dev Server
-Development server built with esbuild.
+# Michijs Dev Server
+Development server built on top of esbuild.
 
 ![npm][version] [![license][github-license]][github-license-url] ![npm][npm-downloads] ![npm][repo-size]
   [![CodeQL](https://github.com/michijs/dev-server/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/michijs/dev-server/actions/workflows/codeql-analysis.yml)
