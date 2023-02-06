@@ -1,6 +1,6 @@
 import coloredString from './utils/coloredString';
 import * as yargs from 'yargs';
-import Timer from './utils/timer';
+import { Timer } from './classes/Timer';
 
 export async function cli() {
   const timer = new Timer();

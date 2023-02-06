@@ -17,13 +17,23 @@ export type PublicOptions = {
    * @default true if environment is PRODUCTION 
   */
   minify?: boolean;
+
   /**
-   * A `manifest` is a JSON document that contains startup parameters and application defaults for
-   * when a web application is launched.
-   *
-   * @see https://w3c.github.io/manifest/#webappmanifest-dictionary
-   */
-  manifest?: WebAppManifest
+  * Is a JSON document that contains startup parameters and application defaults for when a web application is launched.
+  *
+  * @see https://w3c.github.io/manifest/#webappmanifest-dictionary
+  */
+  manifest?: {
+    /**
+     * Document name
+     * @default manifest.json
+    */
+    name?: string,
+    /**
+     * startup parameters and application defaults for when a web application is launched.
+     */
+    options?: WebAppManifest
+  }
 }
 
 export type Config = {

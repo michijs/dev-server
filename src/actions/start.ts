@@ -34,7 +34,7 @@ export const start = (callback: () => void) => {
             removed.push(fileChangedPath);
           else {
             updated.push(fileChangedPath);
-            copyFile(srcDir, fileName, outDir, transformers)
+            copyFile(srcDir, fileName, outDir)
           }
 
           // Refresh browser

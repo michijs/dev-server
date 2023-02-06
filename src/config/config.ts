@@ -3,11 +3,11 @@ import { Config } from '../types';
 import coloredString from '../utils/coloredString';
 import { copy } from '../utils/copy';
 import { getPath } from '../utils/getPath';
-import Timer from '../utils/timer';
+import { Timer } from '../classes/Timer';
 import { getIPAddress } from './getIPAddress';
 import { userConfig } from './userConfig';
 import http from 'http';
-import { jsAndTsRegex, notJsAndTsRegex, transformers } from '../utils/transformers';
+import { jsAndTsRegex, jsonTransformer, notJsAndTsRegex } from '../utils/transformers';
 
 const minify = process.env.NODE_ENV === 'PRODUCTION';
 const devServerListener = process.env.NODE_ENV === 'DEVELOPMENT' ? [getPath(`${__dirname}/public/client.js`)] : [];
@@ -25,7 +25,11 @@ const config: Required<Config> = {
     path: 'public',
     indexName: 'index.html',
     minify: minify,
-    ...(userConfig.public ?? {})
+    ...(userConfig.public ?? {}),
+    manifest: {
+      name: 'manifest.json',
+      ...(userConfig.public?.manifest ?? {})
+    },
   },
   esbuildOptions: {
     outdir: 'build',
@@ -74,9 +78,15 @@ const config: Required<Config> = {
             }
             fs.mkdirSync(build.initialOptions.outdir, { recursive: true })
           }
+
+          if (config.public.manifest?.options && config.public.manifest.name) {
+            const transformedFile = jsonTransformer.transformer(JSON.stringify(config.public.manifest.options, null, 2));
+            fs.writeFileSync(getPath(`${build.initialOptions.outdir}/${config.public.manifest.name}`), transformedFile);
+          }
+
           // Copy public path - Omit to copy service worker - will be transformed after
           if (config.public.path && build.initialOptions.outdir)
-            copy(config.public.path, build.initialOptions.outdir, transformers, [jsAndTsRegex]);
+            copy(config.public.path, build.initialOptions.outdir, [jsAndTsRegex]);
 
           const buildTimer = new Timer();
           let firstLoad = true;
@@ -84,7 +94,7 @@ const config: Required<Config> = {
           build.onEnd(() => {
             // first-load sw - Omit to copy any other non-js file
             if (firstLoad && config.public.path && build.initialOptions.outdir)
-              copy(config.public.path, build.initialOptions.outdir, transformers, [notJsAndTsRegex]);
+              copy(config.public.path, build.initialOptions.outdir, [notJsAndTsRegex]);
             console.log(coloredString(`  Build finished in ${buildTimer.endTimer()}ms`))
             firstLoad = false;
           })

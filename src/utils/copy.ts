@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { getPath } from './getPath';
+import { transformers } from './transformers';
 
 export type Tranformer = {
   fileRegex: RegExp,
@@ -7,15 +8,15 @@ export type Tranformer = {
   pathTransformer?: (destPath: string) => string
 }
 
-export function copyFile(src: string, fileName: string, dest: string, fileTransformers?: Tranformer[], omit?: RegExp[]) {
+export function copyFile(src: string, fileName: string, dest: string, omit?: RegExp[]) {
   if (!omit?.find(x => x.test(fileName))) {
     const srcPath = getPath(`${src}/${fileName}`);
     const destPath = getPath(`${dest}/${fileName}`);
     if (fs.lstatSync(srcPath).isDirectory()) {
       fs.mkdirSync(destPath);
-      copy(srcPath, destPath, fileTransformers);
+      copy(srcPath, destPath);
     } else {
-      const fileTransformer = fileTransformers?.find(x => x.fileRegex.test(fileName));
+      const fileTransformer = transformers?.find(x => x.fileRegex.test(fileName));
       if (fileTransformer) {
         const srcFileContent = fs.readFileSync(srcPath, { encoding: 'utf-8' });
         const finalDestPath = fileTransformer.pathTransformer?.(destPath) ?? destPath
@@ -27,7 +28,7 @@ export function copyFile(src: string, fileName: string, dest: string, fileTransf
   }
 }
 
-export function copy(src: string, dest: string, fileTransformers?: Tranformer[], omit?: RegExp[]) {
+export function copy(src: string, dest: string, omit?: RegExp[]) {
   const srcDir = fs.readdirSync(src);
-  srcDir.forEach(fileName => copyFile(src, fileName, dest, fileTransformers, omit));
+  srcDir.forEach(fileName => copyFile(src, fileName, dest, omit));
 }

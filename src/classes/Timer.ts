@@ -1,4 +1,4 @@
-export default class Timer {
+export class Timer {
     start: number;
 
     startTimer() {

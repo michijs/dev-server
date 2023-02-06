@@ -78,6 +78,18 @@ export default config;
       <td>Can be chequed <a href="#esbuild-default-options">here</a></td>
     </tr>
     <tr>
+      <td rowspan="3">manifest</td>
+      <td rowspan="3">Is a JSON document that contains startup parameters and application defaults for when a web application is launched.</td>
+      <tr>
+        <td>name</td>
+        <td>"manifest.json"</td>
+      </tr>
+      <tr>
+        <td>options</td>
+        <td></td>
+      </tr>
+    </tr>
+    <tr>
       <td>openBrowser</td>
       <td colspan="2">If the browser should open at localhost url when server starts</td>
       <td>"true"</td>
@@ -91,16 +103,16 @@ export default config;
       <td rowspan="5">public</td>
       <td rowspan="5">Public folder - will be copied at server start</td>
       <tr>
-        <td>path</td>
-        <td>"public"</td>
-      </tr>
-      <tr>
         <td>indexName</td>
         <td>"index.html"</td>
       </tr>
       <tr>
         <td>minify</td>
         <td>"true" if environment is PRODUCTION</td>
+      </tr>
+      <tr>
+        <td>path</td>
+        <td>"public"</td>
       </tr>
     </tr>
   </tbody>
@@ -117,36 +129,8 @@ export default config;
   </thead>
   <tbody>
     <tr>
-      <td>outdir</td>
-      <td>"build"</td>
-    </tr>
-    <tr>
-      <td>tsconfig</td>
-      <td>"tsconfig.json"</td>
-    </tr>
-    <tr>
-      <td>minifySyntax</td>
-      <td>"true" if environment is PRODUCTION</td>
-    </tr>
-    <tr>
-      <td>minifyWhitespace</td>
-      <td>"true" if environment is PRODUCTION</td>
-    </tr>
-    <tr>
-      <td>sourcemap</td>
-      <td>"true" if environment is <b>NOT</b> PRODUCTION</td>
-    </tr>
-    <tr>
       <td>bundle</td>
       <td>"true"</td>
-    </tr>
-    <tr>
-      <td>splitting</td>
-      <td>"true"</td>
-    </tr>
-    <tr>
-      <td>keepNames</td>
-      <td>"true" if environment is PRODUCTION</td>
     </tr>
     <tr>
       <td>entryPoints</td>
@@ -157,12 +141,40 @@ export default config;
       <td>"esm"</td>
     </tr>
     <tr>
-      <td>target</td>
-      <td>"esnext"</td>
+      <td>keepNames</td>
+      <td>"true" if environment is PRODUCTION</td>
     </tr>
     <tr>
       <td>logLevel</td>
       <td>"error"</td>
+    </tr>
+    <tr>
+      <td>minifySyntax</td>
+      <td>"true" if environment is PRODUCTION</td>
+    </tr>
+    <tr>
+      <td>minifyWhitespace</td>
+      <td>"true" if environment is PRODUCTION</td>
+    </tr>
+    <tr>
+      <td>outdir</td>
+      <td>"build"</td>
+    </tr>
+    <tr>
+      <td>sourcemap</td>
+      <td>"true" if environment is <b>NOT</b> PRODUCTION</td>
+    </tr>
+    <tr>
+      <td>splitting</td>
+      <td>"true"</td>
+    </tr>
+    <tr>
+      <td>target</td>
+      <td>"esnext"</td>
+    </tr>
+    <tr>
+      <td>tsconfig</td>
+      <td>"tsconfig.json"</td>
     </tr>
   </tbody>
 </table>
