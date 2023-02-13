@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@types/node": "18.13.0",
-    "@types/yargs": "17.0.0",
+    "@types/yargs": "17.0.22",
     "lint-staged": "13.1.1",
     "rome": "11.0.0",
     "simple-git-hooks": "2.8.1"
