@@ -47,7 +47,7 @@
     "@types/web-app-manifest": "^1.0.2",
     "esbuild": "0.17.7",
     "node-watch": "0.7.3",
-    "open": "8.4.1",
+    "open": "8.4.2",
     "typescript": "4.9.4",
     "yargs": "17.6.2"
   },
