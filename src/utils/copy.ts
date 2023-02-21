@@ -13,7 +13,8 @@ export function copyFile(src: string, fileName: string, dest: string, omit?: Reg
     const srcPath = getPath(`${src}/${fileName}`);
     const destPath = getPath(`${dest}/${fileName}`);
     if (fs.lstatSync(srcPath).isDirectory()) {
-      fs.mkdirSync(destPath);
+      if (!fs.existsSync(destPath))
+        fs.mkdirSync(destPath);
       copy(srcPath, destPath);
     } else {
       const fileTransformer = transformers?.find(x => x.fileRegex.test(fileName));
