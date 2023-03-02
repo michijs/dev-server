@@ -7,6 +7,7 @@ import { Timer } from '../classes/Timer';
 import { getIPAddress } from './getIPAddress';
 import { userConfig } from './userConfig';
 import http from 'http';
+import { resolve } from 'path'
 import { jsAndTsRegex, jsonTransformer, notJsAndTsRegex } from '../utils/transformers';
 
 const minify = process.env.NODE_ENV === 'PRODUCTION';
@@ -120,11 +121,12 @@ const localURL = `http://localhost:${config.port}`;
 // const hostURL = `${config.protocol}://${config.hostname}:${config.port}`;
 // const localURL = `${config.protocol}://localhost:${config.port}`;
 
-function findSymbolickLinkRealPath(path) {
-  if (fs.lstatSync(path).isSymbolicLink()) {
-    return findSymbolickLinkRealPath(fs.readlinkSync(path));
+function findSymbolickLinkRealPath(packagePath: string) {
+  if (fs.lstatSync(packagePath).isSymbolicLink()) {
+    // Getting absolute path for the simbolic link
+    return resolve(fs.readlinkSync(packagePath));
   }
-  return path;
+  return packagePath;
 }
 
 if (config.showLinkedPackages) {
