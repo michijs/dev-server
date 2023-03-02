@@ -1,6 +1,6 @@
 import { config } from "../config/config";
 import { Tranformer } from "./copy";
-import { minifyXMLLike, replaceEnter } from "./minify";
+import { minifyXMLLike } from "./minify";
 import { serviceWorkerTransformer } from "./serviceWorkerTransformer";
 
 export const jsAndTsRegex = /.*\.(?:ts|js)/;
@@ -8,7 +8,7 @@ export const notJsAndTsRegex = /.*\.(?!ts|js)/;
 
 export const jsonTransformer: Tranformer = {
   fileRegex: /.*\.(?:json)/,
-  transformer: (fileContent: string) => config.public.minify ? replaceEnter(fileContent) : fileContent
+  transformer: (fileContent: string) => config.public.minify ? JSON.stringify(JSON.parse(fileContent)) : fileContent
 };
 
 export const transformers: Tranformer[] = [
