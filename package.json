@@ -22,7 +22,7 @@
     "publish-npm": "npm run dist && npm publish --access public"
   },
   "devDependencies": {
-    "@types/node": "18.15.2",
+    "@types/node": "18.15.10",
     "@types/yargs": "17.0.24",
     "lint-staged": "13.2.0",
     "rome": "11.0.0",
