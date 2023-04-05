@@ -48,7 +48,7 @@
     "esbuild": "0.17.15",
     "node-watch": "0.7.3",
     "open": "9.1.0",
-    "typescript": "5.0.2",
+    "typescript": "5.0.3",
     "yargs": "17.7.1"
   },
   "simple-git-hooks": {
