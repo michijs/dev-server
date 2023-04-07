@@ -18,7 +18,11 @@
       "complexity": {
         "useSimplifiedLogicExpression": "off"
       },
+      "suspicious": {
+        "noExplicitAny": "off"
+      },
       "style": {
+        "noNonNullAssertion": "off",
         "useSingleVarDeclarator": "off",
         "useBlockStatements": "off",
         "noImplicitBoolean": "off"

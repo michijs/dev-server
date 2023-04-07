@@ -1,24 +1,23 @@
-import { config } from '../config/config';
-import { getAllFiles } from './getAllFiles';
+import { config } from '../config/config.js';
+import { getAllFiles } from './getAllFiles.js';
 import { Loader, transformSync as esbuild } from 'esbuild';
 
-export const serviceWorkerTransformer = (serviceWorkerCode: string, loader: Loader = 'ts'): string | Buffer => {
-  const {
-    sourcemap,
-    keepNames,
-    format,
-    outdir,
-    define,
-    target
-  } = config.esbuildOptions;
+export const serviceWorkerTransformer = (
+  serviceWorkerCode: string,
+  loader: Loader = 'ts',
+): string | Buffer => {
+  const { sourcemap, keepNames, format, outdir, define, target } =
+    config.esbuildOptions;
   try {
     const allFiles = getAllFiles(outdir!, '.');
     const result = esbuild(serviceWorkerCode, {
       define: {
         'process.env.BUILD_FILES': `${JSON.stringify(allFiles)}`,
         // Time at GMT+0
-        'process.env.CACHE_NAME': `"${new Date(new Date().toLocaleString('en-US', { timeZone: 'Etc/GMT' })).getTime()}"`,
-        ...define
+        'process.env.CACHE_NAME': `"${new Date(
+          new Date().toLocaleString('en-US', { timeZone: 'Etc/GMT' }),
+        ).getTime()}"`,
+        ...define,
       },
       loader,
       logLevel: 'error',
@@ -27,11 +26,11 @@ export const serviceWorkerTransformer = (serviceWorkerCode: string, loader: Load
       sourcemap,
       minifySyntax: config.public.minify,
       minifyWhitespace: config.public.minify,
-      keepNames
+      keepNames,
     });
     return result.code;
   } catch (ex) {
     console.log(ex);
-    throw ex
+    throw ex;
   }
 };

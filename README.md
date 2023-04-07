@@ -24,20 +24,29 @@ You have the following CLI commands:
     <tr>
       <th>CLI command</th>
       <th>Default environment</th>
+      <th>Description</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>start</td>
       <td>DEVELOPMENT</td>
+      <td>Allows to start a dev server as a webpage.</td>
     </tr>
     <tr>
       <td>build</td>
       <td>PRODUCTION</td>
+      <td>Allows to build the src code as a webpage.</td>
     </tr>
     <tr>
       <td>dist</td>
       <td>DISTRIBUTION</td>
+      <td>Allows to distribute the src code as a package. At the moment ESBuild does not support .d.ts files so we still use the Typescript compiler with the tsconfig provided by esbuildOptions field.</td>
+    </tr>
+    <tr>
+      <td>generate-icons</td>
+      <td>-</td>
+      <td>Allows to generate a full set of icons from a src icon.</td>
     </tr>
   </tbody>
 </table>
@@ -178,9 +187,6 @@ export default config;
     </tr>
   </tbody>
 </table>
-
-## Distribution
-At the moment ESBuild does not support .d.ts files so we still use the Typescript compiler with the tsconfig provided by esbuildOptions field.
 
 ## License
  - [MIT](https://github.com/michijs/dev-server/blob/master/LICENSE.md)

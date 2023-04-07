@@ -6,7 +6,10 @@
     "type": "git",
     "url": "https://github.com/michijs/dev-server.git"
   },
-  "main": "bin/index",
+  "exports": {
+		"types": "./bin/index.d.ts",
+		"default": "./bin/index.js"
+	},
   "bin": {
     "michi-server": "bin/index.js"
   },
@@ -14,6 +17,7 @@
   "files": [
     "bin/"
   ],
+  "type": "module",
   "baseUrl": "./src",
   "scripts": {
     "dist": "tsc",
@@ -26,6 +30,7 @@
     "@types/yargs": "17.0.24",
     "lint-staged": "13.2.0",
     "rome": "12.0.0",
+    "sharp": "0.32.0",
     "simple-git-hooks": "2.8.1"
   },
   "keywords": [
@@ -43,11 +48,16 @@
     "server",
     "development"
   ],
+  "engines": {
+    "node": ">=14.16"
+  },
   "dependencies": {
-    "@types/web-app-manifest": "^1.0.2",
+    "@types/web-app-manifest": "1.0.2",
     "esbuild": "0.17.15",
     "node-watch": "0.7.3",
     "open": "9.1.0",
+    "sharp-bmp": "0.1.5",
+    "sharp-ico": "0.1.5",
     "typescript": "5.0.3",
     "yargs": "17.7.1"
   },

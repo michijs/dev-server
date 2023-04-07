@@ -1,17 +1,26 @@
 import fs from 'fs';
-import { Config } from '../types';
-import coloredString from '../utils/coloredString';
-import { copy } from '../utils/copy';
-import { getPath } from '../utils/getPath';
-import { Timer } from '../classes/Timer';
-import { getIPAddress } from './getIPAddress';
-import { userConfig } from './userConfig';
+import { Config } from '../types.js';
+import coloredString from '../utils/coloredString.js';
+import { copy } from '../utils/copy.js';
+import { getPath } from '../utils/getPath.js';
+import { Timer } from '../classes/Timer.js';
+import { getIPAddress } from './getIPAddress.js';
+import { userConfig } from './userConfig.js';
 import http from 'http';
-import { resolve } from 'path'
-import { jsAndTsRegex, jsonTransformer, notJsAndTsRegex } from '../utils/transformers';
+import { resolve } from 'path';
+import {
+  jsAndTsRegex,
+  jsonTransformer,
+  notJsAndTsRegex,
+} from '../utils/transformers.js';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
 const minify = process.env.NODE_ENV === 'PRODUCTION';
-const devServerListener = process.env.NODE_ENV === 'DEVELOPMENT' ? [getPath(`${__dirname}/public/client.js`)] : [];
+const devServerListener =
+  process.env.NODE_ENV === 'DEVELOPMENT'
+    ? [getPath(`${dirname(fileURLToPath(import.meta.url))}/public/client.js`)]
+    : [];
 
 export const connections: (http.ServerResponse<http.IncomingMessage> & {
   req: http.IncomingMessage;
@@ -29,7 +38,7 @@ const config: Required<Config> = {
     ...(userConfig.public ?? {}),
     manifest: {
       name: 'manifest.json',
-      ...(userConfig.public?.manifest ?? {})
+      ...(userConfig.public?.manifest ?? {}),
     },
   },
   esbuildOptions: {
@@ -77,43 +86,59 @@ const config: Required<Config> = {
             if (fs.existsSync(build.initialOptions.outdir)) {
               fs.rmSync(build.initialOptions.outdir, { recursive: true });
             }
-            fs.mkdirSync(build.initialOptions.outdir, { recursive: true })
+            fs.mkdirSync(build.initialOptions.outdir, { recursive: true });
           }
 
           if (config.public.manifest?.options && config.public.manifest.name) {
-            const transformedFile = jsonTransformer.transformer(JSON.stringify(config.public.manifest.options, null, 2));
-            fs.writeFileSync(getPath(`${build.initialOptions.outdir}/${config.public.manifest.name}`), transformedFile);
+            const transformedFile = jsonTransformer.transformer(
+              JSON.stringify(config.public.manifest.options, null, 2),
+            );
+            fs.writeFileSync(
+              getPath(
+                `${build.initialOptions.outdir}/${config.public.manifest.name}`,
+              ),
+              transformedFile,
+            );
           }
 
           // Copy public path - Omit to copy service worker - will be transformed after
           if (config.public.path && build.initialOptions.outdir)
-            copy(config.public.path, build.initialOptions.outdir, [jsAndTsRegex]);
+            copy(config.public.path, build.initialOptions.outdir, [
+              jsAndTsRegex,
+            ]);
 
           const buildTimer = new Timer();
           let firstLoad = true;
-          build.onStart(() => buildTimer.startTimer())
+          build.onStart(() => buildTimer.startTimer());
           build.onEnd(() => {
             // first-load sw - Omit to copy any other non-js file
             if (firstLoad && config.public.path && build.initialOptions.outdir)
-              copy(config.public.path, build.initialOptions.outdir, [notJsAndTsRegex]);
-            console.log(coloredString(`  Build finished in ${buildTimer.endTimer()}ms`))
+              copy(config.public.path, build.initialOptions.outdir, [
+                notJsAndTsRegex,
+              ]);
+            console.log(
+              coloredString(`  Build finished in ${buildTimer.endTimer()}ms`),
+            );
             firstLoad = false;
-          })
-        }
-      }
+          });
+        },
+      },
     ],
     define: {
       // Intentionally added before process
       process: JSON.stringify({
         env: {
           NODE_ENV: process.env.NODE_ENV,
-          ...(userConfig.env ?? {})
-        }
-      })
+          ...(userConfig.env ?? {}),
+        },
+      }),
     },
-    inject: [...devServerListener, ...(userConfig.esbuildOptions?.inject ?? [])],
+    inject: [
+      ...devServerListener,
+      ...(userConfig.esbuildOptions?.inject ?? []),
+    ],
     ...(userConfig.esbuildOptions?.define ?? {}),
-  }
+  },
 };
 
 const hostURL = `http://${getIPAddress()}:${config.port}`;
@@ -134,7 +159,7 @@ if (config.showLinkedPackages) {
   const dependencies = Object.keys(packageJson.dependencies || {});
   const devDependencies = Object.keys(packageJson.devDependencies || {});
 
-  dependencies.concat(devDependencies).forEach(packagePath => {
+  dependencies.concat(devDependencies).forEach((packagePath) => {
     const packagePathOnNodeModules = getPath(`node_modules/${packagePath}`);
     if (fs.lstatSync(packagePathOnNodeModules).isSymbolicLink()) {
       const pathToWatch = findSymbolickLinkRealPath(packagePathOnNodeModules);
