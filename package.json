@@ -54,7 +54,7 @@
   },
   "dependencies": {
     "@types/web-app-manifest": "1.0.2",
-    "esbuild": "0.17.15",
+    "esbuild": "0.17.16",
     "node-watch": "0.7.3",
     "open": "9.1.0",
     "sharp-bmp": "0.1.5",
