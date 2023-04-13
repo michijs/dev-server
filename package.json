@@ -59,8 +59,10 @@
     "open": "9.1.0",
     "sharp-bmp": "0.1.5",
     "sharp-ico": "0.1.5",
-    "typescript": "5.0.3",
     "yargs": "17.7.1"
+  },
+  "peerDependencies": {
+    "typescript": "5.0.4"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
