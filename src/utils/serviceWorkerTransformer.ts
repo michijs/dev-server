@@ -12,9 +12,9 @@ export const serviceWorkerTransformer = (
     const allFiles = getAllFiles(outdir!, '.');
     const result = esbuild(serviceWorkerCode, {
       define: {
-        'process.env.BUILD_FILES': `${JSON.stringify(allFiles)}`,
+        'michiProcess.env.BUILD_FILES': `${JSON.stringify(allFiles)}`,
         // Time at GMT+0
-        'process.env.CACHE_NAME': `"${new Date(
+        'michiProcess.env.CACHE_NAME': `"${new Date(
           new Date().toLocaleString('en-US', { timeZone: 'Etc/GMT' }),
         ).getTime()}"`,
         ...define,
