@@ -71,57 +71,67 @@ export default config;
 <table>
   <thead>
     <tr>
-      <th colspan="3">ServerConfig</th>
+      <th colspan="4">ServerConfig</th>
       <th>Default value</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>env</td>
-      <td colspan="2">Allows to add environment variables</td>
+      <td colspan="3">Allows to add environment variables</td>
       <td></td>
     </tr>
     <tr>
       <td>esbuildOptions</td>
-      <td colspan="2">All the options available at <a href="https://esbuild.github.io/plugins/#build-options">esbuild documentation</a></td>
+      <td colspan="3">All the options available at <a href="https://esbuild.github.io/plugins/#build-options">esbuild documentation</a></td>
       <td>Can be chequed <a href="#esbuild-default-options">here</a></td>
     </tr>
     <tr>
-      <td rowspan="3">manifest</td>
-      <td rowspan="3">Is a JSON document that contains startup parameters and application defaults for when a web application is launched.</td>
-      <tr>
-        <td>name</td>
-        <td>"manifest.json"</td>
-      </tr>
-      <tr>
-        <td>options</td>
-        <td></td>
-      </tr>
-    </tr>
-    <tr>
       <td>openBrowser</td>
-      <td colspan="2">If the browser should open at localhost url when server starts</td>
+      <td colspan="3">If the browser should open at localhost url when server starts</td>
       <td>"true"</td>
     </tr>
     <tr>
       <td>port</td>
-      <td colspan="2">Port to run dev server on</td>
+      <td colspan="3">Port to run dev server on</td>
       <td>"3000"</td>
     </tr>
     <tr>
-      <td rowspan="5">public</td>
-      <td rowspan="5">Public folder - will be copied at server start</td>
+      <td rowspan="10">public</td>
+      <td rowspan="10">Public folder - will be copied at server start</td>
       <tr>
-        <td>indexName</td>
+        <td colspan="2">indexName</td>
         <td>"index.html"</td>
       </tr>
       <tr>
-        <td>minify</td>
+        <td colspan="2">minify</td>
         <td>"true" if environment is PRODUCTION</td>
       </tr>
       <tr>
-        <td>path</td>
+        <td colspan="2">path</td>
         <td>"public"</td>
+      </tr>
+      <tr>
+        <td rowspan="3">manifest <br/><small>(A JSON document that contains startup parameters and application defaults for when a web application is launched.)</small></td>
+        <tr>
+          <td>name</td>
+          <td>"manifest.json"</td>
+        </tr>
+        <tr>
+          <td>options</td>
+          <td></td>
+        </tr>
+      </tr>
+      <tr>
+        <td rowspan="3">wellKnown <br/><small>(A URI with the path component /.well-known/assetlinks.json is used by the AssetLinks protocol to identify one or more digital assets (such as web sites or mobile apps) that are related to the hosting web site in some fashion.)</small></td>
+        <tr>
+          <td>relation</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>target</td>
+          <td></td>
+        </tr>
       </tr>
     </tr>
   </tbody>

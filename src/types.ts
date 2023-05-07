@@ -1,7 +1,46 @@
 import { BuildOptions } from 'esbuild';
 import type { WebAppManifest } from 'web-app-manifest';
 
+interface AssetDescriptorWeb {
+  namespace: 'web';
+  site: string;
+}
+interface AssetDescriptorAndroid {
+  namespace: 'android_app';
+  package_name: string;
+  /**
+   * The sha256_cert_fingerprints field is a list of colon-separated hex strings.
+   */
+  sha256_cert_fingerprints: string[];
+}
+interface AssetDescriptorIos {
+  namespace: 'ios_app';
+  appid: string;
+}
+
+type AssetDescriptor =
+  | AssetDescriptorWeb
+  | AssetDescriptorAndroid
+  | AssetDescriptorIos;
+
+export interface WellKnown {
+  /**
+   * A Relation describes the nature of a statement, and consists of a kind and a detail.
+   *
+   * [Specification] {@link https://github.com/google/digitalassetlinks/blob/master/well-known/specification.md}
+   *
+   * @example [delegate_permission/common.handle_all_urls]
+   * */
+  relation: string[];
+  target: AssetDescriptor;
+}
+
 export interface PublicOptions {
+  /**
+   * A URI with the path component /.well-known/assetlinks.json is used by the AssetLinks protocol to identify one or more digital assets (such as web sites or mobile apps) that are related to the hosting web site in some fashion.
+   *
+   * [Specification] {@link https://github.com/google/digitalassetlinks/blob/master/well-known/specification.md} */
+  wellKnown?: WellKnown[];
   /**
    * Public folder path
    * @default public

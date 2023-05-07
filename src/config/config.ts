@@ -101,6 +101,18 @@ const config: Required<Config> = {
             );
           }
 
+          if (config.public.wellKnown) {
+            const transformedFile = jsonTransformer.transformer(
+              JSON.stringify(config.public.wellKnown),
+            );
+            const wellKnownDir = `${build.initialOptions.outdir}/.well-known`;
+            if (!fs.existsSync(wellKnownDir)) fs.mkdirSync(wellKnownDir);
+            fs.writeFileSync(
+              getPath(`${wellKnownDir}/assetlinks.json`),
+              transformedFile,
+            );
+          }
+
           // Copy public path - Omit to copy service worker - will be transformed after
           if (config.public.path && build.initialOptions.outdir)
             copy(config.public.path, build.initialOptions.outdir, [
