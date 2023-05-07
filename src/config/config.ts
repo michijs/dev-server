@@ -138,7 +138,7 @@ const config: Required<Config> = {
     ],
     define: {
       // Intentionally added before process
-      process: JSON.stringify({
+      michiProcess: JSON.stringify({
         env: {
           NODE_ENV: process.env.NODE_ENV,
           ...(userConfig.env ?? {}),

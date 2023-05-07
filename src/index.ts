@@ -4,8 +4,11 @@ export type {
   ServerConfig,
   PublicOptions,
   DefaultEnvironment,
-  ProcessSWType,
-  ProcessType,
+  MichiProcessType,
+  AssetDescriptor,
+  AssetDescriptorIos,
+  AssetDescriptorAndroid,
+  AssetDescriptorWeb,
 } from './types.js';
 import { cli } from './cli.js';
 cli();

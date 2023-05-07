@@ -1,11 +1,11 @@
 import { BuildOptions } from 'esbuild';
 import type { WebAppManifest } from 'web-app-manifest';
 
-interface AssetDescriptorWeb {
+export interface AssetDescriptorWeb {
   namespace: 'web';
   site: string;
 }
-interface AssetDescriptorAndroid {
+export interface AssetDescriptorAndroid {
   namespace: 'android_app';
   package_name: string;
   /**
@@ -13,12 +13,12 @@ interface AssetDescriptorAndroid {
    */
   sha256_cert_fingerprints: string[];
 }
-interface AssetDescriptorIos {
+export interface AssetDescriptorIos {
   namespace: 'ios_app';
   appid: string;
 }
 
-type AssetDescriptor =
+export type AssetDescriptor =
   | AssetDescriptorWeb
   | AssetDescriptorAndroid
   | AssetDescriptorIos;
@@ -111,15 +111,11 @@ export interface ServerConfig extends Config {
   env?: { [key: string]: any };
 }
 
-export interface ProcessType {
-  env: {
-    NODE_ENV: DefaultEnvironment;
-  };
-}
-export interface ProcessSWType {
+export interface MichiProcessType {
   env: {
     BUILD_FILES: string[];
     CACHE_NAME: string;
+    NODE_ENV: DefaultEnvironment;
   };
 }
 
