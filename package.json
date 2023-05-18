@@ -1,7 +1,7 @@
 {
   "name": "@michijs/dev-server",
   "license": "MIT",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/michijs/dev-server.git"
@@ -27,10 +27,10 @@
     "publish-npm": "npm run dist && npm publish --access public"
   },
   "devDependencies": {
-    "@types/node": "18.16.3",
+    "@types/node": "20.1.7",
     "@types/yargs": "17.0.24",
     "lint-staged": "13.2.2",
-    "rome": "12.0.0",
+    "rome": "12.1.0",
     "simple-git-hooks": "2.8.1"
   },
   "keywords": [
@@ -52,8 +52,8 @@
     "node": ">=14.16"
   },
   "dependencies": {
-    "@types/web-app-manifest": "1.0.2",
-    "esbuild": "0.17.18",
+    "@types/web-app-manifest": "1.0.3",
+    "esbuild": "0.17.19",
     "node-watch": "0.7.3",
     "open": "9.1.0",
     "sharp": "0.32.1",
