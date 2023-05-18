@@ -36,6 +36,12 @@ export async function generateIcons(callback: () => void, src: string) {
           ),
         );
     }),
+    image
+      .resize(512, 512)
+      .png()
+      .toFile(
+        getPath(`${destPath}/${src.split('/').at(-1)?.split('.')[0]}-512.png`),
+      ),
     generateFavicon(src, getPath(`${config.public.path}/favicon.ico`)),
   ]);
 
