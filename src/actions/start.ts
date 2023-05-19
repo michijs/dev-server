@@ -1,24 +1,24 @@
-import http from 'http';
-import fs from 'fs';
-import { config, hostURL, localURL, connections } from '../config/config.js';
-import coloredString from '../utils/coloredString.js';
-import { getPath } from '../utils/getPath.js';
-import open from 'open';
-import { context } from 'esbuild';
-import watch from 'node-watch';
-import { copyFile } from '../utils/copy.js';
-import { sep } from 'path';
-import { transformers } from '../utils/transformers.js';
+import http from "http";
+import fs from "fs";
+import { config, hostURL, localURL, connections } from "../config/config.js";
+import coloredString from "../utils/coloredString.js";
+import { getPath } from "../utils/getPath.js";
+import open from "open";
+import { context } from "esbuild";
+import watch from "node-watch";
+import { copyFile } from "../utils/copy.js";
+import { sep } from "path";
+import { transformers } from "../utils/transformers.js";
 
 export const start = (callback: () => void) => {
   config.esbuildOptions.plugins?.push({
-    name: 'michijs-dev-server-watch-public-folder',
+    name: "michijs-dev-server-watch-public-folder",
     setup(build) {
       if (config.public.path)
         watch.default(
           config.public.path,
           {
-            encoding: 'utf-8',
+            encoding: "utf-8",
             persistent: true,
             recursive: true,
           },
@@ -44,7 +44,7 @@ export const start = (callback: () => void) => {
               ),
               { force: true, recursive: true },
             );
-            if (event === 'remove') removed.push(fileChangedPath);
+            if (event === "remove") removed.push(fileChangedPath);
             else {
               updated.push(fileChangedPath);
               copyFile(srcDir, fileName, outDir);
@@ -72,7 +72,7 @@ export const start = (callback: () => void) => {
 
     http
       .createServer(async (req, res) => {
-        if (req.url === '/esbuild') connections.push(res);
+        if (req.url === "/esbuild") connections.push(res);
         const esbuildProxyRequestOptions = {
           hostname: esbuildHost,
           port: esbuildPort,
@@ -87,7 +87,7 @@ export const start = (callback: () => void) => {
           (proxyRes) => {
             // If esbuild returns "not found", send a custom 404 page
             if (!proxyRes.statusCode || proxyRes.statusCode === 404) {
-              res.writeHead(200, { 'Content-Type': 'text/html' });
+              res.writeHead(200, { "Content-Type": "text/html" });
               // TODO: Find a better way to do this
               res.end(
                 fs.readFileSync(

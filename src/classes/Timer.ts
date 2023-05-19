@@ -1,11 +1,11 @@
 export class Timer {
-    start: number;
+  start: number;
 
-    startTimer() {
-      this.start = Date.now();
-    }
+  startTimer() {
+    this.start = Date.now();
+  }
 
-    endTimer() {
-      return Date.now() - this.start;
-    }
+  endTimer() {
+    return Date.now() - this.start;
+  }
 }

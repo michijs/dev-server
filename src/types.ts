@@ -1,12 +1,12 @@
-import { BuildOptions } from 'esbuild';
-import type { WebAppManifest } from 'web-app-manifest';
+import { BuildOptions } from "esbuild";
+import type { WebAppManifest } from "web-app-manifest";
 
 export interface AssetDescriptorWeb {
-  namespace: 'web';
+  namespace: "web";
   site: string;
 }
 export interface AssetDescriptorAndroid {
-  namespace: 'android_app';
+  namespace: "android_app";
   package_name: string;
   /**
    * The sha256_cert_fingerprints field is a list of colon-separated hex strings.
@@ -14,7 +14,7 @@ export interface AssetDescriptorAndroid {
   sha256_cert_fingerprints: string[];
 }
 export interface AssetDescriptorIos {
-  namespace: 'ios_app';
+  namespace: "ios_app";
   appid: string;
 }
 
@@ -102,7 +102,7 @@ export interface Config {
 //   [P in keyof T]?: DeepPartial<T[P]>;
 // };
 
-export type DefaultEnvironment = 'PRODUCTION' | 'DISTRIBUTION' | 'DEVELOPMENT';
+export type DefaultEnvironment = "PRODUCTION" | "DISTRIBUTION" | "DEVELOPMENT";
 
 export interface ServerConfig extends Config {
   /**

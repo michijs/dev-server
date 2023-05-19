@@ -1,7 +1,7 @@
-import { config } from '../config/config.js';
-import { Tranformer } from './copy.js';
-import { minifyXMLLike } from './minify.js';
-import { serviceWorkerTransformer } from './serviceWorkerTransformer.js';
+import { config } from "../config/config.js";
+import { Tranformer } from "./copy.js";
+import { minifyXMLLike } from "./minify.js";
+import { serviceWorkerTransformer } from "./serviceWorkerTransformer.js";
 
 export const jsAndTsRegex = /.*\.(?:ts|js)/;
 export const notJsAndTsRegex = /.*\.(?!ts|js)/;
@@ -24,6 +24,6 @@ export const transformers: Tranformer[] = [
   {
     fileRegex: jsAndTsRegex,
     transformer: serviceWorkerTransformer,
-    pathTransformer: (destPath) => destPath.replace('.ts', '.js'),
+    pathTransformer: (destPath) => destPath.replace(".ts", ".js"),
   },
 ];

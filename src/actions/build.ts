@@ -1,5 +1,5 @@
-import { config } from '../config/config.js';
-import { build as esbuild } from 'esbuild';
+import { config } from "../config/config.js";
+import { build as esbuild } from "esbuild";
 
 export function build(callback?: Function) {
   return new Promise((resolve, reject) => {
