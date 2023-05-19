@@ -1,4 +1,4 @@
-import { normalize, sep } from 'path';
+import { normalize, sep } from "path";
 
 export function getPath(path: string) {
   return normalize(path).replace(/\\/g, sep);

@@ -9,6 +9,6 @@ export type {
   AssetDescriptorIos,
   AssetDescriptorAndroid,
   AssetDescriptorWeb,
-} from './types.js';
-import { cli } from './cli.js';
+} from "./types.js";
+import { cli } from "./cli.js";
 cli();

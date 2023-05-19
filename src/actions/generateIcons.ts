@@ -1,10 +1,10 @@
-import { getPath } from '../utils/getPath.js';
-import { config } from '../config/config.js';
-import { mkdirSync, existsSync, writeFileSync } from 'fs';
-import { pngToIco } from '../utils/pngToIco.js';
+import { getPath } from "../utils/getPath.js";
+import { config } from "../config/config.js";
+import { mkdirSync, existsSync, writeFileSync } from "fs";
+import { pngToIco } from "../utils/pngToIco.js";
 
 const generateFavicon = async (src: string, dest: string) => {
-  const { default: sharp } = await import('sharp');
+  const { default: sharp } = await import("sharp");
   const image = await sharp(src);
 
   const iconSizes = [16, 24, 32, 48, 64, 128, 256];
@@ -21,7 +21,7 @@ export async function generateIcons(callback: () => void, src: string) {
   const destPath = getPath(`${config.public.path}/assets/generated`);
   if (!existsSync(destPath)) mkdirSync(destPath, { recursive: true });
 
-  const { default: sharp } = await import('sharp');
+  const { default: sharp } = await import("sharp");
   const sizes = [24, 48, 72, 96, 128, 256, 512];
   const image = sharp(src);
 
@@ -32,7 +32,7 @@ export async function generateIcons(callback: () => void, src: string) {
         .webp()
         .toFile(
           getPath(
-            `${destPath}/${src.split('/').at(-1)?.split('.')[0]}-${x}.webp`,
+            `${destPath}/${src.split("/").at(-1)?.split(".")[0]}-${x}.webp`,
           ),
         );
     }),
@@ -40,7 +40,7 @@ export async function generateIcons(callback: () => void, src: string) {
       .resize(512, 512)
       .png()
       .toFile(
-        getPath(`${destPath}/${src.split('/').at(-1)?.split('.')[0]}-512.png`),
+        getPath(`${destPath}/${src.split("/").at(-1)?.split(".")[0]}-512.png`),
       ),
     generateFavicon(src, getPath(`${config.public.path}/favicon.ico`)),
   ]);

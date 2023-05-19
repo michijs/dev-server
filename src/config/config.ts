@@ -1,24 +1,24 @@
-import fs from 'fs';
-import { Config } from '../types.js';
-import coloredString from '../utils/coloredString.js';
-import { copy } from '../utils/copy.js';
-import { getPath } from '../utils/getPath.js';
-import { Timer } from '../classes/Timer.js';
-import { getIPAddress } from './getIPAddress.js';
-import { userConfig } from './userConfig.js';
-import http from 'http';
-import { resolve } from 'path';
+import fs from "fs";
+import { Config } from "../types.js";
+import coloredString from "../utils/coloredString.js";
+import { copy } from "../utils/copy.js";
+import { getPath } from "../utils/getPath.js";
+import { Timer } from "../classes/Timer.js";
+import { getIPAddress } from "./getIPAddress.js";
+import { userConfig } from "./userConfig.js";
+import http from "http";
+import { resolve } from "path";
 import {
   jsAndTsRegex,
   jsonTransformer,
   notJsAndTsRegex,
-} from '../utils/transformers.js';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
+} from "../utils/transformers.js";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 
-const minify = process.env.NODE_ENV === 'PRODUCTION';
+const minify = process.env.NODE_ENV === "PRODUCTION";
 const devServerListener =
-  process.env.NODE_ENV === 'DEVELOPMENT'
+  process.env.NODE_ENV === "DEVELOPMENT"
     ? [getPath(`${dirname(fileURLToPath(import.meta.url))}/public/client.js`)]
     : [];
 
@@ -27,33 +27,33 @@ export const connections: (http.ServerResponse<http.IncomingMessage> & {
 })[] = [];
 const config: Required<Config> = {
   port: 3000,
-  openBrowser: process.env.NODE_ENV === 'DEVELOPMENT',
+  openBrowser: process.env.NODE_ENV === "DEVELOPMENT",
   showLinkedPackages: true,
   ...userConfig,
   // protocol: 'http',
   public: {
-    path: 'public',
-    indexName: 'index.html',
+    path: "public",
+    indexName: "index.html",
     minify: minify,
     ...(userConfig.public ?? {}),
     manifest: {
-      name: 'manifest.json',
+      name: "manifest.json",
       ...(userConfig.public?.manifest ?? {}),
     },
   },
   esbuildOptions: {
-    outdir: 'build',
-    tsconfig: 'tsconfig.json',
+    outdir: "build",
+    tsconfig: "tsconfig.json",
     minifySyntax: minify,
     minifyWhitespace: minify,
-    sourcemap: process.env.NODE_ENV !== 'PRODUCTION',
+    sourcemap: process.env.NODE_ENV !== "PRODUCTION",
     splitting: true,
     bundle: true,
     keepNames: minify,
-    entryPoints: ['src/index.ts'],
-    format: 'esm',
-    target: 'esnext',
-    logLevel: 'error',
+    entryPoints: ["src/index.ts"],
+    format: "esm",
+    target: "esnext",
+    logLevel: "error",
     ...(userConfig.esbuildOptions ?? {}),
     // Still not supported
     // bug .css.ts
@@ -79,7 +79,7 @@ const config: Required<Config> = {
     plugins: [
       ...(userConfig.esbuildOptions?.plugins ?? []),
       {
-        name: 'michijs-dev-server',
+        name: "michijs-dev-server",
         setup(build) {
           // Clean outdir
           if (build.initialOptions.outdir) {
@@ -167,7 +167,7 @@ function findSymbolickLinkRealPath(packagePath: string) {
 }
 
 if (config.showLinkedPackages) {
-  const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+  const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
   const dependencies = Object.keys(packageJson.dependencies || {});
   const devDependencies = Object.keys(packageJson.devDependencies || {});
 

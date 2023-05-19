@@ -1,4 +1,4 @@
-import { networkInterfaces } from 'os';
+import { networkInterfaces } from "os";
 
 export function getIPAddress() {
   const interfaces = networkInterfaces();
@@ -8,9 +8,13 @@ export function getIPAddress() {
     if (iface)
       for (let i = 0; i < iface.length; i++) {
         const alias = iface[i];
-        if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal)
+        if (
+          alias.family === "IPv4" &&
+          alias.address !== "127.0.0.1" &&
+          !alias.internal
+        )
           return alias.address;
       }
   }
-  return '0.0.0.0';
+  return "0.0.0.0";
 }

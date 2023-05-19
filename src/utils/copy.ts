@@ -1,6 +1,6 @@
-import fs from 'fs';
-import { getPath } from './getPath.js';
-import { transformers } from './transformers.js';
+import fs from "fs";
+import { getPath } from "./getPath.js";
+import { transformers } from "./transformers.js";
 
 export type Tranformer = {
   fileRegex: RegExp;
@@ -25,7 +25,7 @@ export function copyFile(
         x.fileRegex.test(fileName),
       );
       if (fileTransformer) {
-        const srcFileContent = fs.readFileSync(srcPath, { encoding: 'utf-8' });
+        const srcFileContent = fs.readFileSync(srcPath, { encoding: "utf-8" });
         const finalDestPath =
           fileTransformer.pathTransformer?.(destPath) ?? destPath;
         const transformedFile = fileTransformer.transformer(srcFileContent);

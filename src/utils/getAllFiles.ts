@@ -1,5 +1,5 @@
-import fs from 'fs';
-import { getPath } from './getPath.js';
+import fs from "fs";
+import { getPath } from "./getPath.js";
 
 export const getAllFiles = function (
   dirPath: string,
