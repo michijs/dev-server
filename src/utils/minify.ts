@@ -1,4 +1,4 @@
-export function replaceEnter(json: string, replaceWith: string = "") {
+export function replaceEnter(json: string, replaceWith = "") {
   return json.replace(/\s+/g, replaceWith).trim();
 }
 export function minifyXMLLike(xml: string) {
