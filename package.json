@@ -27,7 +27,7 @@
     "publish-npm": "npm run dist && npm publish --access public"
   },
   "devDependencies": {
-    "@types/node": "20.2.5",
+    "@types/node": "20.3.0",
     "@types/yargs": "17.0.24"
   },
   "keywords": [
