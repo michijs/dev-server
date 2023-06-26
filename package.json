@@ -1,7 +1,7 @@
 {
   "name": "@michijs/dev-server",
   "license": "MIT",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/michijs/dev-server.git"
@@ -53,11 +53,11 @@
     "esbuild": "0.18.9",
     "node-watch": "0.7.3",
     "open": "9.1.0",
-    "puppeteer": "^20.5.0",
+    "puppeteer": "20.7.3",
     "sharp": "0.32.1",
     "yargs": "17.7.2"
   },
   "peerDependencies": {
-    "typescript": "5.0.4"
+    "typescript": "^5.0.4"
   }
 }
