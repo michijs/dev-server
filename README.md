@@ -1,5 +1,6 @@
 # Michijs Dev Server
 Development server built on top of esbuild.
+<!-- TODO: To generate feature-image require to install roboto -->
 
 ![npm][version] [![license][github-license]][github-license-url] ![npm][npm-downloads] ![npm][repo-size]
   [![CodeQL](https://github.com/michijs/dev-server/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/michijs/dev-server/actions/workflows/codeql-analysis.yml)
@@ -92,13 +93,33 @@ export default config;
       <td>"true"</td>
     </tr>
     <tr>
+      <td>watch</td>
+      <td colspan="3">If the server should watch for changes on the folders</td>
+      <td>"true"</td>
+    </tr>
+    <tr>
       <td>port</td>
       <td colspan="3">Port to run dev server on</td>
       <td>"3000"</td>
     </tr>
     <tr>
-      <td rowspan="10">public</td>
-      <td rowspan="10">Public folder - will be copied at server start</td>
+      <td rowspan="14">public</td>
+      <td rowspan="14">Public folder - will be copied at server start</td>
+      <tr>
+        <td rowspan="4">assets</td>
+        <tr>
+          <td>path</td>
+          <td>"assets"</td>
+        </tr>
+        <tr>
+          <td>screenshots</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>featureImage</td>
+          <td></td>
+        </tr>
+      </tr>
       <tr>
         <td colspan="2">indexName</td>
         <td>"index.html"</td>

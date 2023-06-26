@@ -27,9 +27,9 @@ export async function cli() {
       default: false,
       description: "Allows to distribute the src code as a package.",
     })
-    .option("generate-icons", {
+    .option("generate-assets", {
       type: "string",
-      description: "Allows to generate a full set of icons from a src icon.",
+      description: "Allows to generate a full set of icons and screenshots from a src icon.",
     })
     .option("watch", {
       type: "boolean",
@@ -49,11 +49,11 @@ export async function cli() {
     args.env ||
     (args.build ? "PRODUCTION" : args.dist ? "DISTRIBUTION" : "DEVELOPMENT");
 
-  const generateIcons =
-    args.generateIcons === "" ? "public/assets/icon.svg" : args.generateIcons;
-  if (generateIcons) {
-    const action = await import("./actions/generateIcons.js");
-    await action.generateIcons(showReadyMessage, generateIcons);
+  const generateAssets =
+    args.generateAssets === "" ? "public/assets/icon.svg" : args.generateAssets;
+  if (generateAssets) {
+    const action = await import("./actions/generateAssets.js");
+    await action.generateAssets(showReadyMessage, generateAssets);
   } else
     console.log(coloredString(`  Running in ${process.env.NODE_ENV} mode`));
 

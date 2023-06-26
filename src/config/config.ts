@@ -25,10 +25,11 @@ const devServerListener =
 export const connections: (http.ServerResponse<http.IncomingMessage> & {
   req: http.IncomingMessage;
 })[] = [];
-const config: Required<Config> = {
+const config = {
   port: 3000,
   openBrowser: process.env.NODE_ENV === "DEVELOPMENT",
   showLinkedPackages: true,
+  watch: true,
   ...userConfig,
   // protocol: 'http',
   public: {
@@ -36,6 +37,19 @@ const config: Required<Config> = {
     indexName: "index.html",
     minify: minify,
     ...(userConfig.public ?? {}),
+    assets: {
+      path: "assets",
+      ...(userConfig.public?.assets ?? {}),
+      screenshots: {
+        paths: ['/'],
+        pageCallbacks: [() => { }],
+        ...(userConfig.public?.assets?.screenshots ?? {})
+      },
+      featureImage: {
+        path: '/',
+        ...(userConfig.public?.assets?.featureImage ?? {})
+      }
+    },
     manifest: {
       name: "manifest.json",
       ...(userConfig.public?.manifest ?? {}),
@@ -151,12 +165,7 @@ const config: Required<Config> = {
     ],
     ...(userConfig.esbuildOptions?.define ?? {}),
   },
-};
-
-const hostURL = `http://${getIPAddress()}:${config.port}`;
-const localURL = `http://localhost:${config.port}`;
-// const hostURL = `${config.protocol}://${config.hostname}:${config.port}`;
-// const localURL = `${config.protocol}://localhost:${config.port}`;
+} satisfies Config;
 
 function findSymbolickLinkRealPath(packagePath: string) {
   if (fs.lstatSync(packagePath).isSymbolicLink()) {
@@ -180,4 +189,4 @@ if (config.showLinkedPackages) {
   });
 }
 
-export { config, hostURL, localURL };
+export { config };

@@ -7,6 +7,7 @@ import {
 import { buildSync as esbuild } from "esbuild";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
+import { assetsSizes } from "../constants.js";
 
 let config: ServerConfig = {};
 if (fs.existsSync("michi.config.ts")) {
@@ -27,8 +28,9 @@ if (fs.existsSync("michi.config.ts")) {
   });
   // @ts-ignore
   const michiConfig = await import("./michi.config.cjs");
-  config = (michiConfig.default.default as ServerConfigFactory)(
-    process.env.NODE_ENV as DefaultEnvironment,
-  );
+  config = (michiConfig.default.default as ServerConfigFactory)({
+    assetsSizes,
+    environment: process.env.NODE_ENV as DefaultEnvironment,
+  });
 }
 export const userConfig = config;

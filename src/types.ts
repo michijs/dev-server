@@ -1,5 +1,7 @@
-import { BuildOptions } from "esbuild";
+import type { BuildOptions } from "esbuild";
 import type { WebAppManifest } from "web-app-manifest";
+import type { assetsSizes } from "./constants.js";
+import type { Page } from "puppeteer";
 
 export interface AssetDescriptorWeb {
   namespace: "web";
@@ -35,6 +37,13 @@ export interface WellKnown {
   target: AssetDescriptor;
 }
 
+export interface PageCallback<R = string | void> {
+  /**
+   * @returns A folder name suffix
+   */
+  (page: Page): Promise<R> | R
+}
+
 export interface PublicOptions {
   /**
    * A URI with the path component /.well-known/assetlinks.json is used by the AssetLinks protocol to identify one or more digital assets (such as web sites or mobile apps) that are related to the hosting web site in some fashion.
@@ -57,6 +66,53 @@ export interface PublicOptions {
    */
   minify?: boolean;
 
+  assets?: {
+    /**
+     * Assets folder path
+     * @default assets
+     */
+    path?: string,
+    /**
+     * Screenshots to take
+     */
+    screenshots?: {
+      /**
+       * Paths to use.
+       * @example ["/demo"]
+       */
+      paths?: string[],
+      /**
+       * An array of callbacks used to manipulate the page. Each callback returns the folder name suffix
+       * @example 
+       * [
+       *  async (page) => {
+       *   await page.emulateMediaFeatures([{ name: 'prefers-color-scheme', value: 'dark' }]);
+       *   return 'dark'
+       *  }
+       * ]
+       */
+      pageCallbacks?: PageCallback[]
+    },
+    /**
+     * Feature image to take
+     */
+    featureImage?: {
+      /**
+       * Path to use.
+       * @example "/demo"
+       */
+      path?: string,
+      /**
+       * A callback used to manipulate the page.
+       * @example 
+       * async (page) => {
+       *  await page.emulateMediaFeatures([{ name: 'prefers-color-scheme', value: 'dark' }]);
+       * }
+       */
+      pageCallback?: PageCallback<void>
+    }
+  }
+
   /**
    * Is a JSON document that contains startup parameters and application defaults for when a web application is launched.
    *
@@ -76,6 +132,11 @@ export interface PublicOptions {
 }
 
 export interface Config {
+  /**
+   * If the server should watch for changes on the folders
+   * @default true
+   */
+  watch?: boolean;
   // protocol: 'http' | 'https';
   /**
    * Port to run dev server on
@@ -119,6 +180,11 @@ export interface MichiProcessType {
   };
 }
 
+interface ServerConfigFactoryProps<T extends string> {
+  assetsSizes: typeof assetsSizes
+  environment: T
+}
+
 export type ServerConfigFactory<T extends string = DefaultEnvironment> = (
-  environment: T,
+  props: ServerConfigFactoryProps<T>,
 ) => ServerConfig;

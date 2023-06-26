@@ -1,6 +1,6 @@
 import http from "http";
 import fs from "fs";
-import { config, hostURL, localURL, connections } from "../config/config.js";
+import { config, connections } from "../config/config.js";
 import coloredString from "../utils/coloredString.js";
 import { getPath } from "../utils/getPath.js";
 import open from "open";
@@ -9,12 +9,14 @@ import watch from "node-watch";
 import { copyFile } from "../utils/copy.js";
 import { sep } from "path";
 import { transformers } from "../utils/transformers.js";
+import { getHostURL } from "../utils/getHostURL.js";
+import { getLocalURL } from "../utils/getLocalURL.js";
 
-export const start = (callback: () => void) => {
+export const start = (callback: (selectedPort: number) => void) => {
   config.esbuildOptions.plugins?.push({
     name: "michijs-dev-server-watch-public-folder",
     setup(build) {
-      if (config.public.path)
+      if (config.public.path && config.watch)
         watch.default(
           config.public.path,
           {
@@ -36,10 +38,9 @@ export const start = (callback: () => void) => {
 
             fs.rmSync(
               getPath(
-                `${outDir}/${
-                  transformers
-                    .find((x) => x.fileRegex.test(fileName))
-                    ?.pathTransformer?.(fileName) ?? fileName
+                `${outDir}/${transformers
+                  .find((x) => x.fileRegex.test(fileName))
+                  ?.pathTransformer?.(fileName) ?? fileName
                 }`,
               ),
               { force: true, recursive: true },
@@ -70,7 +71,7 @@ export const start = (callback: () => void) => {
       servedir: config.esbuildOptions.outdir,
     });
 
-    http
+    const server = http
       .createServer(async (req, res) => {
         if (req.url === "/esbuild") connections.push(res);
         const esbuildProxyRequestOptions = {
@@ -108,15 +109,32 @@ export const start = (callback: () => void) => {
         // Forward the body of the request to esbuild
         req.pipe(proxyReq, { end: true });
       })
-      .listen(config.port);
 
-    console.log(`
-  Server running at:
-  
-  > Network:  ${coloredString(hostURL)}
-  > Local:    ${coloredString(localURL)}`);
-    callback();
-    buildContext.watch();
-    if (config.openBrowser) open(localURL);
+    let selectedPort: number = config.port;
+    server.on('error', (e) => {
+      // @ts-ignore
+      if (e.code === 'EADDRINUSE') {
+        selectedPort++;
+        server.listen(selectedPort);
+      }
+      else
+        throw e;
+    })
+
+    server.on('listening', () => {
+      const localURL = getLocalURL(selectedPort)
+      console.log(`
+    Server running at:
+    
+    > Network:  ${coloredString(getHostURL(selectedPort))}
+    > Local:    ${coloredString(localURL)}`);
+      callback(selectedPort);
+      if (config.watch)
+        buildContext.watch();
+      if (config.openBrowser) open(localURL);
+    })
+
+    // First try
+    server.listen(selectedPort);
   });
 };

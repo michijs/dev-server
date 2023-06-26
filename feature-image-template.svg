@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="500">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900');
+  </style>
+  <!-- Background color -->
+  <rect width="100%" height="100%" fill="{{background}}" />
+
+  <!-- Background image with blurred logo -->
+
+  <image x="-295" y="90" width="100%" height="100%" filter="url(#blur)" href="{{icon-href}}"></image>
+
+  <!-- Filter for blurring the logo -->
+  <filter id="blur">
+    <feGaussianBlur stdDeviation="5" />
+  </filter>
+
+  <!-- PC -->
+  <svg x="50%" y="-5%" width="50%" viewBox="0 0 200 200">
+    <!-- Border -->
+    <rect x="10" y="40" width="180" height="120" rx="5" ry="5" stroke="#000" stroke-width="5" fill="#000" />
+    <!-- PC screen -->
+    <image x="10" y="43" width="180" height="110" href="{{pc-href}}"></image>
+    <!-- PC stand -->
+    <g>
+      <rect x="80" y="160" width="40" height="20" rx="0" ry="3" fill="#000" />
+      <!-- Monitor base -->
+      <polygon points="80,180 70,200 130,200 120,180" fill="#000" />
+    </g>
+    <!-- PC button -->
+    <circle cx="100" cy="158" r="2" fill="#FFF" />
+  </svg>
+
+  <!-- Tablet -->
+  <svg x="40%" y="30%" width="25%" viewBox="0 0 200 200">
+    <!-- Tablet frame -->
+    <rect x="20" y="40" width="161" height="120" rx="5" ry="5" stroke="#000000" stroke-width="5" fill="#222"/>
+    <!-- Tablet screen -->
+    <image x="22.5" y="44" width="156" height="112" href="{{tablet-href}}"/>
+  </svg>
+
+  <!-- Phone -->
+  <svg x="41%" y="-7%" width="15%" viewBox="0 0 200 200">
+    <!-- Phone frame -->
+    <rect x="20" y="40" width="120" height="180" rx="10" ry="10" stroke="#000000" stroke-width="5" fill="#222" />
+    <!-- Phone screen -->
+    <image x="22.5" y="48" width="115" height="155" href="{{phone-href}}"></image>
+
+    <circle cx="80" cy="211" r="5" fill="#FFF" />
+  </svg>
+
+
+  <!-- App title -->
+  <text x="21%" y="20%" text-anchor="middle" style="filter: invert(1)" font-family="Roboto" font-size="40"
+    font-weight="bold">
+    {{app-title}}
+  </text>
+</svg>
