@@ -146,7 +146,10 @@ export async function generateScreenshots() {
                 : "",
             ) {
               const screenshotPath = getPath(
-                `${screenshotsPath}${pageSuffix}${path.replaceAll(/[?#]/g, "_")}`,
+                `${screenshotsPath}${pageSuffix}${path.replaceAll(
+                  /[?#]/g,
+                  "_",
+                )}`,
               );
               if (!existsSync(screenshotPath))
                 mkdirSync(screenshotPath, { recursive: true });
