@@ -1,7 +1,7 @@
 {
   "name": "@michijs/dev-server",
   "license": "MIT",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/michijs/dev-server.git"
@@ -16,7 +16,8 @@
   },
   "description": "Development server based on esbuild",
   "files": [
-    "bin/"
+    "bin/",
+    "feature-image-template.svg"
   ],
   "type": "module",
   "baseUrl": "./src",
