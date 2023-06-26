@@ -29,7 +29,8 @@ export async function cli() {
     })
     .option("generate-assets", {
       type: "string",
-      description: "Allows to generate a full set of icons and screenshots from a src icon.",
+      description:
+        "Allows to generate a full set of icons and screenshots from a src icon.",
     })
     .option("watch", {
       type: "boolean",

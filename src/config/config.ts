@@ -41,14 +41,14 @@ const config = {
       path: "assets",
       ...(userConfig.public?.assets ?? {}),
       screenshots: {
-        paths: ['/'],
-        pageCallbacks: [() => { }],
-        ...(userConfig.public?.assets?.screenshots ?? {})
+        paths: ["/"],
+        pageCallbacks: [() => {}],
+        ...(userConfig.public?.assets?.screenshots ?? {}),
       },
       featureImage: {
-        path: '/',
-        ...(userConfig.public?.assets?.featureImage ?? {})
-      }
+        path: "/",
+        ...(userConfig.public?.assets?.featureImage ?? {}),
+      },
     },
     manifest: {
       name: "manifest.json",

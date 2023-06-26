@@ -38,9 +38,10 @@ export const start = (callback: (selectedPort: number) => void) => {
 
             fs.rmSync(
               getPath(
-                `${outDir}/${transformers
-                  .find((x) => x.fileRegex.test(fileName))
-                  ?.pathTransformer?.(fileName) ?? fileName
+                `${outDir}/${
+                  transformers
+                    .find((x) => x.fileRegex.test(fileName))
+                    ?.pathTransformer?.(fileName) ?? fileName
                 }`,
               ),
               { force: true, recursive: true },
@@ -71,68 +72,61 @@ export const start = (callback: (selectedPort: number) => void) => {
       servedir: config.esbuildOptions.outdir,
     });
 
-    const server = http
-      .createServer(async (req, res) => {
-        if (req.url === "/esbuild") connections.push(res);
-        const esbuildProxyRequestOptions = {
-          hostname: esbuildHost,
-          port: esbuildPort,
-          path: req.url,
-          method: req.method,
-          headers: req.headers,
-        };
+    const server = http.createServer(async (req, res) => {
+      if (req.url === "/esbuild") connections.push(res);
+      const esbuildProxyRequestOptions = {
+        hostname: esbuildHost,
+        port: esbuildPort,
+        path: req.url,
+        method: req.method,
+        headers: req.headers,
+      };
 
-        // Forward each incoming request to esbuild
-        const proxyReq = http.request(
-          esbuildProxyRequestOptions,
-          (proxyRes) => {
-            // If esbuild returns "not found", send a custom 404 page
-            if (!proxyRes.statusCode || proxyRes.statusCode === 404) {
-              res.writeHead(200, { "Content-Type": "text/html" });
-              // TODO: Find a better way to do this
-              res.end(
-                fs.readFileSync(
-                  getPath(
-                    `${config.esbuildOptions.outdir}/${config.public.indexName}`,
-                  ),
-                ),
-              );
-              return;
-            }
+      // Forward each incoming request to esbuild
+      const proxyReq = http.request(esbuildProxyRequestOptions, (proxyRes) => {
+        // If esbuild returns "not found", send a custom 404 page
+        if (!proxyRes.statusCode || proxyRes.statusCode === 404) {
+          res.writeHead(200, { "Content-Type": "text/html" });
+          // TODO: Find a better way to do this
+          res.end(
+            fs.readFileSync(
+              getPath(
+                `${config.esbuildOptions.outdir}/${config.public.indexName}`,
+              ),
+            ),
+          );
+          return;
+        }
 
-            // Otherwise, forward the response from esbuild to the client
-            res.writeHead(proxyRes.statusCode, proxyRes.headers);
-            proxyRes.pipe(res, { end: true });
-          },
-        );
+        // Otherwise, forward the response from esbuild to the client
+        res.writeHead(proxyRes.statusCode, proxyRes.headers);
+        proxyRes.pipe(res, { end: true });
+      });
 
-        // Forward the body of the request to esbuild
-        req.pipe(proxyReq, { end: true });
-      })
+      // Forward the body of the request to esbuild
+      req.pipe(proxyReq, { end: true });
+    });
 
     let selectedPort: number = config.port;
-    server.on('error', (e) => {
+    server.on("error", (e) => {
       // @ts-ignore
-      if (e.code === 'EADDRINUSE') {
+      if (e.code === "EADDRINUSE") {
         selectedPort++;
         server.listen(selectedPort);
-      }
-      else
-        throw e;
-    })
+      } else throw e;
+    });
 
-    server.on('listening', () => {
-      const localURL = getLocalURL(selectedPort)
+    server.on("listening", () => {
+      const localURL = getLocalURL(selectedPort);
       console.log(`
     Server running at:
     
     > Network:  ${coloredString(getHostURL(selectedPort))}
     > Local:    ${coloredString(localURL)}`);
       callback(selectedPort);
-      if (config.watch)
-        buildContext.watch();
+      if (config.watch) buildContext.watch();
       if (config.openBrowser) open(localURL);
-    })
+    });
 
     // First try
     server.listen(selectedPort);

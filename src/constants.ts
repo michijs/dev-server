@@ -9,5 +9,5 @@ export const assetsSizes = {
     { width: 1280, height: 720 },
     // Desktop / tablet 10 inches 16:9
     { width: 1920, height: 1080 },
-  ] satisfies Viewport[]
-} as const
+  ] satisfies Viewport[],
+} as const;
