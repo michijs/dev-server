@@ -66,10 +66,10 @@ async function takeScreenshots({
       const page = await browser.newPage();
       await page.goto(`${getLocalURL(port)}${path}`);
       await page.setViewport(viewport);
-      const prefix = await pageCallback?.(page);
+      const suffix = await pageCallback?.(page);
       const screenshot = await page.screenshot({
         fullPage: true,
-        ...options?.(viewport, prefix ? `_${prefix}` : prefix),
+        ...options?.(viewport, suffix ? `/${suffix}` : suffix),
       });
       await page.close();
       return screenshot;
@@ -140,13 +140,13 @@ export async function generateScreenshots() {
             pageCallback,
             options(
               viewport,
-              pagePrefix = config.public.assets.screenshots.pageCallbacks
+              pageSuffix = config.public.assets.screenshots.pageCallbacks
                 .length > 1
                 ? `_${index}`
                 : "",
             ) {
               const screenshotPath = getPath(
-                `${screenshotsPath}${pagePrefix}${path.replace("?", "_")}`,
+                `${screenshotsPath}${pageSuffix}${path.replace("?", "_")}`,
               );
               if (!existsSync(screenshotPath))
                 mkdirSync(screenshotPath, { recursive: true });
