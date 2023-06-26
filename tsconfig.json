@@ -13,7 +13,7 @@
     "noErrorTruncation": true,
     "lib": [
       "dom",
-      "es2020"
+      "es2021"
     ],
     "incremental": true,
     "outDir": "bin",
