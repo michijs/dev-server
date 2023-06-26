@@ -131,36 +131,34 @@ export async function generateFeatureImage(src: string) {
 
 export async function generateScreenshots() {
   return await Promise.all(
-    config.public.assets.screenshots.paths
-      .map((path) =>
-        config.public.assets.screenshots.pageCallbacks.map(
-          async (pageCallback, index) =>
-            await takeScreenshots({
-              viewports: assetsSizes.screenshots,
-              path,
-              pageCallback,
-              options(
-                viewport,
-                pagePrefix = config.public.assets.screenshots.pageCallbacks
-                  .length > 1
-                  ? `_${index}`
-                  : "",
-              ) {
-                const screenshotPath = getPath(
-                  `${screenshotsPath}${pagePrefix}${path.replace("?", "_")}`,
-                );
-                if (!existsSync(screenshotPath))
-                  mkdirSync(screenshotPath, { recursive: true });
-                return {
-                  path: getPath(
-                    `${screenshotPath}/screenshot-${viewport.width}x${viewport.height}.png`,
-                  ),
-                };
-              },
-            }),
-        ),
-      )
-      .flat(),
+    config.public.assets.screenshots.paths.flatMap((path) =>
+      config.public.assets.screenshots.pageCallbacks.map(
+        async (pageCallback, index) =>
+          await takeScreenshots({
+            viewports: assetsSizes.screenshots,
+            path,
+            pageCallback,
+            options(
+              viewport,
+              pagePrefix = config.public.assets.screenshots.pageCallbacks
+                .length > 1
+                ? `_${index}`
+                : "",
+            ) {
+              const screenshotPath = getPath(
+                `${screenshotsPath}${pagePrefix}${path.replace("?", "_")}`,
+              );
+              if (!existsSync(screenshotPath))
+                mkdirSync(screenshotPath, { recursive: true });
+              return {
+                path: getPath(
+                  `${screenshotPath}/screenshot-${viewport.width}x${viewport.height}.png`,
+                ),
+              };
+            },
+          }),
+      ),
+    ),
   );
 }
 
