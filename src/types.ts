@@ -41,7 +41,7 @@ export interface PageCallback<R = string | void> {
   /**
    * @returns A folder name suffix
    */
-  (page: Page): Promise<R> | R
+  (page: Page): Promise<R> | R;
 }
 
 export interface PublicOptions {
@@ -71,7 +71,7 @@ export interface PublicOptions {
      * Assets folder path
      * @default assets
      */
-    path?: string,
+    path?: string;
     /**
      * Screenshots to take
      */
@@ -80,10 +80,10 @@ export interface PublicOptions {
        * Paths to use.
        * @example ["/demo"]
        */
-      paths?: string[],
+      paths?: string[];
       /**
        * An array of callbacks used to manipulate the page. Each callback returns the folder name suffix
-       * @example 
+       * @example
        * [
        *  async (page) => {
        *   await page.emulateMediaFeatures([{ name: 'prefers-color-scheme', value: 'dark' }]);
@@ -91,8 +91,8 @@ export interface PublicOptions {
        *  }
        * ]
        */
-      pageCallbacks?: PageCallback[]
-    },
+      pageCallbacks?: PageCallback[];
+    };
     /**
      * Feature image to take
      */
@@ -101,17 +101,17 @@ export interface PublicOptions {
        * Path to use.
        * @example "/demo"
        */
-      path?: string,
+      path?: string;
       /**
        * A callback used to manipulate the page.
-       * @example 
+       * @example
        * async (page) => {
        *  await page.emulateMediaFeatures([{ name: 'prefers-color-scheme', value: 'dark' }]);
        * }
        */
-      pageCallback?: PageCallback<void>
-    }
-  }
+      pageCallback?: PageCallback<void>;
+    };
+  };
 
   /**
    * Is a JSON document that contains startup parameters and application defaults for when a web application is launched.
@@ -181,8 +181,8 @@ export interface MichiProcessType {
 }
 
 interface ServerConfigFactoryProps<T extends string> {
-  assetsSizes: typeof assetsSizes
-  environment: T
+  assetsSizes: typeof assetsSizes;
+  environment: T;
 }
 
 export type ServerConfigFactory<T extends string = DefaultEnvironment> = (
