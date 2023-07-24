@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "@types/web-app-manifest": "1.0.4",
-    "esbuild": "0.18.13",
+    "esbuild": "0.18.16",
     "node-watch": "0.7.3",
     "open": "9.1.0",
     "puppeteer": "20.9.0",
