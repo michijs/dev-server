@@ -37,9 +37,10 @@ export const start = (callback: (selectedPort: number) => void) => {
             );
             fs.rmSync(
               getPath(
-                `${outDir}/${transformers
-                  .find((x) => x.fileRegex.test(fileName))
-                  ?.pathTransformer?.(fileName) ?? fileName
+                `${outDir}/${
+                  transformers
+                    .find((x) => x.fileRegex.test(fileName))
+                    ?.pathTransformer?.(fileName) ?? fileName
                 }`,
               ),
               { force: true, recursive: true },
