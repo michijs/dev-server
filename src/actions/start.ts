@@ -32,16 +32,14 @@ export const start = (callback: (selectedPort: number) => void) => {
             const srcDir = splittedPath.slice(0, -1).join(sep);
             const fileName = splittedPath.at(-1)!;
             const outDir = srcDir.replace(
-              config.public.path!,
+              getPath(config.public.path!),
               build.initialOptions.outdir!,
             );
-
             fs.rmSync(
               getPath(
-                `${outDir}/${
-                  transformers
-                    .find((x) => x.fileRegex.test(fileName))
-                    ?.pathTransformer?.(fileName) ?? fileName
+                `${outDir}/${transformers
+                  .find((x) => x.fileRegex.test(fileName))
+                  ?.pathTransformer?.(fileName) ?? fileName
                 }`,
               ),
               { force: true, recursive: true },
