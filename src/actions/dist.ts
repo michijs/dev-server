@@ -1,7 +1,7 @@
-import { tsconfig } from "../config/tsconfig.js";
-import { config } from "../config/config.js";
 import { exec } from "child_process";
 import fs from "fs";
+import { config } from "../config/config.js";
+import { tsconfig } from "../config/tsconfig.js";
 
 export function dist(callback: () => void, watch = false) {
   if (

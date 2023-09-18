@@ -1,13 +1,13 @@
 import fs from "fs";
-import {
-  DefaultEnvironment,
-  ServerConfigFactory,
-  ServerConfig,
-} from "../types.js";
-import { buildSync as esbuild } from "esbuild";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
+import { buildSync as esbuild } from "esbuild";
 import { assetsSizes } from "../constants.js";
+import {
+  DefaultEnvironment,
+  ServerConfig,
+  ServerConfigFactory,
+} from "../types.js";
 
 let config: ServerConfig = {};
 if (fs.existsSync("michi.config.ts")) {

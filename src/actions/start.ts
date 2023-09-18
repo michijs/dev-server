@@ -1,16 +1,16 @@
-import http from "http";
 import fs from "fs";
-import { config, connections } from "../config/config.js";
-import coloredString from "../utils/coloredString.js";
-import { getPath } from "../utils/getPath.js";
-import open from "open";
+import http from "http";
+import { sep } from "path";
 import { context } from "esbuild";
 import watch from "node-watch";
+import open from "open";
+import { config, connections } from "../config/config.js";
+import coloredString from "../utils/coloredString.js";
 import { copyFile } from "../utils/copy.js";
-import { sep } from "path";
-import { transformers } from "../utils/transformers.js";
 import { getHostURL } from "../utils/getHostURL.js";
 import { getLocalURL } from "../utils/getLocalURL.js";
+import { getPath } from "../utils/getPath.js";
+import { transformers } from "../utils/transformers.js";
 
 export const start = (callback: (selectedPort: number) => void) => {
   config.esbuildOptions.plugins?.push({
