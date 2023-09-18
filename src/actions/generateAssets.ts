@@ -1,15 +1,15 @@
-import { getPath } from "../utils/getPath.js";
-import { config } from "../config/config.js";
-import { mkdirSync, existsSync, writeFileSync, readFileSync, rmSync } from "fs";
-import { pngToIco } from "../utils/pngToIco.js";
-import { ScreenshotOptions, Viewport } from "puppeteer";
-import { fileURLToPath } from "url";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "fs";
 import { dirname, resolve } from "path";
-import sharp from "sharp";
-import { getLocalURL } from "../utils/getLocalURL.js";
-import { assetsSizes } from "../constants.js";
+import { fileURLToPath } from "url";
+import { ScreenshotOptions, Viewport } from "puppeteer";
 import puppeteer from "puppeteer";
+import sharp from "sharp";
+import { config } from "../config/config.js";
+import { assetsSizes } from "../constants.js";
 import { PageCallback } from "../types.js";
+import { getLocalURL } from "../utils/getLocalURL.js";
+import { getPath } from "../utils/getPath.js";
+import { pngToIco } from "../utils/pngToIco.js";
 
 const generatedPath = getPath(
   `${config.public.path}/${config.public.assets.path}/generated`,
