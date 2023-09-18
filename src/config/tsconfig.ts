@@ -1,6 +1,6 @@
-import { config } from "./config.js";
 import fs from "fs";
 import type { CompilerOptions } from "typescript";
+import { config } from "./config.js";
 
 let tsconfig: {
   compilerOptions: CompilerOptions;

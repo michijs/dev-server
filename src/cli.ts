@@ -1,7 +1,7 @@
-import coloredString from "./utils/coloredString.js";
 import yargs from "yargs";
-import { Timer } from "./classes/Timer.js";
 import { hideBin } from "yargs/helpers";
+import { Timer } from "./classes/Timer.js";
+import coloredString from "./utils/coloredString.js";
 
 export async function cli() {
   const timer = new Timer();

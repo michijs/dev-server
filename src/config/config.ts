@@ -1,20 +1,20 @@
 import fs from "fs";
+import http from "http";
+import { resolve } from "path";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+import { Timer } from "../classes/Timer.js";
 import { Config } from "../types.js";
 import coloredString from "../utils/coloredString.js";
 import { copy } from "../utils/copy.js";
 import { getPath } from "../utils/getPath.js";
-import { Timer } from "../classes/Timer.js";
-import { getIPAddress } from "./getIPAddress.js";
-import { userConfig } from "./userConfig.js";
-import http from "http";
-import { resolve } from "path";
 import {
   jsAndTsRegex,
   jsonTransformer,
   notJsAndTsRegex,
 } from "../utils/transformers.js";
-import { dirname } from "path";
-import { fileURLToPath } from "url";
+import { getIPAddress } from "./getIPAddress.js";
+import { userConfig } from "./userConfig.js";
 
 const minify = process.env.NODE_ENV === "PRODUCTION";
 const devServerListener =
