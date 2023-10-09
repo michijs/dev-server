@@ -10,6 +10,5 @@ export type {
   AssetDescriptorAndroid,
   AssetDescriptorWeb,
 } from "./types.js";
-export * from './constants.js'
 import { cli } from "./cli.js";
 cli();
