@@ -1,7 +1,7 @@
 {
   "name": "@michijs/dev-server",
   "license": "MIT",
-  "version": "0.5.4",
+  "version": "0.5.6",
   "repository": {
     "type": "git",
     "url": "https://github.com/michijs/dev-server.git"
@@ -28,8 +28,8 @@
     "publish-npm": "npm run dist && npm publish --access public"
   },
   "devDependencies": {
-    "@types/node": "20.4.8",
-    "@types/yargs": "17.0.24"
+    "@types/node": "20.8.0",
+    "@types/yargs": "17.0.26"
   },
   "keywords": [
     "react",
@@ -50,12 +50,12 @@
     "node": ">=14.16"
   },
   "dependencies": {
-    "@types/web-app-manifest": "1.0.4",
-    "esbuild": "0.18.19",
-    "node-watch": "0.7.3",
+    "@types/web-app-manifest": "1.0.5",
+    "esbuild": "0.19.4",
+    "node-watch": "0.7.4",
     "open": "9.1.0",
-    "puppeteer": "21.0.3",
-    "sharp": "0.32.4",
+    "puppeteer": "21.3.6",
+    "sharp": "0.32.6",
     "yargs": "17.7.2"
   },
   "peerDependencies": {
