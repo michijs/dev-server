@@ -180,7 +180,7 @@ export interface MichiProcessType {
   };
 }
 
-interface ServerConfigFactoryProps<T extends string> {
+export interface ServerConfigFactoryProps<T extends string> {
   assetsSizes: typeof assetsSizes;
   environment: T;
 }

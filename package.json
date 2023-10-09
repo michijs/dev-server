@@ -9,7 +9,8 @@
   "main": "bin/index",
   "exports": {
     "types": "./bin/index.d.ts",
-    "default": "./bin/index.js"
+    "default": "./bin/index.js",
+    "constants": "./bin/constants.js"
   },
   "bin": {
     "michi-server": "bin/index.js"
