@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@types/node": "20.8.6",
-    "@types/yargs": "17.0.28"
+    "@types/yargs": "17.0.29"
   },
   "keywords": [
     "react",
