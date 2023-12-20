@@ -29,7 +29,7 @@
     "publish-npm": "npm run dist && npm publish --access public"
   },
   "devDependencies": {
-    "@types/node": "20.10.3",
+    "@types/node": "20.10.5",
     "@types/yargs": "17.0.32"
   },
   "keywords": [
@@ -56,7 +56,7 @@
     "node-watch": "0.7.4",
     "open": "9.1.0",
     "puppeteer": "21.6.1",
-    "sharp": "0.33.0",
+    "sharp": "0.33.1",
     "yargs": "17.7.2"
   },
   "peerDependencies": {
