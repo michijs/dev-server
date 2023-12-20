@@ -52,7 +52,7 @@
   },
   "dependencies": {
     "@types/web-app-manifest": "1.0.7",
-    "esbuild": "0.19.8",
+    "esbuild": "0.19.9",
     "node-watch": "0.7.4",
     "open": "9.1.0",
     "puppeteer": "21.6.1",
