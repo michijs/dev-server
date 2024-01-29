@@ -29,7 +29,7 @@
     "publish-npm": "npm run dist && npm publish --access public"
   },
   "devDependencies": {
-    "@types/node": "20.11.2",
+    "@types/node": "20.11.10",
     "@types/yargs": "17.0.32"
   },
   "keywords": [
