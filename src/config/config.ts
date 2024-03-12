@@ -1,12 +1,12 @@
 import fs from "fs";
-import { Config } from "../types.js";
+import type { Config } from "../types.js";
 import coloredString from "../utils/coloredString.js";
 import { copy } from "../utils/copy.js";
 import { getPath } from "../utils/getPath.js";
 import { Timer } from "../classes/Timer.js";
 import { getIPAddress } from "./getIPAddress.js";
 import { userConfig } from "./userConfig.js";
-import http from "http";
+import type http from "http";
 import { resolve } from "path";
 import {
   jsAndTsRegex,
