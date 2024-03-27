@@ -1,5 +1,5 @@
 import fs from "fs";
-import {
+import type {
   DefaultEnvironment,
   ServerConfigFactory,
   ServerConfig,
