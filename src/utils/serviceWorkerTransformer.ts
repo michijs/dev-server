@@ -1,6 +1,6 @@
 import { config } from "../config/config.js";
 import { getAllFiles } from "./getAllFiles.js";
-import { Loader, transformSync as esbuild } from "esbuild";
+import { type Loader, transformSync as esbuild } from "esbuild";
 
 export const serviceWorkerTransformer = (
   serviceWorkerCode: string,
