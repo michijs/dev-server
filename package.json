@@ -54,7 +54,7 @@
     "@types/web-app-manifest": "1.0.8",
     "esbuild": "0.20.2",
     "node-watch": "0.7.4",
-    "open": "10.0.3",
+    "open": "10.1.0",
     "puppeteer": "21.11.0",
     "sharp": "0.33.2",
     "yargs": "17.7.2"
