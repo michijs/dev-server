@@ -2,14 +2,14 @@ import { getPath } from "../utils/getPath.js";
 import { config } from "../config/config.js";
 import { mkdirSync, existsSync, writeFileSync, readFileSync, rmSync } from "fs";
 import { pngToIco } from "../utils/pngToIco.js";
-import { ScreenshotOptions, Viewport } from "puppeteer";
+import type { ScreenshotOptions, Viewport } from "puppeteer";
 import { fileURLToPath } from "url";
 import { dirname, resolve } from "path";
 import sharp from "sharp";
 import { getLocalURL } from "../utils/getLocalURL.js";
 import { assetsSizes } from "../constants.js";
 import puppeteer from "puppeteer";
-import { PageCallback } from "../types.js";
+import type { PageCallback } from "../types.js";
 
 const generatedPath = getPath(
   `${config.public.path}/${config.public.assets.path}/generated`,
