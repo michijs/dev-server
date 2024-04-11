@@ -46,7 +46,8 @@ export async function cli() {
     .help()
     .alias("help", "h").argv;
 
-  process.env.NODE_ENV = process.env.NODE_ENV ||
+  process.env.NODE_ENV =
+    process.env.NODE_ENV ||
     args.env ||
     (args.build ? "PRODUCTION" : args.dist ? "DISTRIBUTION" : "DEVELOPMENT");
 
