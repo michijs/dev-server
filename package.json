@@ -24,9 +24,7 @@
   "baseUrl": "./src",
   "scripts": {
     "dist": "tsc",
-    "link": "npm run dist && npm link --force && tsc -w",
-    "publish-patch-version": "npm version patch && npm run publish-npm",
-    "publish-npm": "npm run dist && npm publish --access public"
+    "link": "bun run dist && bun link --force && tsc -w",
   },
   "devDependencies": {
     "@types/node": "20.11.30",
