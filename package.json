@@ -24,7 +24,7 @@
   "baseUrl": "./src",
   "scripts": {
     "dist": "tsc",
-    "link": "bun run dist && bun link --force && tsc -w",
+    "link": "bun run dist && bun link --force && tsc -w"
   },
   "devDependencies": {
     "@types/node": "20.12.5",
