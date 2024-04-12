@@ -25,7 +25,11 @@ export const connections: (http.ServerResponse<http.IncomingMessage> & {
   req: http.IncomingMessage;
 })[] = [];
 
-const defaultEntryPoint = fs.existsSync("src/index.tsx") ? "src/index.tsx": (fs.existsSync("src/index.ts") ? "src/index.ts": "src/index.js")
+const defaultEntryPoint = fs.existsSync("src/index.tsx")
+  ? "src/index.tsx"
+  : fs.existsSync("src/index.ts")
+    ? "src/index.ts"
+    : "src/index.js";
 const config = {
   port: 3000,
   openBrowser: process.env.NODE_ENV === "DEVELOPMENT",
