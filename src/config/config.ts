@@ -4,7 +4,6 @@ import coloredString from "../utils/coloredString.js";
 import { copy } from "../utils/copy.js";
 import { getPath } from "../utils/getPath.js";
 import { Timer } from "../classes/Timer.js";
-import { getIPAddress } from "./getIPAddress.js";
 import { userConfig } from "./userConfig.js";
 import type http from "http";
 import { resolve } from "path";
@@ -25,6 +24,8 @@ const devServerListener =
 export const connections: (http.ServerResponse<http.IncomingMessage> & {
   req: http.IncomingMessage;
 })[] = [];
+
+const defaultEntryPoint = fs.existsSync("src/index.tsx") ? "src/index.tsx": (fs.existsSync("src/index.ts") ? "src/index.ts": "src/index.js")
 const config = {
   port: 3000,
   openBrowser: process.env.NODE_ENV === "DEVELOPMENT",
@@ -64,7 +65,7 @@ const config = {
     splitting: true,
     bundle: true,
     keepNames: minify,
-    entryPoints: ["src/index.ts"],
+    entryPoints: [defaultEntryPoint],
     format: "esm",
     target: "esnext",
     logLevel: "error",
