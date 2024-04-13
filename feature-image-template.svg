@@ -50,7 +50,7 @@
 
 
   <!-- App title -->
-  <text x="21%" y="20%" text-anchor="middle" style="filter: invert(1)" font-family="Roboto" font-size="40"
+  <text x="25%" y="20%" text-anchor="middle" style="filter: invert(1)" font-family="Roboto" font-size="40"
     font-weight="bold">
     {{app-title}}
   </text>

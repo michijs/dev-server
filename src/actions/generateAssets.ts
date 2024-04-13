@@ -45,7 +45,7 @@ config.watch = false;
 config.openBrowser = false;
 const browser = await puppeteer.launch({
   dumpio: true,
-  headless: "new",
+  headless: true,
   product: "chrome",
 });
 
@@ -196,5 +196,6 @@ export async function generateAssets(callback: () => void, src: string) {
 
   callback();
   await browser.close();
+  console.log('pase')
   process.exit();
 }
