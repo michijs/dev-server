@@ -54,7 +54,7 @@
     "node-watch": "0.7.4",
     "open": "10.1.0",
     "puppeteer": "22.10.0",
-    "sharp": "0.33.3",
+    "sharp": "0.33.4",
     "yargs": "17.7.2"
   },
   "peerDependencies": {
