@@ -27,7 +27,7 @@
     "link": "bun run dist && bun link --force && tsc -w"
   },
   "devDependencies": {
-    "@types/node": "20.14.2",
+    "@types/node": "20.14.8",
     "@types/yargs": "17.0.32"
   },
   "keywords": [
