@@ -53,7 +53,7 @@
     "esbuild": "0.21.5",
     "node-watch": "0.7.4",
     "open": "10.1.0",
-    "puppeteer": "22.10.0",
+    "puppeteer": "22.11.1",
     "sharp": "0.33.4",
     "yargs": "17.7.2"
   },
