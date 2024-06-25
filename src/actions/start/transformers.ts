@@ -6,13 +6,13 @@ import { serviceWorkerTransformer } from "../../utils/serviceWorkerTransformer.j
 export const jsAndTsRegex = /.*\.(?:ts|js)/;
 export const notJsAndTsRegex = /.*\.(?!ts|js)/;
 
-export const jsonTransformer: Transformer = {
+export const jsonTransformer = {
   fileRegex: /.*\.(?:json)/,
   transformer: (fileContent: string) =>
     config.public.minify
       ? JSON.stringify(JSON.parse(fileContent))
       : fileContent,
-};
+} satisfies Transformer;
 
 export const transformers: Transformer[] = [
   jsonTransformer,

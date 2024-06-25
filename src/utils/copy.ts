@@ -24,12 +24,14 @@ export function copyFile(
         x.fileRegex.test(fileName),
       );
       if (fileTransformer.length > 0) {
-        fileTransformer.forEach(x => {
+        fileTransformer.forEach(async x => {
           const srcFileContent = fs.readFileSync(srcPath, { encoding: "utf-8" });
           const finalDestPath =
             x.pathTransformer?.(destPath) ?? destPath;
-          const transformedFile = x.transformer(srcFileContent, srcPath);
-          fs.writeFileSync(finalDestPath, transformedFile);
+          try {
+            const transformedFile = x.transformer(srcFileContent, srcPath);
+            fs.writeFileSync(finalDestPath, transformedFile);
+          }catch{}
         })
       } else fs.copyFileSync(srcPath, destPath, fs.constants.COPYFILE_FICLONE);
     }
@@ -40,6 +42,6 @@ export function copy(src: string, dest: string, transformers: Transformer[], omi
   const srcDir = fs.readdirSync(src);
   try {
     fs.mkdirSync(dest);
-  }catch{}
+  } catch { }
   srcDir.forEach((fileName) => copyFile(src, fileName, dest, transformers, omit));
 }

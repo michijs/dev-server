@@ -3,7 +3,6 @@ import type { Config } from "../types.js";
 import coloredString from "../utils/coloredString.js";
 import { copy } from "../utils/copy.js";
 import { getPath } from "../utils/getPath.js";
-import { Timer } from "../classes/Timer.js";
 import { userConfig } from "./userConfig.js";
 import type http from "http";
 import { resolve } from "path";
@@ -67,9 +66,9 @@ const config = {
     tsconfig: "tsconfig.json",
     minifySyntax: minify,
     minifyWhitespace: minify,
-    sourcemap: process.env.NODE_ENV !== "PRODUCTION",
+    sourcemap: process.env.NODE_ENV === "DEVELOPMENT",
     splitting: true,
-    bundle: true,
+    bundle: process.env.NODE_ENV !== "DISTRIBUTION",
     keepNames: minify,
     entryPoints: [defaultEntryPoint],
     format: "esm",
