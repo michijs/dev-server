@@ -1,10 +1,9 @@
 import { config } from "../config/config.js";
 import { getAllFiles } from "./getAllFiles.js";
-import { type Loader, transformSync as esbuild } from "esbuild";
+import { transformSync as esbuild } from "esbuild";
 
 export const serviceWorkerTransformer = (
-  serviceWorkerCode: string,
-  loader: Loader = "ts",
+  serviceWorkerCode: string
 ): string | Buffer => {
   const { sourcemap, keepNames, format, outdir, define, target } =
     config.esbuildOptions;
@@ -19,7 +18,7 @@ export const serviceWorkerTransformer = (
         ).getTime()}"`,
         ...define,
       },
-      loader,
+      loader: 'ts',
       logLevel: "error",
       format,
       target,

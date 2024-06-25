@@ -196,6 +196,5 @@ export async function generateAssets(callback: () => void, src: string) {
 
   callback();
   await browser.close();
-  console.log("pase");
   process.exit();
 }

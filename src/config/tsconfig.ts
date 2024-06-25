@@ -1,22 +1,58 @@
 import { config } from "./config.js";
 import fs from "fs";
-import type { CompilerOptions } from "typescript";
+import path from "path";
+import { parseConfigFileTextToJson, type CompilerOptions } from "typescript";
 
-let tsconfig: {
+interface TsConfig {
   compilerOptions: CompilerOptions;
   include: string[];
   exclude: string[];
-};
-
-if (
-  config.esbuildOptions.tsconfig &&
-  fs.existsSync(config.esbuildOptions?.tsconfig)
-) {
-  tsconfig = JSON.parse(
-    fs.readFileSync(config.esbuildOptions.tsconfig, "utf-8"),
-  );
-} else {
-  throw `Unable to find tsconfig at ${config.esbuildOptions.tsconfig}`;
+  files: string[],
+  extends?: string
 }
 
-export { tsconfig };
+function readConfigFile(filePath: string): TsConfig {
+  const absolutePath = path.resolve(filePath);
+  const rawContent = fs.readFileSync(absolutePath, 'utf8');
+  const parsed = parseConfigFileTextToJson(absolutePath, rawContent);
+
+  if (parsed.error) {
+    throw new Error(`Error parsing ${absolutePath}: ${JSON.stringify(parsed.error)}`);
+  }
+
+  return parsed.config;
+}
+
+function mergeConfigs(baseConfig: any, additionalConfig: any): any {
+  // Merge compilerOptions
+  const mergedCompilerOptions = { ...baseConfig.compilerOptions, ...additionalConfig.compilerOptions };
+
+  // Merge include, exclude, files
+  const mergedInclude = [...(baseConfig.include || []), ...(additionalConfig.include || [])];
+  const mergedExclude = [...(baseConfig.exclude || []), ...(additionalConfig.exclude || [])];
+  const mergedFiles = [...(baseConfig.files || []), ...(additionalConfig.files || [])];
+
+  return {
+    ...baseConfig,
+    ...additionalConfig,
+    compilerOptions: mergedCompilerOptions,
+    include: mergedInclude,
+    exclude: mergedExclude,
+    files: mergedFiles,
+  };
+}
+
+function getFullConfig(filePath: string): TsConfig {
+  const config = readConfigFile(filePath);
+  
+  if (config.extends) {
+    const parentConfigPath = path.resolve(path.dirname(filePath), config.extends);
+    const parentConfig = getFullConfig(parentConfigPath);
+    return mergeConfigs(parentConfig, config);
+  }
+
+  return config;
+}
+
+export const tsconfig = getFullConfig(config.esbuildOptions.tsconfig ?? 'tsconfig.json')
+

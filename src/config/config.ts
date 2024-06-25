@@ -11,9 +11,11 @@ import {
   jsAndTsRegex,
   jsonTransformer,
   notJsAndTsRegex,
-} from "../utils/transformers.js";
+  transformers,
+} from "../actions/start/transformers.js";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
+import { counterPlugin } from "./plugins/counter.js";
 
 const minify = process.env.NODE_ENV === "PRODUCTION";
 const devServerListener =
@@ -47,7 +49,7 @@ const config = {
       ...(userConfig.public?.assets ?? {}),
       screenshots: {
         paths: ["/"],
-        pageCallbacks: [() => {}],
+        pageCallbacks: [() => { }],
         ...(userConfig.public?.assets?.screenshots ?? {}),
       },
       featureImage: {
@@ -134,26 +136,22 @@ const config = {
 
           // Copy public path - Omit to copy service worker - will be transformed after
           if (config.public.path && build.initialOptions.outdir)
-            copy(config.public.path, build.initialOptions.outdir, [
+            copy(config.public.path, build.initialOptions.outdir, transformers, [
               jsAndTsRegex,
             ]);
 
-          const buildTimer = new Timer();
           let firstLoad = true;
-          build.onStart(() => buildTimer.startTimer());
           build.onEnd(() => {
             // first-load sw - Omit to copy any other non-js file
             if (firstLoad && config.public.path && build.initialOptions.outdir)
-              copy(config.public.path, build.initialOptions.outdir, [
+              copy(config.public.path, build.initialOptions.outdir, transformers, [
                 notJsAndTsRegex,
               ]);
-            console.log(
-              coloredString(`  Build finished in ${buildTimer.endTimer()}ms`),
-            );
             firstLoad = false;
           });
         },
       },
+      counterPlugin
     ],
     define: {
       // Intentionally added before process
