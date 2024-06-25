@@ -48,7 +48,7 @@ const config = {
       ...(userConfig.public?.assets ?? {}),
       screenshots: {
         paths: ["/"],
-        pageCallbacks: [() => { }],
+        pageCallbacks: [() => {}],
         ...(userConfig.public?.assets?.screenshots ?? {}),
       },
       featureImage: {
@@ -135,22 +135,28 @@ const config = {
 
           // Copy public path - Omit to copy service worker - will be transformed after
           if (config.public.path && build.initialOptions.outdir)
-            copy(config.public.path, build.initialOptions.outdir, transformers, [
-              jsAndTsRegex,
-            ]);
+            copy(
+              config.public.path,
+              build.initialOptions.outdir,
+              transformers,
+              [jsAndTsRegex],
+            );
 
           let firstLoad = true;
           build.onEnd(() => {
             // first-load sw - Omit to copy any other non-js file
             if (firstLoad && config.public.path && build.initialOptions.outdir)
-              copy(config.public.path, build.initialOptions.outdir, transformers, [
-                notJsAndTsRegex,
-              ]);
+              copy(
+                config.public.path,
+                build.initialOptions.outdir,
+                transformers,
+                [notJsAndTsRegex],
+              );
             firstLoad = false;
           });
         },
       },
-      counterPlugin
+      counterPlugin,
     ],
     define: {
       // Intentionally added before process

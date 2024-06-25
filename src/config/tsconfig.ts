@@ -7,17 +7,19 @@ interface TsConfig {
   compilerOptions: CompilerOptions;
   include: string[];
   exclude: string[];
-  files: string[],
-  extends?: string
+  files: string[];
+  extends?: string;
 }
 
 function readConfigFile(filePath: string): TsConfig {
   const absolutePath = path.resolve(filePath);
-  const rawContent = fs.readFileSync(absolutePath, 'utf8');
+  const rawContent = fs.readFileSync(absolutePath, "utf8");
   const parsed = parseConfigFileTextToJson(absolutePath, rawContent);
 
   if (parsed.error) {
-    throw new Error(`Error parsing ${absolutePath}: ${JSON.stringify(parsed.error)}`);
+    throw new Error(
+      `Error parsing ${absolutePath}: ${JSON.stringify(parsed.error)}`,
+    );
   }
 
   return parsed.config;
@@ -25,12 +27,24 @@ function readConfigFile(filePath: string): TsConfig {
 
 function mergeConfigs(baseConfig: any, additionalConfig: any): any {
   // Merge compilerOptions
-  const mergedCompilerOptions = { ...baseConfig.compilerOptions, ...additionalConfig.compilerOptions };
+  const mergedCompilerOptions = {
+    ...baseConfig.compilerOptions,
+    ...additionalConfig.compilerOptions,
+  };
 
   // Merge include, exclude, files
-  const mergedInclude = [...(baseConfig.include || []), ...(additionalConfig.include || [])];
-  const mergedExclude = [...(baseConfig.exclude || []), ...(additionalConfig.exclude || [])];
-  const mergedFiles = [...(baseConfig.files || []), ...(additionalConfig.files || [])];
+  const mergedInclude = [
+    ...(baseConfig.include || []),
+    ...(additionalConfig.include || []),
+  ];
+  const mergedExclude = [
+    ...(baseConfig.exclude || []),
+    ...(additionalConfig.exclude || []),
+  ];
+  const mergedFiles = [
+    ...(baseConfig.files || []),
+    ...(additionalConfig.files || []),
+  ];
 
   return {
     ...baseConfig,
@@ -44,9 +58,12 @@ function mergeConfigs(baseConfig: any, additionalConfig: any): any {
 
 function getFullConfig(filePath: string): TsConfig {
   const config = readConfigFile(filePath);
-  
+
   if (config.extends) {
-    const parentConfigPath = path.resolve(path.dirname(filePath), config.extends);
+    const parentConfigPath = path.resolve(
+      path.dirname(filePath),
+      config.extends,
+    );
     const parentConfig = getFullConfig(parentConfigPath);
     return mergeConfigs(parentConfig, config);
   }
@@ -54,5 +71,6 @@ function getFullConfig(filePath: string): TsConfig {
   return config;
 }
 
-export const tsconfig = getFullConfig(config.esbuildOptions.tsconfig ?? 'tsconfig.json')
-
+export const tsconfig = getFullConfig(
+  config.esbuildOptions.tsconfig ?? "tsconfig.json",
+);

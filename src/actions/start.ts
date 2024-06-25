@@ -12,7 +12,7 @@ import { watchPublicFolderPlugin } from "../config/plugins/watchPublicFolder.js"
 export const start = async (callback: (selectedPort: number) => void) => {
   config.esbuildOptions.plugins?.push(watchPublicFolderPlugin);
 
-  const buildContext = await context(config.esbuildOptions)
+  const buildContext = await context(config.esbuildOptions);
   const { host: esbuildHost, port: esbuildPort } = await buildContext.serve({
     servedir: config.esbuildOptions.outdir,
   });
@@ -75,4 +75,4 @@ export const start = async (callback: (selectedPort: number) => void) => {
 
   // First try
   server.listen(selectedPort);
-}
+};

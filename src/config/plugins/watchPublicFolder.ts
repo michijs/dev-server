@@ -7,16 +7,23 @@ export const watchPublicFolderPlugin: Plugin = {
   name: "michijs-dev-server-watch-public-folder",
   setup() {
     if (config.public.path && config.watch)
-      syncDirs(config.public.path, config.esbuildOptions.outdir, transformers, undefined, undefined, (event, fileChangedPath) => {
-        connections.forEach((x) =>
-          x.write(
-            `event: change\ndata: ${JSON.stringify({
-              added: [],
-              removed: event === 'remove' ? [fileChangedPath] : [],
-              updated: event === 'update' ? [fileChangedPath] : [],
-            })}\n\n`,
-          ),
-        );
-      })
+      syncDirs(
+        config.public.path,
+        config.esbuildOptions.outdir,
+        transformers,
+        undefined,
+        undefined,
+        (event, fileChangedPath) => {
+          connections.forEach((x) =>
+            x.write(
+              `event: change\ndata: ${JSON.stringify({
+                added: [],
+                removed: event === "remove" ? [fileChangedPath] : [],
+                updated: event === "update" ? [fileChangedPath] : [],
+              })}\n\n`,
+            ),
+          );
+        },
+      );
   },
-}
+};
