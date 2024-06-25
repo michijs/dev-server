@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import { Transformer, copyFile } from "../utils/copy.js";
+import { type Transformer, copyFile } from "../utils/copy.js";
 import watch from "node-watch";
 import { getPath } from "../utils/getPath.js";
 
