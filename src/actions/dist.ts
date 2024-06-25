@@ -4,7 +4,7 @@ import {
   transpileDeclaration,
   formatDiagnosticsWithColorAndContext,
   sys,
-  Diagnostic,
+  type Diagnostic,
   createProgram,
   readConfigFile,
   parseJsonConfigFileContent,
@@ -12,7 +12,7 @@ import {
 } from "typescript";
 import path from "path";
 import { transformSync as esbuild } from "esbuild";
-import { Transformer, copy } from "../utils/copy.js";
+import { type Transformer, copy } from "../utils/copy.js";
 import { Timer } from "../classes/Timer.js";
 import coloredString from "../utils/coloredString.js";
 import { syncDirs } from "../utils/syncDirs.js";
