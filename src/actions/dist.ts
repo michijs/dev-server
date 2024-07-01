@@ -10,6 +10,7 @@ import { syncDirs } from "../utils/syncDirs.js";
 import { getPath } from "../utils/getPath.js";
 import { globToRegex } from "../utils/globToRegex.js";
 import { config } from "../config/config.js";
+import { exec } from "child_process";
 
 const allJsFilesRegex = /.*\.(?:ts|js|tsx|jsx)/;
 
@@ -47,18 +48,62 @@ const generateIncompatibleDeclarationFiles = () => {
   delayedDeclarationFiles = []
 }
 
+function isErrorInsideCreateCustomElement(diagnostic: Diagnostic) {
+  if (!diagnostic.file || diagnostic.start === undefined) {
+    return false;
+  }
+
+  const sourceText = diagnostic.file.text;
+  const errorPos = diagnostic.start;
+
+  // Get the line containing the error
+  const lineStart = sourceText.lastIndexOf('\n', errorPos);
+  const lineEnd = sourceText.indexOf('\n', errorPos);
+  const errorLine = sourceText.substring(lineStart + 1, lineEnd);
+
+  return errorLine.includes('createCustomElement');
+}
+
 export const transformers: Transformer[] = [
   {
     fileRegex: allJsFilesRegex,
     transformer: (fileContent, path) => {
       const options = { compilerOptions: tsconfig.compilerOptions, fileName: path };
       const { outputText, diagnostics } = transpileDeclaration(fileContent, options);
-      if (diagnostics && diagnostics?.length > 0) {
-        // if (config.esbuildOptions.logLevel === 'warning')
-          showErrors(diagnostics)
 
-        delayedDeclarationFiles.push(path!)
-        throw 'Not compatible ts'
+      if (diagnostics && diagnostics?.length > 0) {
+        const notRelatedWithCustomElementDiagnosis = diagnostics.filter(x => !isErrorInsideCreateCustomElement(x));
+        if (notRelatedWithCustomElementDiagnosis.length > 0) {
+          showErrors(notRelatedWithCustomElementDiagnosis);
+          delayedDeclarationFiles.push(path!);
+          throw "Not compatible ts";
+        }
+        const regex = /const\s+(\w+)\s*=\s*createCustomElement\(\s*".*?"\s*,/gs;
+        const michijsElementsNames: string[] = [];
+        // Obtaining const names
+        let match: RegExpExecArray | null;
+        while ((match = regex.exec(fileContent)) !== null) {
+          michijsElementsNames.push(match[1]!)
+        };
+        const eventsRegexPattern = /new\s+EventDispatcher\s*<\s*([^>]+)\s*>\s*\(\s*\)/gs;
+        const classRegexPattern = /class:\s*(\w+)/gs;
+        const trailingCommaPattern = /\s*,\s*\)\s*;/gs;
+        fileContent = fileContent
+          // Removing createCustomElement and the name of the element
+          .replaceAll(regex, 'const $1 = (')
+          // Helping to resolve events
+          .replaceAll(eventsRegexPattern, 'new EventDispatcher<$1>() as EventDispatcher<$1>')
+          // Helping to resolve classes
+          .replaceAll(classRegexPattern, 'class: $1 as $1')
+          .replaceAll(trailingCommaPattern, ' );');
+        const elementNamesRegex = new RegExp(`\\b(${michijsElementsNames.join('|')})\\b: `, 'g');
+
+        // Converting everything into types
+        const { outputText: newOutputText } = transpileDeclaration(fileContent, options);
+        const finalSrc = newOutputText.replace(elementNamesRegex, `$1: import("@michijs/michijs").MichiElementClass<`)
+        const { outputText: finalOutputText } = transpileDeclaration(finalSrc, options);
+
+        return finalOutputText;
       }
       return outputText
     },
@@ -76,35 +121,40 @@ export const transformers: Transformer[] = [
 ];
 
 export async function dist(callback: () => void, watchOption = false) {
-  const outdir = tsconfig.compilerOptions.outDir;
+  const { outDir, isolatedDeclarations } = tsconfig.compilerOptions;
   if (
-    outdir
+    outDir
   ) {
-    if (fs.existsSync(outdir))
-      fs.rmSync(outdir, { recursive: true });
+    if (fs.existsSync(outDir))
+      fs.rmSync(outDir, { recursive: true });
 
-    const timer = new Timer();
-    timer.startTimer();
-    const omit = tsconfig.exclude.map(x => globToRegex(getPath(x)));
-    tsconfig.include.forEach(x => copy(x, outdir, transformers, omit))
-    generateIncompatibleDeclarationFiles();
-    console.log(
-      coloredString(`  Dist finished in ${timer.endTimer()}ms`),
-    );
-    if (watchOption)
-      tsconfig.include.forEach(x => {
-        const timer = new Timer();
-        syncDirs(x, outdir, transformers, omit, () => timer.startTimer(), () => {
-          generateIncompatibleDeclarationFiles();
-          console.log(
-            coloredString(`  Dist finished in ${timer.endTimer()}ms`),
-          );
+    if (isolatedDeclarations) {
+      const timer = new Timer();
+      timer.startTimer();
+      const omit = tsconfig.exclude.map(x => globToRegex(getPath(x)));
+      tsconfig.include.forEach(x => copy(x, outDir, transformers, omit))
+      generateIncompatibleDeclarationFiles();
+      console.log(
+        coloredString(`  Dist finished in ${timer.endTimer()}ms`),
+      );
+      if (watchOption)
+        tsconfig.include.forEach(x => {
+          const timer = new Timer();
+          syncDirs(x, outDir, transformers, omit, () => timer.startTimer(), () => {
+            generateIncompatibleDeclarationFiles();
+            console.log(
+              coloredString(`  Dist finished in ${timer.endTimer()}ms`),
+            );
+          })
         })
-      })
-    callback();
-
+      callback();
+    } else {
+      exec(
+        `tsc ${watchOption ? "-w" : ""} --project ${config.esbuildOptions.tsconfig}`,
+        callback,
+      );
+    }
   } else {
     throw new Error(`Your tsconfig needs an outdir`);
   }
-
 }
