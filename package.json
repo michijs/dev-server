@@ -1,7 +1,7 @@
 {
   "name": "@michijs/dev-server",
   "license": "MIT",
-  "version": "0.5.14",
+  "version": "0.5.15-beta.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/michijs/dev-server.git"
@@ -27,7 +27,7 @@
     "link": "bun run dist && bun link --force && tsc -w"
   },
   "devDependencies": {
-    "@types/node": "20.14.2",
+    "@types/node": "20.14.8",
     "@types/yargs": "17.0.32"
   },
   "keywords": [
@@ -53,7 +53,7 @@
     "esbuild": "0.21.5",
     "node-watch": "0.7.4",
     "open": "10.1.0",
-    "puppeteer": "22.11.1",
+    "puppeteer": "22.12.0",
     "sharp": "0.33.4",
     "yargs": "17.7.2"
   },

@@ -1,10 +1,17 @@
 import fs from "fs";
 import path from "path";
-import { Transformer, copyFile } from "../utils/copy.js";
+import { type Transformer, copyFile } from "../utils/copy.js";
 import watch from "node-watch";
 import { getPath } from "../utils/getPath.js";
 
-export const syncDirs = (srcDir: string, outDir: string, transformers: Transformer[], omit?: RegExp[], onStartSync?: () => void, onEndSync?: Parameters<typeof watch.default>[2]) => {
+export const syncDirs = (
+  srcDir: string,
+  outDir: string,
+  transformers: Transformer[],
+  omit?: RegExp[],
+  onStartSync?: () => void,
+  onEndSync?: Parameters<typeof watch.default>[2],
+) => {
   watch.default(
     srcDir,
     {
@@ -17,20 +24,20 @@ export const syncDirs = (srcDir: string, outDir: string, transformers: Transform
       const fileSrcDir = path.dirname(fileChangedPath);
       const fileName = path.basename(fileChangedPath);
       const fileOutDir = fileSrcDir.replace(srcDir, outDir);
-      if (event === 'remove')
-        transformers
-          .forEach((x) => {
-            if (x.fileRegex.test(fileChangedPath)) {
-              fs.rmSync(
-                getPath(`${fileOutDir}/${x.pathTransformer?.(fileName) ?? fileName}`),
-                { force: true, recursive: true },
-              )
-            }
-          })
-      else
-        copyFile(fileSrcDir, fileName, fileOutDir, transformers, omit);
+      if (event === "remove")
+        transformers.forEach((x) => {
+          if (x.fileRegex.test(fileChangedPath)) {
+            fs.rmSync(
+              getPath(
+                `${fileOutDir}/${x.pathTransformer?.(fileName) ?? fileName}`,
+              ),
+              { force: true, recursive: true },
+            );
+          }
+        });
+      else copyFile(fileSrcDir, fileName, fileOutDir, transformers, omit);
 
-      onEndSync?.(event, fileChangedPath)
+      onEndSync?.(event, fileChangedPath);
     },
   );
-}
+};
