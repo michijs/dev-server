@@ -150,7 +150,7 @@ export const transformers: Transformer[] = [
   },
 ];
 
-export async function dist(callback: () => void, watchOption = false) {
+export async function dist(callback: () => void, watchOption = false, isolated = false) {
   const { outDir, isolatedDeclarations } = tsconfig.compilerOptions;
   if (
     outDir
@@ -158,7 +158,7 @@ export async function dist(callback: () => void, watchOption = false) {
     if (fs.existsSync(outDir))
       fs.rmSync(outDir, { recursive: true });
 
-    if (isolatedDeclarations) {
+    if (isolated || isolatedDeclarations) {
       const timer = new Timer();
       timer.startTimer();
       const omit = tsconfig.exclude.map(x => globToRegex(getPath(x)));

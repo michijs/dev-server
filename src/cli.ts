@@ -37,6 +37,11 @@ export async function cli() {
       default: false,
       alias: "w",
     })
+    .option("isolated", {
+      type: "boolean",
+      default: false,
+      alias: "i",
+    })
     .option("env", {
       type: "string",
     })
@@ -69,6 +74,6 @@ export async function cli() {
   }
   if (args.dist) {
     const action = await import("./actions/dist.js");
-    action.dist(showReadyMessage, args.watch);
+    action.dist(showReadyMessage, args.watch, args.isolated);
   }
 }
