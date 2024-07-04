@@ -24,7 +24,9 @@
   "baseUrl": "./src",
   "scripts": {
     "dist": "tsc",
-    "link": "bun run dist && bun link --force && tsc -w"
+    "dist-w": "tsc -w",
+    "bun-link": "bun link --force",
+    "link": "bunx concurrently bun:dist-w bun:bun-link"
   },
   "devDependencies": {
     "@types/node": "20.14.8",
