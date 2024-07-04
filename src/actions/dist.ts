@@ -174,7 +174,11 @@ export const transformers: Transformer[] = [
   },
 ];
 
-export async function dist(callback: () => void, watchOption = false, isolated = false) {
+export async function dist(
+  callback: () => void,
+  watchOption = false,
+  isolated = false,
+) {
   const { outDir, isolatedDeclarations } = tsconfig.compilerOptions;
   if (outDir) {
     if (fs.existsSync(outDir)) fs.rmSync(outDir, { recursive: true });

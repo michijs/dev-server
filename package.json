@@ -1,7 +1,7 @@
 {
   "name": "@michijs/dev-server",
   "license": "MIT",
-  "version": "0.5.15-beta.1",
+  "version": "0.6.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/michijs/dev-server.git"
@@ -29,7 +29,7 @@
     "link": "bunx concurrently bun:dist-w bun:bun-link"
   },
   "devDependencies": {
-    "@types/node": "20.14.8",
+    "@types/node": "20.14.9",
     "@types/yargs": "17.0.32"
   },
   "keywords": [
@@ -52,10 +52,10 @@
   },
   "dependencies": {
     "@types/web-app-manifest": "1.0.8",
-    "esbuild": "0.21.5",
+    "esbuild": "0.23.0",
     "node-watch": "0.7.4",
     "open": "10.1.0",
-    "puppeteer": "22.12.0",
+    "puppeteer": "22.12.1",
     "sharp": "0.33.4",
     "yargs": "17.7.2"
   },
