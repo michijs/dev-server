@@ -79,22 +79,30 @@ function isErrorInsideCreateCustomElement(diagnostic: Diagnostic) {
   const errorPos = diagnostic.start;
 
   // Get the line containing the error
-  const lineStart = sourceText.lastIndexOf('\n', errorPos);
-  const lineEnd = sourceText.indexOf('\n', errorPos);
+  const lineStart = sourceText.lastIndexOf("\n", errorPos);
+  const lineEnd = sourceText.indexOf("\n", errorPos);
   const errorLine = sourceText.substring(lineStart + 1, lineEnd);
 
-  return errorLine.includes('createCustomElement');
+  return errorLine.includes("createCustomElement");
 }
 
 export const transformers: Transformer[] = [
   {
     fileRegex: allJsFilesRegex,
     transformer: (fileContent, path) => {
-      const options = { compilerOptions: tsconfig.compilerOptions, fileName: path };
-      const { outputText, diagnostics } = transpileDeclaration(fileContent, options);
+      const options = {
+        compilerOptions: tsconfig.compilerOptions,
+        fileName: path,
+      };
+      const { outputText, diagnostics } = transpileDeclaration(
+        fileContent,
+        options,
+      );
 
       if (diagnostics && diagnostics?.length > 0) {
-        const notRelatedWithCustomElementDiagnosis = diagnostics.filter(x => !isErrorInsideCreateCustomElement(x));
+        const notRelatedWithCustomElementDiagnosis = diagnostics.filter(
+          (x) => !isErrorInsideCreateCustomElement(x),
+        );
         if (notRelatedWithCustomElementDiagnosis.length > 0) {
           showErrors(notRelatedWithCustomElementDiagnosis);
           delayedDeclarationFiles.push(path!);
@@ -105,25 +113,41 @@ export const transformers: Transformer[] = [
         // Obtaining const names
         let match: RegExpExecArray | null;
         while ((match = regex.exec(fileContent)) !== null) {
-          michijsElementsNames.push(match[1]!)
-        };
-        const eventsRegexPattern = /new\s+EventDispatcher\s*<\s*([^>]+)\s*>\s*\(\s*\)/gs;
+          michijsElementsNames.push(match[1]!);
+        }
+        const eventsRegexPattern =
+          /new\s+EventDispatcher\s*<\s*([^>]+)\s*>\s*\(\s*\)/gs;
         const classRegexPattern = /class:\s*(\w+)/gs;
         const trailingCommaPattern = /\s*,\s*\)\s*;/gs;
         fileContent = fileContent
           // Removing createCustomElement and the name of the element
-          .replaceAll(regex, 'const $1 = (')
+          .replaceAll(regex, "const $1 = (")
           // Helping to resolve events
-          .replaceAll(eventsRegexPattern, 'new EventDispatcher<$1>() as EventDispatcher<$1>')
+          .replaceAll(
+            eventsRegexPattern,
+            "new EventDispatcher<$1>() as EventDispatcher<$1>",
+          )
           // Helping to resolve classes
-          .replaceAll(classRegexPattern, 'class: $1 as $1')
-          .replaceAll(trailingCommaPattern, ' );');
-        const elementNamesRegex = new RegExp(`\\b(${michijsElementsNames.join('|')})\\b: `, 'g');
+          .replaceAll(classRegexPattern, "class: $1 as $1")
+          .replaceAll(trailingCommaPattern, " );");
+        const elementNamesRegex = new RegExp(
+          `\\b(${michijsElementsNames.join("|")})\\b: `,
+          "g",
+        );
 
         // Converting everything into types
-        const { outputText: newOutputText } = transpileDeclaration(fileContent, options);
-        const finalSrc = newOutputText.replace(elementNamesRegex, `$1: import("@michijs/michijs").MichiElementClass<`)
-        const { outputText: finalOutputText } = transpileDeclaration(finalSrc, options);
+        const { outputText: newOutputText } = transpileDeclaration(
+          fileContent,
+          options,
+        );
+        const finalSrc = newOutputText.replace(
+          elementNamesRegex,
+          `$1: import("@michijs/michijs").MichiElementClass<`,
+        );
+        const { outputText: finalOutputText } = transpileDeclaration(
+          finalSrc,
+          options,
+        );
 
         return finalOutputText;
       }
@@ -152,31 +176,33 @@ export const transformers: Transformer[] = [
 
 export async function dist(callback: () => void, watchOption = false, isolated = false) {
   const { outDir, isolatedDeclarations } = tsconfig.compilerOptions;
-  if (
-    outDir
-  ) {
-    if (fs.existsSync(outDir))
-      fs.rmSync(outDir, { recursive: true });
+  if (outDir) {
+    if (fs.existsSync(outDir)) fs.rmSync(outDir, { recursive: true });
 
     if (isolated || isolatedDeclarations) {
       const timer = new Timer();
       timer.startTimer();
-      const omit = tsconfig.exclude.map(x => globToRegex(getPath(x)));
-      tsconfig.include.forEach(x => copy(x, outDir, transformers, omit))
+      const omit = tsconfig.exclude.map((x) => globToRegex(getPath(x)));
+      tsconfig.include.forEach((x) => copy(x, outDir, transformers, omit));
       generateIncompatibleDeclarationFiles();
-      console.log(
-        coloredString(`  Dist finished in ${timer.endTimer()}ms`),
-      );
+      console.log(coloredString(`  Dist finished in ${timer.endTimer()}ms`));
       if (watchOption)
-        tsconfig.include.forEach(x => {
+        tsconfig.include.forEach((x) => {
           const timer = new Timer();
-          syncDirs(x, outDir, transformers, omit, () => timer.startTimer(), () => {
-            generateIncompatibleDeclarationFiles();
-            console.log(
-              coloredString(`  Dist finished in ${timer.endTimer()}ms`),
-            );
-          })
-        })
+          syncDirs(
+            x,
+            outDir,
+            transformers,
+            omit,
+            () => timer.startTimer(),
+            () => {
+              generateIncompatibleDeclarationFiles();
+              console.log(
+                coloredString(`  Dist finished in ${timer.endTimer()}ms`),
+              );
+            },
+          );
+        });
       callback();
     } else {
       exec(
