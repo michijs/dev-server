@@ -127,10 +127,12 @@ export interface PublicOptions {
     /**
      * startup parameters and application defaults for when a web application is launched.
      */
-    options?: WebAppManifest & {
-      file_handlers?: FileHandler[];
-    };
+    options?: FinalWebAppManifest;
   };
+}
+
+export interface FinalWebAppManifest extends WebAppManifest {
+  file_handlers?: FileHandler[];
 }
 
 export interface FileHandler {
