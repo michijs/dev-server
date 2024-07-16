@@ -32,10 +32,10 @@ if (fs.existsSync("michi.config.ts")) {
     assetsSizes,
     environment: process.env.NODE_ENV as DefaultEnvironment,
   });
-  config.public?.manifest?.options?.file_handlers.forEach(fileHandler => {
+  config.public?.manifest?.options?.file_handlers.forEach((fileHandler) => {
     Object.entries(fileHandler.accept).forEach(([name, value]) => {
-      fileHandler.accept[name] = Array.from(value)
-    })
-  })
+      fileHandler.accept[name] = Array.from(value);
+    });
+  });
 }
 export const userConfig = config;
