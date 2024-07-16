@@ -1,5 +1,5 @@
 import type { BuildOptions } from "esbuild";
-import type { WebAppManifest } from "web-app-manifest";
+import type { ImageResource, WebAppManifest } from "web-app-manifest";
 import type { assetsSizes } from "./constants.js";
 import type { Page } from "puppeteer";
 
@@ -127,8 +127,17 @@ export interface PublicOptions {
     /**
      * startup parameters and application defaults for when a web application is launched.
      */
-    options?: WebAppManifest;
+    options?: WebAppManifest & {
+      file_handlers: FileHandler[]
+    };
   };
+}
+
+interface FileHandler {
+  action: string,
+  name: string,
+  icons: ImageResource[],
+  accept: Record<string, Set<string> | string[]>
 }
 
 export interface Config {
