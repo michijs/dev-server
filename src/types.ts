@@ -128,12 +128,12 @@ export interface PublicOptions {
      * startup parameters and application defaults for when a web application is launched.
      */
     options?: WebAppManifest & {
-      file_handlers: FileHandler[];
+      file_handlers?: FileHandler[];
     };
   };
 }
 
-interface FileHandler {
+export interface FileHandler {
   action: string;
   name: string;
   icons: ImageResource[];
