@@ -48,7 +48,7 @@ const config = {
       ...(userConfig.public?.assets ?? {}),
       screenshots: {
         paths: ["/"],
-        pageCallbacks: [() => {}],
+        pageCallbacks: [() => { }],
         ...(userConfig.public?.assets?.screenshots ?? {}),
       },
       featureImage: {
@@ -122,15 +122,27 @@ const config = {
           }
 
           if (config.public.wellKnown) {
-            const transformedFile = jsonTransformer.transformer(
-              JSON.stringify(config.public.wellKnown),
-            );
             const wellKnownDir = `${build.initialOptions.outdir}/.well-known`;
             if (!fs.existsSync(wellKnownDir)) fs.mkdirSync(wellKnownDir);
-            fs.writeFileSync(
-              getPath(`${wellKnownDir}/assetlinks.json`),
-              transformedFile,
-            );
+
+            if (config.public.wellKnown.assetsLinks) {
+              const transformedFile = jsonTransformer.transformer(
+                JSON.stringify(config.public.wellKnown.assetsLinks),
+              );
+              fs.writeFileSync(
+                getPath(`${wellKnownDir}/assetlinks.json`),
+                transformedFile,
+              );
+            }
+            if (config.public.wellKnown.webAppOriginAssociation) {
+              const transformedFile = jsonTransformer.transformer(
+                JSON.stringify(config.public.wellKnown.webAppOriginAssociation),
+              );
+              fs.writeFileSync(
+                getPath(`${wellKnownDir}/web-app-origin-association`),
+                transformedFile,
+              );
+            }
           }
 
           // Copy public path - Omit to copy service worker - will be transformed after

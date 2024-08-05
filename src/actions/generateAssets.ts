@@ -4,8 +4,7 @@ import { mkdirSync, existsSync, writeFileSync, readFileSync, rmSync } from "fs";
 import { pngToIco } from "../utils/pngToIco.js";
 import type { ScreenshotOptions, Viewport } from "puppeteer";
 import { fileURLToPath } from "url";
-import { dirname, resolve } from "path";
-import sharp from "sharp";
+import { basename, dirname, resolve } from "path";
 import { getLocalURL } from "../utils/getLocalURL.js";
 import { assetsSizes } from "../constants.js";
 import puppeteer from "puppeteer";
@@ -79,6 +78,7 @@ async function takeScreenshots({
 
 export async function generateFeatureImage(src: string) {
   const svgFilePath = getPath(`${svgPath}/feature-image-template.svg`);
+  const { default: sharp } = await import("sharp");
   const [screenshots, icon] = await Promise.all([
     takeScreenshots({
       viewports: [
@@ -166,11 +166,12 @@ export async function generateScreenshots() {
 }
 
 export async function generateAssets(callback: () => void, src: string) {
-  rmSync(generatedPath, { recursive: true });
+  const { default: sharp } = await import("sharp");
+  rmSync(generatedPath, { recursive: true, force: true });
   if (!existsSync(generatedPath))
     mkdirSync(screenshotsPath, { recursive: true });
   const image = sharp(src);
-  const fileNameWithoutExtension = src.split("/").at(-1)?.split(".")[0];
+  const fileNameWithoutExtension = basename(src).split('.')[0];
 
   await Promise.all([
     ...assetsSizes.webp.map((x) => {

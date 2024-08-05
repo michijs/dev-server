@@ -25,7 +25,7 @@ export type AssetDescriptor =
   | AssetDescriptorAndroid
   | AssetDescriptorIos;
 
-export interface WellKnown {
+export interface AssetLink {
   /**
    * A Relation describes the nature of a statement, and consists of a kind and a detail.
    *
@@ -35,6 +35,15 @@ export interface WellKnown {
    * */
   relation: string[];
   target: AssetDescriptor;
+}
+
+export interface WebAppOriginAssociation {
+  web_apps: { web_app_identity: string }[]
+}
+
+export interface WellKnown {
+  assetsLinks: AssetLink[],
+  webAppOriginAssociation: WebAppOriginAssociation
 }
 
 export interface PageCallback<R = string | void> {
@@ -49,7 +58,7 @@ export interface PublicOptions {
    * A URI with the path component /.well-known/assetlinks.json is used by the AssetLinks protocol to identify one or more digital assets (such as web sites or mobile apps) that are related to the hosting web site in some fashion.
    *
    * [Specification] {@link https://github.com/google/digitalassetlinks/blob/master/well-known/specification.md} */
-  wellKnown?: WellKnown[];
+  wellKnown?: WellKnown;
   /**
    * Public folder path
    * @default public
@@ -132,6 +141,7 @@ export interface PublicOptions {
 }
 
 export interface ServerWebAppManifest extends WebAppManifest {
+  scope_extensions?: { origin: string }[],
   file_handlers?: FileHandler[];
 }
 

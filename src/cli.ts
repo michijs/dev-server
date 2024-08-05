@@ -37,6 +37,11 @@ export async function cli() {
       description:
         "Allows to generate a full set of icons and screenshots from a src icon.",
     })
+    .option("minify-asset", {
+      type: "string",
+      description:
+        "Allows to minify an asset.",
+    })
     .option("watch", {
       type: "boolean",
       default: false,
@@ -74,7 +79,11 @@ export async function cli() {
     action.dist(showReadyMessage, args.watch);
   }
   if (args.testTsc) {
-    const action = await import("./actions/test-tsc.js");
+    const action = await import("./actions/testTsc.js");
     action.testTsc(showReadyMessage);
+  }
+  if (args.minifyAsset) {
+    const action = await import("./actions/minifyAsset.js");
+    action.minifyAsset(showReadyMessage, args.minifyAsset);
   }
 }
