@@ -8,6 +8,7 @@
   },
   "main": "bin/index",
   "exports": {
+    "tsconfig": "./tsconfig/tsconfig.json",
     "types": "./bin/index.d.ts",
     "default": "./bin/index.js",
     "constants": "./bin/constants.js"
@@ -29,6 +30,7 @@
     "link": "bunx concurrently bun:dist-w bun:bun-link"
   },
   "devDependencies": {
+    "typescript": "^5.5.3",
     "@types/node": "22.0.0",
     "@types/yargs": "17.0.32"
   },
@@ -58,8 +60,5 @@
     "puppeteer": "22.14.0",
     "sharp": "0.33.4",
     "yargs": "17.7.2"
-  },
-  "peerDependencies": {
-    "typescript": "^5.5.3"
   }
 }

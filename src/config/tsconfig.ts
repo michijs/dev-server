@@ -1,7 +1,7 @@
 import { config } from "./config.js";
 import fs from "fs";
 import path from "path";
-import { parseConfigFileTextToJson, type CompilerOptions } from "typescript";
+import { type CompilerOptions } from "typescript";
 
 interface TsConfig {
   compilerOptions: CompilerOptions;
@@ -14,15 +14,8 @@ interface TsConfig {
 function readConfigFile(filePath: string): TsConfig {
   const absolutePath = path.resolve(filePath);
   const rawContent = fs.readFileSync(absolutePath, "utf8");
-  const parsed = parseConfigFileTextToJson(absolutePath, rawContent);
 
-  if (parsed.error) {
-    throw new Error(
-      `Error parsing ${absolutePath}: ${JSON.stringify(parsed.error)}`,
-    );
-  }
-
-  return parsed.config;
+  return JSON.parse(rawContent) as TsConfig;
 }
 
 function mergeConfigs(baseConfig: any, additionalConfig: any): any {

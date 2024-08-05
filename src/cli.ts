@@ -27,6 +27,11 @@ export async function cli() {
       default: false,
       description: "Allows to distribute the src code as a package.",
     })
+    .option("test-tsc", {
+      type: "boolean",
+      default: false,
+      description: "Allows to test typescript files without emitting files.",
+    })
     .option("generate-assets", {
       type: "string",
       description:
@@ -36,14 +41,6 @@ export async function cli() {
       type: "boolean",
       default: false,
       alias: "w",
-    })
-    .option("isolated", {
-      type: "boolean",
-      default: false,
-      alias: "i",
-    })
-    .option("env", {
-      type: "string",
     })
     .option("env", {
       type: "string",
@@ -74,6 +71,10 @@ export async function cli() {
   }
   if (args.dist) {
     const action = await import("./actions/dist.js");
-    action.dist(showReadyMessage, args.watch, args.isolated);
+    action.dist(showReadyMessage, args.watch);
+  }
+  if (args.testTsc) {
+    const action = await import("./actions/test-tsc.js");
+    action.testTsc(showReadyMessage);
   }
 }
