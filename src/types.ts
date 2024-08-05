@@ -38,12 +38,12 @@ export interface AssetLink {
 }
 
 export interface WebAppOriginAssociation {
-  web_apps: { web_app_identity: string }[]
+  web_apps: { web_app_identity: string }[];
 }
 
 export interface WellKnown {
-  assetsLinks: AssetLink[],
-  webAppOriginAssociation: WebAppOriginAssociation
+  assetsLinks: AssetLink[];
+  webAppOriginAssociation: WebAppOriginAssociation;
 }
 
 export interface PageCallback<R = string | void> {
@@ -141,7 +141,7 @@ export interface PublicOptions {
 }
 
 export interface ServerWebAppManifest extends WebAppManifest {
-  scope_extensions?: { origin: string }[],
+  scope_extensions?: { origin: string }[];
   file_handlers?: FileHandler[];
 }
 

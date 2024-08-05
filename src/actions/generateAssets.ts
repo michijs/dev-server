@@ -171,7 +171,7 @@ export async function generateAssets(callback: () => void, src: string) {
   if (!existsSync(generatedPath))
     mkdirSync(screenshotsPath, { recursive: true });
   const image = sharp(src);
-  const fileNameWithoutExtension = basename(src).split('.')[0];
+  const fileNameWithoutExtension = basename(src).split(".")[0];
 
   await Promise.all([
     ...assetsSizes.webp.map((x) => {
