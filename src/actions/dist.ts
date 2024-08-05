@@ -42,8 +42,8 @@ export async function dist(callback: () => void, watchOption = false) {
 
     tsconfig.include.forEach((x) => copy(x, outDir, transformers, omit));
     exec(
-      // There is no point on checking when deploying. It is assumed that it was checked before
-      `tsc ${watchOption ? "-w --incremental" : ""} --emitDeclarationOnly --project ${config.esbuildOptions.tsconfig}`,
+      // outDir takes the dir from the extended tsconfig...
+      `tsc ${watchOption ? "-w --incremental" : ""} --emitDeclarationOnly --project ${config.esbuildOptions.tsconfig} --outDir ${outDir}`,
       callback,
     );
     coloredString(`  Dist finished in ${timer.endTimer()}ms`);

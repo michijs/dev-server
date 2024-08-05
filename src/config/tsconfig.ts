@@ -55,7 +55,7 @@ function getFullConfig(filePath: string): TsConfig {
   if (config.extends) {
     const parentConfigPath = path.resolve(
       path.dirname(filePath),
-      config.extends,
+      config.extends.startsWith('@') ? `node_modules/${config.extends}`: config.extends,
     );
     const parentConfig = getFullConfig(parentConfigPath);
     return mergeConfigs(parentConfig, config);
