@@ -55,7 +55,7 @@ export async function cli() {
   process.env.NODE_ENV =
     process.env.NODE_ENV ||
     args.env ||
-    (args.build ? "PRODUCTION" : args.dist ? "DISTRIBUTION" : "DEVELOPMENT");
+    (args.build || args.minifyAsset ? "PRODUCTION" : args.dist || args.testTsc ? "DISTRIBUTION" : "DEVELOPMENT");
 
   const generateAssets =
     args.generateAssets === "" ? "public/assets/icon.svg" : args.generateAssets;
