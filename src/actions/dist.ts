@@ -32,17 +32,14 @@ export const transformers: Transformer[] = [
   },
 ];
 
-export async function dist(
-  callback: () => void,
-  watchOption = false
-) {
+export async function dist(callback: () => void, watchOption = false) {
   const { outDir } = tsconfig.compilerOptions;
   if (outDir) {
     const timer = new Timer();
     timer.startTimer();
     if (fs.existsSync(outDir)) fs.rmSync(outDir, { recursive: true });
     const omit = tsconfig.exclude.map((x) => globToRegex(getPath(x)));
-      
+
     tsconfig.include.forEach((x) => copy(x, outDir, transformers, omit));
     exec(
       // There is no point on checking when deploying. It is assumed that it was checked before
