@@ -39,8 +39,7 @@ export async function cli() {
     })
     .option("minify-asset", {
       type: "string",
-      description:
-        "Allows to minify an asset.",
+      description: "Allows to minify an asset.",
     })
     .option("watch", {
       type: "boolean",

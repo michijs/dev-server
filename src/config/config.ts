@@ -48,7 +48,7 @@ const config = {
       ...(userConfig.public?.assets ?? {}),
       screenshots: {
         paths: ["/"],
-        pageCallbacks: [() => { }],
+        pageCallbacks: [() => {}],
         ...(userConfig.public?.assets?.screenshots ?? {}),
       },
       featureImage: {
