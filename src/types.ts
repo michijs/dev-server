@@ -42,8 +42,8 @@ export interface WebAppOriginAssociation {
 }
 
 export interface WellKnown {
-  assetsLinks: AssetLink[];
-  webAppOriginAssociation: WebAppOriginAssociation;
+  assetsLinks?: AssetLink[];
+  webAppOriginAssociation?: WebAppOriginAssociation;
 }
 
 export interface PageCallback<R = string | void> {
