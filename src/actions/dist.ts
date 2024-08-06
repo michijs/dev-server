@@ -43,9 +43,15 @@ export async function dist(callback: () => void, watchOption = false) {
     tsconfig.include.forEach((x) => copy(x, outDir, transformers, omit));
     exec(
       // outDir takes the dir from the extended tsconfig...
-      `tsc ${watchOption ? "-w --incremental" : ""} --emitDeclarationOnly --project ${config.esbuildOptions.tsconfig} --outDir ${outDir}`,
-      callback,
-    );
+      `tsc ${watchOption ? "-w --incremental" : ""} --emitDeclarationOnly --project ${config.esbuildOptions.tsconfig} --outDir ${outDir}`, { maxBuffer: 1024 * 500 }, (error, stdout, stderr) => {
+        if (stdout)
+          console.log(stdout);
+        if (error || stderr) {
+          console.error(error?.message ?? stderr)
+          process.exit(1)
+        }
+        callback()
+      });
     coloredString(`  Dist finished in ${timer.endTimer()}ms`);
     if (watchOption)
       tsconfig.include.forEach((x) => {

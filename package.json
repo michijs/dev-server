@@ -29,7 +29,7 @@
     "link": "bunx concurrently bun:dist-w bun:bun-link"
   },
   "devDependencies": {
-    "@michijs/tsconfig": "0.0.3",
+    "@michijs/tsconfig": "0.0.4",
     "typescript": "^5.5.3",
     "@types/node": "22.0.0",
     "@types/yargs": "17.0.32"
