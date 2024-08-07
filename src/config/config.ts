@@ -26,14 +26,13 @@ export const connections: (http.ServerResponse<http.IncomingMessage> & {
   req: http.IncomingMessage;
 })[] = [];
 
-
 const getCurrentCommitSha = () => {
-  const headPath = join('.git', 'HEAD');
-  const headContent = fs.readFileSync(headPath, 'utf-8').trim();
+  const headPath = join(".git", "HEAD");
+  const headContent = fs.readFileSync(headPath, "utf-8").trim();
 
-  if (headContent.startsWith('ref:')) {
-    const refPath = join('.git', headContent.split(' ')[1]);
-    return fs.readFileSync(refPath, 'utf-8').trim();
+  if (headContent.startsWith("ref:")) {
+    const refPath = join(".git", headContent.split(" ")[1]);
+    return fs.readFileSync(refPath, "utf-8").trim();
   } else {
     return headContent;
   }
@@ -217,13 +216,18 @@ if (config.showLinkedPackages) {
   const devDependencies = Object.keys(packageJson.devDependencies || {});
   const peerDependencies = Object.keys(packageJson.peerDependencies || {});
 
-  dependencies.concat(devDependencies).concat(peerDependencies).forEach((packagePath) => {
-    const packagePathOnNodeModules = getPath(`node_modules/${packagePath}`);
-    if (fs.lstatSync(packagePathOnNodeModules).isSymbolicLink()) {
-      const pathToWatch = findSymbolickLinkRealPath(packagePathOnNodeModules);
-      console.log(coloredString(`  Linked package found at "${pathToWatch}"`));
-    }
-  });
+  dependencies
+    .concat(devDependencies)
+    .concat(peerDependencies)
+    .forEach((packagePath) => {
+      const packagePathOnNodeModules = getPath(`node_modules/${packagePath}`);
+      if (fs.lstatSync(packagePathOnNodeModules).isSymbolicLink()) {
+        const pathToWatch = findSymbolickLinkRealPath(packagePathOnNodeModules);
+        console.log(
+          coloredString(`  Linked package found at "${pathToWatch}"`),
+        );
+      }
+    });
 }
 
 export { config };

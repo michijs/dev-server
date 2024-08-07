@@ -5,7 +5,12 @@ import { hideBin } from "yargs/helpers";
 import { readFileSync } from "fs";
 import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
-const version = JSON.parse(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), "..", "package.json"), { encoding: 'utf-8' })).version;
+const version = JSON.parse(
+  readFileSync(
+    resolve(dirname(fileURLToPath(import.meta.url)), "..", "package.json"),
+    { encoding: "utf-8" },
+  ),
+).version;
 
 export async function cli() {
   console.log(`  ${coloredString(`Running dev server version ${version}.`)}`);
