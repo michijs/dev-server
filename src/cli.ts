@@ -2,9 +2,17 @@ import coloredString from "./utils/coloredString.js";
 import yargs from "yargs";
 import { Timer } from "./classes/Timer.js";
 import { hideBin } from "yargs/helpers";
+import { readFileSync } from "fs";
+import { dirname, resolve } from "path";
+import { fileURLToPath } from "url";
+const version = JSON.parse(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), "..", "package.json"), { encoding: 'utf-8' })).version;
 
 export async function cli() {
+  console.log(`  ${coloredString(`Running dev server version ${version}.`)}`);
   const timer = new Timer();
+
+  console.log(`
+    ${coloredString(`Ready in ${timer.endTimer()}ms.`)}`);
 
   const showReadyMessage = () =>
     console.log(`
