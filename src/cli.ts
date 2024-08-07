@@ -16,9 +16,6 @@ export async function cli() {
   console.log(`  ${coloredString(`Running dev server version ${version}.`)}`);
   const timer = new Timer();
 
-  console.log(`
-    ${coloredString(`Ready in ${timer.endTimer()}ms.`)}`);
-
   const showReadyMessage = () =>
     console.log(`
   ${coloredString(`Ready in ${timer.endTimer()}ms.`)}`);
