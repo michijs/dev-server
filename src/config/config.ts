@@ -5,7 +5,7 @@ import { copy } from "../utils/copy.js";
 import { getPath } from "../utils/getPath.js";
 import { userConfig } from "./userConfig.js";
 import type http from "http";
-import { resolve } from "path";
+import { join, resolve } from "path";
 import {
   jsAndTsRegex,
   jsonTransformer,
@@ -25,6 +25,20 @@ const devServerListener =
 export const connections: (http.ServerResponse<http.IncomingMessage> & {
   req: http.IncomingMessage;
 })[] = [];
+
+const getCurrentCommitSha = () => {
+  const headPath = join(".git", "HEAD");
+  const headContent = fs.readFileSync(headPath, "utf-8").trim();
+
+  if (headContent.startsWith("ref:")) {
+    const refPath = join(".git", headContent.split(" ")[1]);
+    return fs.readFileSync(refPath, "utf-8").trim();
+  } else {
+    return headContent;
+  }
+};
+
+const commitSha = getCurrentCommitSha();
 
 const defaultEntryPoint = fs.existsSync("src/index.tsx")
   ? "src/index.tsx"
@@ -175,6 +189,7 @@ const config = {
       michiProcess: JSON.stringify({
         env: {
           NODE_ENV: process.env.NODE_ENV,
+          COMMIT_SHA: commitSha,
           ...(userConfig.env ?? {}),
         },
       }),
@@ -199,14 +214,20 @@ if (config.showLinkedPackages) {
   const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
   const dependencies = Object.keys(packageJson.dependencies || {});
   const devDependencies = Object.keys(packageJson.devDependencies || {});
+  const peerDependencies = Object.keys(packageJson.peerDependencies || {});
 
-  dependencies.concat(devDependencies).forEach((packagePath) => {
-    const packagePathOnNodeModules = getPath(`node_modules/${packagePath}`);
-    if (fs.lstatSync(packagePathOnNodeModules).isSymbolicLink()) {
-      const pathToWatch = findSymbolickLinkRealPath(packagePathOnNodeModules);
-      console.log(coloredString(`  Linked package found at "${pathToWatch}"`));
-    }
-  });
+  dependencies
+    .concat(devDependencies)
+    .concat(peerDependencies)
+    .forEach((packagePath) => {
+      const packagePathOnNodeModules = getPath(`node_modules/${packagePath}`);
+      if (fs.lstatSync(packagePathOnNodeModules).isSymbolicLink()) {
+        const pathToWatch = findSymbolickLinkRealPath(packagePathOnNodeModules);
+        console.log(
+          coloredString(`  Linked package found at "${pathToWatch}"`),
+        );
+      }
+    });
 }
 
 export { config };

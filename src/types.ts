@@ -197,6 +197,7 @@ export interface MichiProcessType {
   env: {
     BUILD_FILES: string[];
     CACHE_NAME: string;
+    COMMIT_SHA: string;
     NODE_ENV: DefaultEnvironment;
   };
 }

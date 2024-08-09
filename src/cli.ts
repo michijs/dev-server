@@ -2,8 +2,18 @@ import coloredString from "./utils/coloredString.js";
 import yargs from "yargs";
 import { Timer } from "./classes/Timer.js";
 import { hideBin } from "yargs/helpers";
+import { readFileSync } from "fs";
+import { dirname, resolve } from "path";
+import { fileURLToPath } from "url";
+const version = JSON.parse(
+  readFileSync(
+    resolve(dirname(fileURLToPath(import.meta.url)), "..", "package.json"),
+    { encoding: "utf-8" },
+  ),
+).version;
 
 export async function cli() {
+  console.log(`  ${coloredString(`Running dev server version ${version}.`)}`);
   const timer = new Timer();
 
   const showReadyMessage = () =>
@@ -55,7 +65,11 @@ export async function cli() {
   process.env.NODE_ENV =
     process.env.NODE_ENV ||
     args.env ||
-    (args.build || args.minifyAsset ? "PRODUCTION" : args.dist || args.testTsc ? "DISTRIBUTION" : "DEVELOPMENT");
+    (args.build || args.minifyAsset
+      ? "PRODUCTION"
+      : args.dist || args.testTsc
+        ? "DISTRIBUTION"
+        : "DEVELOPMENT");
 
   const generateAssets =
     args.generateAssets === "" ? "public/assets/icon.svg" : args.generateAssets;

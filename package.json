@@ -1,7 +1,7 @@
 {
   "name": "@michijs/dev-server",
   "license": "MIT",
-  "version": "0.7.2",
+  "version": "0.7.5",
   "repository": {
     "type": "git",
     "url": "https://github.com/michijs/dev-server.git"
@@ -31,7 +31,7 @@
   "devDependencies": {
     "@michijs/tsconfig": "0.0.4",
     "typescript": "^5.5.3",
-    "@types/node": "22.0.0",
+    "@types/node": "22.1.0",
     "@types/yargs": "17.0.32"
   },
   "keywords": [
@@ -57,7 +57,7 @@
     "esbuild": "0.23.0",
     "node-watch": "0.7.4",
     "open": "10.1.0",
-    "puppeteer": "22.14.0",
+    "puppeteer": "22.15.0",
     "sharp": "0.33.4",
     "yargs": "17.7.2"
   }
