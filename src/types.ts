@@ -148,7 +148,7 @@ export interface ServerWebAppManifest extends WebAppManifest {
 export interface FileHandler {
   action: string;
   name: string;
-  icons: ImageResource[];
+  icons?: ImageResource[];
   accept: Record<string, Set<string> | string[]>;
 }
 
