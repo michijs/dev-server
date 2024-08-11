@@ -85,6 +85,7 @@ const config = {
     bundle: process.env.NODE_ENV !== "DISTRIBUTION",
     keepNames: minify,
     entryPoints: [defaultEntryPoint],
+    legalComments: "external",
     format: "esm",
     target: "esnext",
     logLevel: "error",
