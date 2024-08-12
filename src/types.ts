@@ -140,8 +140,14 @@ export interface PublicOptions {
   };
 }
 
+interface ProtocolHandler {
+  protocol: string,
+  url: string
+}
+
 export interface ServerWebAppManifest extends WebAppManifest {
   scope_extensions?: { origin: string }[];
+  protocol_handlers?: ProtocolHandler[];
   file_handlers?: FileHandler[];
 }
 
