@@ -141,8 +141,8 @@ export interface PublicOptions {
 }
 
 interface ProtocolHandler {
-  protocol: string,
-  url: string
+  protocol: string;
+  url: string;
 }
 
 export interface ServerWebAppManifest extends WebAppManifest {
