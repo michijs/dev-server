@@ -228,7 +228,7 @@ export async function generateAssets(callback: () => void, src: string) {
           .webp()
           .toFile(
             getPath(
-              `${generatedPath}/${fileNameWithoutExtension}-${x}${y === flattenImage ? "-masked" : ""}.webp`,
+              `${generatedPath}/${fileNameWithoutExtension}-${x}${y === flattenImage ? "-maskable" : ""}.webp`,
             ),
           ),
       ),
@@ -240,7 +240,7 @@ export async function generateAssets(callback: () => void, src: string) {
           .png()
           .toFile(
             getPath(
-              `${generatedPath}/${fileNameWithoutExtension}-${x}${y === flattenImage ? "-masked" : ""}.png`,
+              `${generatedPath}/${fileNameWithoutExtension}-${x}${y === flattenImage ? "-maskable" : ""}.png`,
             ),
           ),
       ),
