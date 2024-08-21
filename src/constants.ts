@@ -18,24 +18,24 @@ export const defaultProductionConfig: ServerConfigFactoryProps<"PRODUCTION"> = {
     ...assetsSizes.webp.map((x) => ({
       src: `/assets/generated/icon-${x}.webp`,
       sizes: `${x}x${x}`,
-      type: "image/webp"
+      type: "image/webp",
     })),
     ...assetsSizes.png.map((x) => ({
       src: `/assets/generated/icon-${x}.png`,
       sizes: `${x}x${x}`,
-      type: "image/png"
+      type: "image/png",
     })),
     ...assetsSizes.webp.map((x) => ({
       src: `/assets/generated/icon-${x}-maskable.webp`,
       sizes: `${x}x${x}`,
       type: "image/webp",
-      purpose: 'maskable'
+      purpose: "maskable",
     })),
     ...assetsSizes.png.map((x) => ({
       src: `/assets/generated/icon-${x}-maskable.png`,
       sizes: `${x}x${x}`,
       type: "image/png",
-      purpose: 'maskable'
+      purpose: "maskable",
     })),
   ],
   environment: "PRODUCTION",

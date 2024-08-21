@@ -9,10 +9,10 @@ import { assetsSizes } from "../constants.js";
 import { chromium, type PageScreenshotOptions } from "playwright-core";
 import type { PageCallback, Viewport } from "../types.js";
 import { exec } from "child_process";
-import { getColor } from 'colorthief'
+import { getColor } from "colorthief";
 
 async function installPlaywright() {
-  console.log('Installing Playwright...');
+  console.log("Installing Playwright...");
 
   return new Promise<void>((resolve, reject) => {
     const runners = ["bunx", "npx"];
@@ -207,28 +207,44 @@ export async function generateAssets(callback: () => void, src: string) {
     mkdirSync(screenshotsPath, { recursive: true });
   const image = sharp(src);
   const fileNameWithoutExtension = basename(src).split(".")[0];
-  const tempFileName = getPath(`${generatedPath}/${fileNameWithoutExtension}-temp.png`)
-  await image
-    .png()
-    .toFile(
-      tempFileName,
-    );
+  const tempFileName = getPath(
+    `${generatedPath}/${fileNameWithoutExtension}-temp.png`,
+  );
+  await image.png().toFile(tempFileName);
   const dominantColor = await getColor(tempFileName, 1);
   rmSync(tempFileName, { force: true });
   const color = {
     r: dominantColor[0],
     g: dominantColor[1],
-    b: dominantColor[2]
-  }
-  const flattenImage = image.clone().flatten({ background: color })
+    b: dominantColor[2],
+  };
+  const flattenImage = image.clone().flatten({ background: color });
 
   await Promise.all([
-    ...assetsSizes.webp.flatMap((x) => [image, flattenImage].map(y => y.resize(x, x).webp().toFile(
-      getPath(`${generatedPath}/${fileNameWithoutExtension}-${x}${y === flattenImage ? '-masked': ''}.webp`),
-    ))),
-    ...assetsSizes.png.flatMap((x) => [image, flattenImage].map(y => y.resize(x, x).png().toFile(
-      getPath(`${generatedPath}/${fileNameWithoutExtension}-${x}${y === flattenImage ? '-masked': ''}.png`),
-    ))),
+    ...assetsSizes.webp.flatMap((x) =>
+      [image, flattenImage].map((y) =>
+        y
+          .resize(x, x)
+          .webp()
+          .toFile(
+            getPath(
+              `${generatedPath}/${fileNameWithoutExtension}-${x}${y === flattenImage ? "-masked" : ""}.webp`,
+            ),
+          ),
+      ),
+    ),
+    ...assetsSizes.png.flatMap((x) =>
+      [image, flattenImage].map((y) =>
+        y
+          .resize(x, x)
+          .png()
+          .toFile(
+            getPath(
+              `${generatedPath}/${fileNameWithoutExtension}-${x}${y === flattenImage ? "-masked" : ""}.png`,
+            ),
+          ),
+      ),
+    ),
     generateFavicon(src, getPath(`${config.public.path}/favicon.ico`)),
     generateFeatureImage(src),
     generateScreenshots(),
