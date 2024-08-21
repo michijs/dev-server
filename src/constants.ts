@@ -14,5 +14,29 @@ export const assetsSizes = {
 
 export const defaultProductionConfig: ServerConfigFactoryProps<"PRODUCTION"> = {
   assetsSizes,
+  icons: [
+    ...assetsSizes.webp.map((x) => ({
+      src: `/assets/generated/icon-${x}.webp`,
+      sizes: `${x}x${x}`,
+      type: "image/webp"
+    })),
+    ...assetsSizes.png.map((x) => ({
+      src: `/assets/generated/icon-${x}.png`,
+      sizes: `${x}x${x}`,
+      type: "image/png"
+    })),
+    ...assetsSizes.webp.map((x) => ({
+      src: `/assets/generated/icon-${x}-maskable.webp`,
+      sizes: `${x}x${x}`,
+      type: "image/webp",
+      purpose: 'maskable'
+    })),
+    ...assetsSizes.png.map((x) => ({
+      src: `/assets/generated/icon-${x}-maskable.png`,
+      sizes: `${x}x${x}`,
+      type: "image/png",
+      purpose: 'maskable'
+    })),
+  ],
   environment: "PRODUCTION",
 };

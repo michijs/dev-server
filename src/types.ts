@@ -214,6 +214,7 @@ export interface MichiProcessType {
 }
 
 export interface ServerConfigFactoryProps<T extends string> {
+  icons: ImageResource[];
   assetsSizes: typeof assetsSizes;
   environment: T;
 }

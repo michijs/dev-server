@@ -7,7 +7,7 @@ import type {
 import { buildSync as esbuild } from "esbuild";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-import { assetsSizes } from "../constants.js";
+import { defaultProductionConfig } from "../constants.js";
 
 let config: ServerConfig = {};
 if (fs.existsSync("michi.config.ts")) {
@@ -29,7 +29,7 @@ if (fs.existsSync("michi.config.ts")) {
   // @ts-ignore
   const michiConfig = await import("./michi.config.cjs");
   config = (michiConfig.default.default as ServerConfigFactory)({
-    assetsSizes,
+    ...defaultProductionConfig,
     environment: process.env.NODE_ENV as DefaultEnvironment,
   });
   config.public?.manifest?.options?.file_handlers?.forEach((fileHandler) => {
