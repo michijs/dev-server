@@ -67,7 +67,8 @@ async function takeScreenshots({
       });
       await page.setViewport(viewport);
       const suffix = await pageCallback?.(page);
-      const optionsResult = options?.(viewport, suffix ? `/${suffix}` : suffix) ?? {};
+      const optionsResult =
+        options?.(viewport, suffix ? `/${suffix}` : suffix) ?? {};
       const screenshot = await page.screenshot({
         fullPage: true,
         ...optionsResult,
