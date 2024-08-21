@@ -36,7 +36,10 @@ const generateFavicon = async (src: string, dest: string) => {
 interface TakeScreenshotsParams {
   path: string;
   viewports: Viewport[];
-  options?(viewport: Viewport, pagePrefix?: string | void): PageScreenshotOptions;
+  options?(
+    viewport: Viewport,
+    pagePrefix?: string | void,
+  ): PageScreenshotOptions;
   pageCallback?: PageCallback;
 }
 
@@ -60,7 +63,11 @@ async function takeScreenshots({
   return await Promise.all(
     viewports.map(async (viewport) => {
       // Create a new page
-      const page = await browser.newPage({ reducedMotion: 'reduce', colorScheme: 'dark', viewport });
+      const page = await browser.newPage({
+        reducedMotion: "reduce",
+        colorScheme: "dark",
+        viewport,
+      });
       const suffix = await pageCallback?.(page);
       const optionsResult =
         options?.(viewport, suffix ? `/${suffix}` : suffix) ?? {};
