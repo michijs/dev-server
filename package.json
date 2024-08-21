@@ -23,7 +23,7 @@
   "type": "module",
   "baseUrl": "./src",
   "scripts": {
-    "postinstall": "playwright install",
+    "postinstall": "playwright install chromium --with-deps",
     "dist": "tsc",
     "dist-w": "tsc -w",
     "bun-link": "bun link --force",
