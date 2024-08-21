@@ -11,18 +11,25 @@ import type { PageCallback, Viewport } from "../types.js";
 import { exec } from "child_process";
 
 async function installPlaywright() {
-  console.log('Installing Playwright...');
-  
+  console.log("Installing Playwright...");
+
   return new Promise<void>((resolve, reject) => {
-    const runners = ['bunx', 'npx']
-    exec(runners.map(x => `${x} playwright install chromium --with-deps`).join(' || '), (error, stdout, stderr) => {
-      if (error) {
-        console.error(`Error during Playwright installation: ${error.message}`);
-        return reject(error);
-      }
-      console.log(stdout);
-      resolve();
-    });
+    const runners = ["bunx", "npx"];
+    exec(
+      runners
+        .map((x) => `${x} playwright install chromium --with-deps`)
+        .join(" || "),
+      (error, stdout, stderr) => {
+        if (error) {
+          console.error(
+            `Error during Playwright installation: ${error.message}`,
+          );
+          return reject(error);
+        }
+        console.log(stdout);
+        resolve();
+      },
+    );
   });
 }
 
@@ -191,8 +198,8 @@ export async function generateScreenshots() {
 }
 
 export async function generateAssets(callback: () => void, src: string) {
-  await installPlaywright()
-  
+  await installPlaywright();
+
   const { default: sharp } = await import("sharp");
   rmSync(generatedPath, { recursive: true, force: true });
   if (!existsSync(generatedPath))
