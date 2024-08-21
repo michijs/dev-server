@@ -65,9 +65,10 @@ async function takeScreenshots({
       await page.setViewport(viewport);
       await page.emulateMediaFeatures([
         { name: "prefers-reduced-motion", value: "reduce" },
-      ])
+      ]);
       const suffix = await pageCallback?.(page);
-      const optionsResult = options?.(viewport, suffix ? `/${suffix}` : suffix) ?? {};
+      const optionsResult =
+        options?.(viewport, suffix ? `/${suffix}` : suffix) ?? {};
       await page.goto(`${getLocalURL(port)}${path}`, {
         waitUntil: "load",
       });
