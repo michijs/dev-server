@@ -4,8 +4,8 @@ import type { assetsSizes } from "./constants.js";
 import type { Page } from "playwright";
 
 export interface Viewport {
-    width: number;
-    height: number;
+  width: number;
+  height: number;
 }
 
 export interface AssetDescriptorWeb {
