@@ -63,15 +63,11 @@ async function takeScreenshots({
       // Create a new page
       const page = await browser.newPage();
       await page.setViewport(viewport);
-      await page.emulateMediaFeatures([
-        { name: "prefers-reduced-motion", value: "reduce" },
-      ])
       const suffix = await pageCallback?.(page);
       const optionsResult = options?.(viewport, suffix ? `/${suffix}` : suffix) ?? {};
-      await page.goto(`${getLocalURL(port)}${path}`, {
-        waitUntil: "load",
-      });
+      await page.goto(`${getLocalURL(port)}${path}`);
       const screenshot = await page.screenshot({
+        captureBeyondViewport: false,
         fullPage: true,
         ...optionsResult,
       });
