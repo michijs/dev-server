@@ -2,13 +2,13 @@ import { getPath } from "../utils/getPath.js";
 import { config } from "../config/config.js";
 import { mkdirSync, existsSync, writeFileSync, readFileSync, rmSync } from "fs";
 import { pngToIco } from "../utils/pngToIco.js";
-import type { PageScreenshotOptions } from "playwright";
+import type { ScreenshotOptions, Viewport } from "puppeteer";
 import { fileURLToPath } from "url";
 import { basename, dirname, resolve } from "path";
 import { getLocalURL } from "../utils/getLocalURL.js";
 import { assetsSizes } from "../constants.js";
-import { chromium } from "playwright";
-import type { PageCallback, Viewport } from "../types.js";
+import puppeteer from "puppeteer";
+import type { PageCallback } from "../types.js";
 
 const generatedPath = getPath(
   `${config.public.path}/${config.public.assets.path}/generated`,
@@ -36,17 +36,15 @@ const generateFavicon = async (src: string, dest: string) => {
 interface TakeScreenshotsParams {
   path: string;
   viewports: Viewport[];
-  options?(
-    viewport: Viewport,
-    pagePrefix?: string | void,
-  ): PageScreenshotOptions;
+  options?(viewport: Viewport, pagePrefix?: string | void): ScreenshotOptions;
   pageCallback?: PageCallback;
 }
 
 config.watch = false;
 config.openBrowser = false;
-const browser = await chromium.launch({
-  headless: true,
+const browser = await puppeteer.launch({
+  dumpio: true,
+  browser: "chrome",
 });
 
 const port = await new Promise<number>(async (resolve) => {
@@ -63,18 +61,16 @@ async function takeScreenshots({
   return await Promise.all(
     viewports.map(async (viewport) => {
       // Create a new page
-      const page = await browser.newPage({
-        reducedMotion: "reduce",
-        colorScheme: "dark",
-        viewport,
-      });
+      const page = await browser.newPage();
+      await page.setViewport(viewport);
+      await page.emulateMediaFeatures([
+        { name: "prefers-reduced-motion", value: "reduce" },
+      ])
       const suffix = await pageCallback?.(page);
-      const optionsResult =
-        options?.(viewport, suffix ? `/${suffix}` : suffix) ?? {};
+      const optionsResult = options?.(viewport, suffix ? `/${suffix}` : suffix) ?? {};
       await page.goto(`${getLocalURL(port)}${path}`, {
         waitUntil: "load",
       });
-      await page.waitForTimeout(3000);
       const screenshot = await page.screenshot({
         fullPage: true,
         ...optionsResult,
@@ -106,19 +102,23 @@ export async function generateFeatureImage(src: string) {
 
   const svg = readFileSync(svgFilePath);
 
+  function uint8ArrayToBase64(uint8Array) {
+    return btoa(String.fromCharCode.apply(null, uint8Array));
+  }
+
   const svgString = svg
     .toString()
     .replace(
       "{{phone-href}}",
-      `data:image/png;base64,${screenshots[0].toString("base64")}`,
+      `data:image/png;base64,${uint8ArrayToBase64(screenshots[0])}`,
     )
     .replace(
       "{{tablet-href}}",
-      `data:image/png;base64,${screenshots[1].toString("base64")}`,
+      `data:image/png;base64,${uint8ArrayToBase64(screenshots[1])}`,
     )
     .replace(
       "{{pc-href}}",
-      `data:image/png;base64,${screenshots[2].toString("base64")}`,
+      `data:image/png;base64,${uint8ArrayToBase64(screenshots[2])}`,
     )
     .replace(
       "{{icon-href}}",

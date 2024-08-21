@@ -1,12 +1,7 @@
 import type { BuildOptions } from "esbuild";
 import type { ImageResource, WebAppManifest } from "web-app-manifest";
 import type { assetsSizes } from "./constants.js";
-import type { Page } from "playwright";
-
-export interface Viewport {
-  width: number;
-  height: number;
-}
+import type { Page } from "puppeteer";
 
 export interface AssetDescriptorWeb {
   namespace: "web";

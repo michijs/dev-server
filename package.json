@@ -23,7 +23,6 @@
   "type": "module",
   "baseUrl": "./src",
   "scripts": {
-    "postinstall": "playwright install chromium --with-deps",
     "dist": "tsc",
     "dist-w": "tsc -w",
     "bun-link": "bun link --force",
@@ -58,7 +57,7 @@
     "esbuild": "0.23.1",
     "node-watch": "0.7.4",
     "open": "10.1.0",
-    "playwright": "1.46.1",
+    "puppeteer": "23.1.0",
     "sharp": "0.33.5",
     "yargs": "17.7.2"
   }
