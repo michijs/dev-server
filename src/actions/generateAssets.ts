@@ -2,13 +2,29 @@ import { getPath } from "../utils/getPath.js";
 import { config } from "../config/config.js";
 import { mkdirSync, existsSync, writeFileSync, readFileSync, rmSync } from "fs";
 import { pngToIco } from "../utils/pngToIco.js";
-import type { ScreenshotOptions, Viewport } from "puppeteer";
 import { fileURLToPath } from "url";
 import { basename, dirname, resolve } from "path";
 import { getLocalURL } from "../utils/getLocalURL.js";
 import { assetsSizes } from "../constants.js";
-import puppeteer from "puppeteer";
-import type { PageCallback } from "../types.js";
+import { chromium, type PageScreenshotOptions } from "playwright-core";
+import type { PageCallback, Viewport } from "../types.js";
+import { exec } from "child_process";
+
+async function installPlaywright() {
+  console.log('Installing Playwright...');
+  
+  return new Promise<void>((resolve, reject) => {
+    const runners = ['bunx', 'npx']
+    exec(runners.map(x => `${x} playwright install chromium --with-deps`).join(' || '), (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Error during Playwright installation: ${error.message}`);
+        return reject(error);
+      }
+      console.log(stdout);
+      resolve();
+    });
+  });
+}
 
 const generatedPath = getPath(
   `${config.public.path}/${config.public.assets.path}/generated`,
@@ -36,15 +52,17 @@ const generateFavicon = async (src: string, dest: string) => {
 interface TakeScreenshotsParams {
   path: string;
   viewports: Viewport[];
-  options?(viewport: Viewport, pagePrefix?: string | void): ScreenshotOptions;
+  options?(
+    viewport: Viewport,
+    pagePrefix?: string | void,
+  ): PageScreenshotOptions;
   pageCallback?: PageCallback;
 }
 
 config.watch = false;
 config.openBrowser = false;
-const browser = await puppeteer.launch({
-  dumpio: true,
-  browser: "chrome",
+const browser = await chromium.launch({
+  headless: true,
 });
 
 const port = await new Promise<number>(async (resolve) => {
@@ -61,14 +79,19 @@ async function takeScreenshots({
   return await Promise.all(
     viewports.map(async (viewport) => {
       // Create a new page
-      const page = await browser.newPage();
-      await page.setViewport(viewport);
+      const page = await browser.newPage({
+        reducedMotion: "reduce",
+        colorScheme: "dark",
+        viewport,
+      });
       const suffix = await pageCallback?.(page);
       const optionsResult =
         options?.(viewport, suffix ? `/${suffix}` : suffix) ?? {};
-      await page.goto(`${getLocalURL(port)}${path}`);
+      await page.goto(`${getLocalURL(port)}${path}`, {
+        waitUntil: "load",
+      });
+      await page.waitForTimeout(3000);
       const screenshot = await page.screenshot({
-        captureBeyondViewport: false,
         fullPage: true,
         ...optionsResult,
       });
@@ -99,23 +122,19 @@ export async function generateFeatureImage(src: string) {
 
   const svg = readFileSync(svgFilePath);
 
-  function uint8ArrayToBase64(uint8Array) {
-    return btoa(String.fromCharCode.apply(null, uint8Array));
-  }
-
   const svgString = svg
     .toString()
     .replace(
       "{{phone-href}}",
-      `data:image/png;base64,${uint8ArrayToBase64(screenshots[0])}`,
+      `data:image/png;base64,${screenshots[0].toString("base64")}`,
     )
     .replace(
       "{{tablet-href}}",
-      `data:image/png;base64,${uint8ArrayToBase64(screenshots[1])}`,
+      `data:image/png;base64,${screenshots[1].toString("base64")}`,
     )
     .replace(
       "{{pc-href}}",
-      `data:image/png;base64,${uint8ArrayToBase64(screenshots[2])}`,
+      `data:image/png;base64,${screenshots[2].toString("base64")}`,
     )
     .replace(
       "{{icon-href}}",
@@ -172,6 +191,8 @@ export async function generateScreenshots() {
 }
 
 export async function generateAssets(callback: () => void, src: string) {
+  await installPlaywright()
+  
   const { default: sharp } = await import("sharp");
   rmSync(generatedPath, { recursive: true, force: true });
   if (!existsSync(generatedPath))

@@ -1,5 +1,4 @@
-import type { Viewport } from "puppeteer";
-import type { ServerConfigFactoryProps } from "./types.js";
+import type { ServerConfigFactoryProps, Viewport } from "./types.js";
 export const assetsSizes = {
   webp: [24, 48, 72, 96, 128, 256, 512],
   png: [300, 512, 1080],
