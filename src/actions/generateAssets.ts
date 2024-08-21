@@ -44,8 +44,7 @@ config.watch = false;
 config.openBrowser = false;
 const browser = await puppeteer.launch({
   dumpio: true,
-  headless: true,
-  product: "chrome",
+  browser: "chrome",
 });
 
 const port = await new Promise<number>(async (resolve) => {
@@ -63,12 +62,15 @@ async function takeScreenshots({
     viewports.map(async (viewport) => {
       // Create a new page
       const page = await browser.newPage();
-      await page.goto(`${getLocalURL(port)}${path}`);
+      await page.goto(`${getLocalURL(port)}${path}`, {
+        waitUntil: "domcontentloaded",
+      });
       await page.setViewport(viewport);
       const suffix = await pageCallback?.(page);
+      const optionsResult = options?.(viewport, suffix ? `/${suffix}` : suffix) ?? {};
       const screenshot = await page.screenshot({
         fullPage: true,
-        ...options?.(viewport, suffix ? `/${suffix}` : suffix),
+        ...optionsResult,
       });
       await page.close();
       return screenshot;
@@ -97,19 +99,23 @@ export async function generateFeatureImage(src: string) {
 
   const svg = readFileSync(svgFilePath);
 
+  function uint8ArrayToBase64(uint8Array) {
+    return btoa(String.fromCharCode.apply(null, uint8Array));
+  }
+
   const svgString = svg
     .toString()
     .replace(
       "{{phone-href}}",
-      `data:image/png;base64,${screenshots[0].toString("base64")}`,
+      `data:image/png;base64,${uint8ArrayToBase64(screenshots[0])}`,
     )
     .replace(
       "{{tablet-href}}",
-      `data:image/png;base64,${screenshots[1].toString("base64")}`,
+      `data:image/png;base64,${uint8ArrayToBase64(screenshots[1])}`,
     )
     .replace(
       "{{pc-href}}",
-      `data:image/png;base64,${screenshots[2].toString("base64")}`,
+      `data:image/png;base64,${uint8ArrayToBase64(screenshots[2])}`,
     )
     .replace(
       "{{icon-href}}",
