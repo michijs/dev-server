@@ -64,7 +64,8 @@ async function takeScreenshots({
       const page = await browser.newPage();
       await page.setViewport(viewport);
       const suffix = await pageCallback?.(page);
-      const optionsResult = options?.(viewport, suffix ? `/${suffix}` : suffix) ?? {};
+      const optionsResult =
+        options?.(viewport, suffix ? `/${suffix}` : suffix) ?? {};
       await page.goto(`${getLocalURL(port)}${path}`);
       const screenshot = await page.screenshot({
         captureBeyondViewport: false,
