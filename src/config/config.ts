@@ -27,14 +27,18 @@ export const connections: (http.ServerResponse<http.IncomingMessage> & {
 })[] = [];
 
 const getCurrentCommitSha = () => {
-  const headPath = join(".git", "HEAD");
-  const headContent = fs.readFileSync(headPath, "utf-8").trim();
+  try {
+    const headPath = join(".git", "HEAD");
+    const headContent = fs.readFileSync(headPath, "utf-8").trim();
 
-  if (headContent.startsWith("ref:")) {
-    const refPath = join(".git", headContent.split(" ")[1]);
-    return fs.readFileSync(refPath, "utf-8").trim();
-  } else {
-    return headContent;
+    if (headContent.startsWith("ref:")) {
+      const refPath = join(".git", headContent.split(" ")[1]);
+      return fs.readFileSync(refPath, "utf-8").trim();
+    } else {
+      return headContent;
+    }
+  } catch {
+    return ""
   }
 };
 
@@ -62,7 +66,7 @@ const config = {
       ...(userConfig.public?.assets ?? {}),
       screenshots: {
         paths: ["/"],
-        pageCallbacks: [() => {}],
+        pageCallbacks: [() => { }],
         ...(userConfig.public?.assets?.screenshots ?? {}),
       },
       featureImage: {
