@@ -3,7 +3,7 @@ import { readdirSync, rmSync, statSync } from "fs";
 import { basename, dirname } from "path";
 
 async function minifyImage(src: string) {
-  if (!src.endsWith('webp')) {
+  if (!src.endsWith("webp")) {
     const { default: sharp } = await import("sharp");
     const image = sharp(src);
     const fileNameWithoutExtension = basename(src).split(".")[0];
@@ -18,13 +18,15 @@ async function minifyImage(src: string) {
 }
 
 export async function minifyAsset(callback: () => void, src: string) {
-  const stat = await statSync(src)
+  const stat = await statSync(src);
   if (stat.isDirectory()) {
-    await Promise.all(readdirSync(src).map(async x => {
-      await minifyImage(getPath(`${src}/${x}`))
-    }))
+    await Promise.all(
+      readdirSync(src).map(async (x) => {
+        await minifyImage(getPath(`${src}/${x}`));
+      }),
+    );
   } else {
-    await minifyImage(src)
+    await minifyImage(src);
   }
 
   callback();
