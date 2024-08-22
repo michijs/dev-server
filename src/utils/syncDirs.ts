@@ -24,18 +24,19 @@ export const syncDirs = (
       const fileSrcDir = path.dirname(fileChangedPath);
       const fileName = path.basename(fileChangedPath);
       const fileOutDir = fileSrcDir.replace(srcDir, outDir);
+      const pathToRemove = getPath(`${fileOutDir}/${fileName}`);
       if (event === "remove")
         transformers.forEach((x) => {
           if (x.fileRegex.test(fileChangedPath)) {
-            fs.rmSync(
-              getPath(
-                `${fileOutDir}/${x.pathTransformer?.(fileName) ?? fileName}`,
-              ),
+            const finalPathToRemove = x.pathTransformer?.(pathToRemove) ?? pathToRemove;
+            fs.rmSync(finalPathToRemove,
               { force: true, recursive: true },
             );
           }
         });
-      else copyFile(fileSrcDir, fileName, fileOutDir, transformers, omit);
+      else { 
+        copyFile(fileSrcDir, fileName, fileOutDir, transformers, omit); 
+      }
 
       onEndSync?.(event, fileChangedPath);
     },
