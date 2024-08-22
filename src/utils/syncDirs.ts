@@ -28,14 +28,13 @@ export const syncDirs = (
       if (event === "remove")
         transformers.forEach((x) => {
           if (x.fileRegex.test(fileChangedPath)) {
-            const finalPathToRemove = x.pathTransformer?.(pathToRemove) ?? pathToRemove;
-            fs.rmSync(finalPathToRemove,
-              { force: true, recursive: true },
-            );
+            const finalPathToRemove =
+              x.pathTransformer?.(pathToRemove) ?? pathToRemove;
+            fs.rmSync(finalPathToRemove, { force: true, recursive: true });
           }
         });
-      else { 
-        copyFile(fileSrcDir, fileName, fileOutDir, transformers, omit); 
+      else {
+        copyFile(fileSrcDir, fileName, fileOutDir, transformers, omit);
       }
 
       onEndSync?.(event, fileChangedPath);
