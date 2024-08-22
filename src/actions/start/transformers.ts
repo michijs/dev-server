@@ -17,10 +17,11 @@ export const jsonTransformer = {
 
 export const cssTransformer = {
   fileRegex: /.*\.(?:css)/,
-  transformer: (fileContent: string) => esbuild(fileContent, {
-    loader: "css",
-    minify: config.public.minify
-  }).code
+  transformer: (fileContent: string) =>
+    esbuild(fileContent, {
+      loader: "css",
+      minify: config.public.minify,
+    }).code,
 } satisfies Transformer;
 
 export const transformers: Transformer[] = [
@@ -35,5 +36,5 @@ export const transformers: Transformer[] = [
     transformer: serviceWorkerTransformer,
     pathTransformer: (destPath) => destPath.replace(".ts", ".js"),
   },
-  cssTransformer
+  cssTransformer,
 ];
