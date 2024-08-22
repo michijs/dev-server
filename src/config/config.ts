@@ -55,7 +55,7 @@ const config = {
   public: {
     path: "public",
     indexName: "index.html",
-    minify: minify,
+    minify,
     ...(userConfig.public ?? {}),
     assets: {
       path: "assets",
