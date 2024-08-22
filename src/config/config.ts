@@ -38,7 +38,7 @@ const getCurrentCommitSha = () => {
       return headContent;
     }
   } catch {
-    return ""
+    return "";
   }
 };
 
@@ -66,7 +66,7 @@ const config = {
       ...(userConfig.public?.assets ?? {}),
       screenshots: {
         paths: ["/"],
-        pageCallbacks: [() => { }],
+        pageCallbacks: [() => {}],
         ...(userConfig.public?.assets?.screenshots ?? {}),
       },
       featureImage: {
