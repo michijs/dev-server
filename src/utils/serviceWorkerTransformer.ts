@@ -15,9 +15,12 @@ export const serviceWorkerTransformer = (
       define: {
         "michiProcess.env.BUILD_FILES": `${JSON.stringify(allFiles)}`,
         // Time at GMT+0
-        "michiProcess.env.CACHE_NAME": commitSha !== '' ? commitSha : `"${new Date(
-          new Date().toLocaleString("en-US", { timeZone: "Etc/GMT" }),
-        ).getTime()}"`,
+        "michiProcess.env.CACHE_NAME":
+          commitSha !== ""
+            ? commitSha
+            : `"${new Date(
+                new Date().toLocaleString("en-US", { timeZone: "Etc/GMT" }),
+              ).getTime()}"`,
         ...define,
       },
       loader: "ts",
