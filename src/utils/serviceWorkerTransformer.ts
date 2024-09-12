@@ -1,6 +1,8 @@
 import { config } from "../config/config.js";
 import { getAllFiles } from "./getAllFiles.js";
 import { transformSync as esbuild } from "esbuild";
+import { getCurrentCommitSha } from "./getCurrentCommitSha.js";
+const commitSha = getCurrentCommitSha();
 
 export const serviceWorkerTransformer = (
   serviceWorkerCode: string,
@@ -13,7 +15,7 @@ export const serviceWorkerTransformer = (
       define: {
         "michiProcess.env.BUILD_FILES": `${JSON.stringify(allFiles)}`,
         // Time at GMT+0
-        "michiProcess.env.CACHE_NAME": `"${new Date(
+        "michiProcess.env.CACHE_NAME": commitSha !== '' ? commitSha : `"${new Date(
           new Date().toLocaleString("en-US", { timeZone: "Etc/GMT" }),
         ).getTime()}"`,
         ...define,

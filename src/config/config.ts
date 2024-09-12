@@ -5,7 +5,7 @@ import { copy } from "../utils/copy.js";
 import { getPath } from "../utils/getPath.js";
 import { userConfig } from "./userConfig.js";
 import type http from "http";
-import { join, resolve } from "path";
+import { resolve } from "path";
 import {
   jsAndTsRegex,
   jsonTransformer,
@@ -15,6 +15,7 @@ import {
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { counterPlugin } from "./plugins/counter.js";
+import { getCurrentCommitSha } from "../utils/getCurrentCommitSha.js";
 
 const minify = process.env.NODE_ENV === "PRODUCTION";
 const devServerListener =
@@ -25,22 +26,6 @@ const devServerListener =
 export const connections: (http.ServerResponse<http.IncomingMessage> & {
   req: http.IncomingMessage;
 })[] = [];
-
-const getCurrentCommitSha = () => {
-  try {
-    const headPath = join(".git", "HEAD");
-    const headContent = fs.readFileSync(headPath, "utf-8").trim();
-
-    if (headContent.startsWith("ref:")) {
-      const refPath = join(".git", headContent.split(" ")[1]);
-      return fs.readFileSync(refPath, "utf-8").trim();
-    } else {
-      return headContent;
-    }
-  } catch {
-    return "";
-  }
-};
 
 const commitSha = getCurrentCommitSha();
 
