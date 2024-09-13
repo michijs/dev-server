@@ -17,7 +17,7 @@ export const serviceWorkerTransformer = (
         // Time at GMT+0
         "michiProcess.env.CACHE_NAME":
           commitSha !== ""
-            ? commitSha
+            ? `"${commitSha}"`
             : `"${new Date(
                 new Date().toLocaleString("en-US", { timeZone: "Etc/GMT" }),
               ).getTime()}"`,
