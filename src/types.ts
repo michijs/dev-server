@@ -150,10 +150,13 @@ interface ProtocolHandler {
   url: string;
 }
 
+type HandleLink = 'auto' | 'preferred' | 'not-preferred'
+
 export interface ServerWebAppManifest extends WebAppManifest {
   scope_extensions?: { origin: string }[];
   protocol_handlers?: ProtocolHandler[];
   file_handlers?: FileHandler[];
+  handle_links?: HandleLink
 }
 
 export interface FileHandler {
