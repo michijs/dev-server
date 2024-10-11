@@ -28,7 +28,9 @@ export const syncDirs = (
       console.log(`  ${coloredString(`File ${fileChangedPath} ${event}.`)}`);
       if (event === "remove") {
         const pathToRemove = getPath(`${fileOutDir}/${fileName}`);
-        const fileTransformer = transformers?.filter((x) => x.fileRegex.test(fileName));
+        const fileTransformer = transformers?.filter((x) =>
+          x.fileRegex.test(fileName),
+        );
         if (fileTransformer.length > 0) {
           fileTransformer.forEach(async (x) => {
             if (x.fileRegex.test(fileChangedPath)) {
@@ -37,9 +39,7 @@ export const syncDirs = (
               fs.rmSync(finalPathToRemove, { force: true, recursive: true });
             }
           });
-        }
-        else
-          fs.rmSync(pathToRemove, { force: true, recursive: true });
+        } else fs.rmSync(pathToRemove, { force: true, recursive: true });
       } else {
         copyFile(fileSrcDir, fileName, fileOutDir, transformers, omit);
       }
