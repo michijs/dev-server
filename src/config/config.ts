@@ -1,21 +1,18 @@
 import fs from "fs";
 import type { Config } from "../types.js";
 import coloredString from "../utils/coloredString.js";
-import { copy } from "../utils/copy.js";
 import { getPath } from "../utils/getPath.js";
 import { userConfig } from "./userConfig.js";
 import type http from "http";
 import { resolve } from "path";
 import {
-  jsAndTsRegex,
   jsonTransformer,
-  notJsAndTsRegex,
-  transformers,
 } from "../actions/start/transformers.js";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { counterPlugin } from "./plugins/counter.js";
 import { getCurrentCommitSha } from "../utils/getCurrentCommitSha.js";
+import { publicFolderPlugin } from "./plugins/publicFolder.js";
 
 const minify = process.env.NODE_ENV === "PRODUCTION";
 const devServerListener =
@@ -102,6 +99,7 @@ const config = {
     // ],
     plugins: [
       ...(userConfig.esbuildOptions?.plugins ?? []),
+      publicFolderPlugin,
       {
         name: "michijs-dev-server",
         setup(build) {
@@ -148,28 +146,6 @@ const config = {
               );
             }
           }
-
-          // Copy public path - Omit to copy service worker - will be transformed after
-          if (config.public.path && build.initialOptions.outdir)
-            copy(
-              config.public.path,
-              build.initialOptions.outdir,
-              transformers,
-              [jsAndTsRegex],
-            );
-
-          let firstLoad = true;
-          build.onEnd(() => {
-            // first-load sw - Omit to copy any other non-js file
-            if (firstLoad && config.public.path && build.initialOptions.outdir)
-              copy(
-                config.public.path,
-                build.initialOptions.outdir,
-                transformers,
-                [notJsAndTsRegex],
-              );
-            firstLoad = false;
-          });
         },
       },
       counterPlugin,

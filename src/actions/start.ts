@@ -7,11 +7,8 @@ import open from "open";
 import { context } from "esbuild";
 import { getHostURL } from "../utils/getHostURL.js";
 import { getLocalURL } from "../utils/getLocalURL.js";
-import { watchPublicFolderPlugin } from "../config/plugins/watchPublicFolder.js";
 
 export const start = async (callback: (selectedPort: number) => void) => {
-  config.esbuildOptions.plugins?.push(watchPublicFolderPlugin);
-
   const buildContext = await context(config.esbuildOptions);
   const { host: esbuildHost, port: esbuildPort } = await buildContext.serve({
     servedir: config.esbuildOptions.outdir,

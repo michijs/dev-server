@@ -3,6 +3,7 @@ import path from "path";
 import { type Transformer, copyFile } from "../utils/copy.js";
 import watch from "node-watch";
 import { getPath } from "../utils/getPath.js";
+import coloredString from "./coloredString.js";
 
 export const syncDirs = (
   srcDir: string,
@@ -25,6 +26,7 @@ export const syncDirs = (
       const fileName = path.basename(fileChangedPath);
       const fileOutDir = fileSrcDir.replace(srcDir, outDir);
       const pathToRemove = getPath(`${fileOutDir}/${fileName}`);
+      console.log(`  ${coloredString(`File ${fileChangedPath} ${event}.`)}`);
       if (event === "remove")
         transformers.forEach((x) => {
           if (x.fileRegex.test(fileChangedPath)) {
