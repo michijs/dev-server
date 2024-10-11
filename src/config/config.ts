@@ -5,9 +5,7 @@ import { getPath } from "../utils/getPath.js";
 import { userConfig } from "./userConfig.js";
 import type http from "http";
 import { resolve } from "path";
-import {
-  jsonTransformer,
-} from "../actions/start/transformers.js";
+import { jsonTransformer } from "../actions/start/transformers.js";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { counterPlugin } from "./plugins/counter.js";
