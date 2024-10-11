@@ -8,9 +8,7 @@ import {
 import { syncDirs } from "../../utils/syncDirs.js";
 import { copy } from "../../utils/copy.js";
 import fs from "fs";
-import {
-  jsonTransformer,
-} from "../../actions/start/transformers.js";
+import { jsonTransformer } from "../../actions/start/transformers.js";
 import { getPath } from "../../utils/getPath.js";
 
 export const publicFolderPlugin: Plugin = {
@@ -18,11 +16,9 @@ export const publicFolderPlugin: Plugin = {
   setup(build) {
     const outdir = build.initialOptions.outdir;
     // Clean outdir
-    if (!outdir)
-      return;
+    if (!outdir) return;
 
-    if (fs.existsSync(outdir))
-      fs.rmSync(outdir, { recursive: true });
+    if (fs.existsSync(outdir)) fs.rmSync(outdir, { recursive: true });
 
     fs.mkdirSync(outdir, { recursive: true });
 
@@ -31,9 +27,7 @@ export const publicFolderPlugin: Plugin = {
         JSON.stringify(config.public.manifest.options, null, 2),
       );
       fs.writeFileSync(
-        getPath(
-          `${outdir}/${config.public.manifest.name}`,
-        ),
+        getPath(`${outdir}/${config.public.manifest.name}`),
         transformedFile,
       );
     }
@@ -62,23 +56,13 @@ export const publicFolderPlugin: Plugin = {
       }
     }
     // Copy public path - Omit to copy service worker - will be transformed after
-    copy(
-      config.public.path,
-      outdir,
-      transformers,
-      [jsAndTsRegex],
-    );
+    copy(config.public.path, outdir, transformers, [jsAndTsRegex]);
 
     let firstLoad = true;
     build.onEnd(() => {
       // first-load sw - Omit to copy any other non-js file
       if (firstLoad) {
-        copy(
-          config.public.path,
-          outdir,
-          transformers,
-          [notJsAndTsRegex],
-        );
+        copy(config.public.path, outdir, transformers, [notJsAndTsRegex]);
         if (config.watch)
           syncDirs(
             config.public.path,
