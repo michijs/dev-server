@@ -7,23 +7,78 @@ import {
 } from "../../actions/start/transformers.js";
 import { syncDirs } from "../../utils/syncDirs.js";
 import { copy } from "../../utils/copy.js";
+import fs from "fs";
+import {
+  jsonTransformer,
+} from "../../actions/start/transformers.js";
+import { getPath } from "../../utils/getPath.js";
 
 export const publicFolderPlugin: Plugin = {
   name: "michijs-dev-server-public-folder",
   setup(build) {
+    const outdir = build.initialOptions.outdir;
+    // Clean outdir
+    if (!outdir)
+      return;
+
+    if (fs.existsSync(outdir))
+      fs.rmSync(outdir, { recursive: true });
+
+    fs.mkdirSync(outdir, { recursive: true });
+
+    if (config.public.manifest?.options && config.public.manifest.name) {
+      const transformedFile = jsonTransformer.transformer(
+        JSON.stringify(config.public.manifest.options, null, 2),
+      );
+      fs.writeFileSync(
+        getPath(
+          `${outdir}/${config.public.manifest.name}`,
+        ),
+        transformedFile,
+      );
+    }
+
+    if (config.public.wellKnown) {
+      const wellKnownDir = `${outdir}/.well-known`;
+      if (!fs.existsSync(wellKnownDir)) fs.mkdirSync(wellKnownDir);
+
+      if (config.public.wellKnown.assetsLinks) {
+        const transformedFile = jsonTransformer.transformer(
+          JSON.stringify(config.public.wellKnown.assetsLinks),
+        );
+        fs.writeFileSync(
+          getPath(`${wellKnownDir}/assetlinks.json`),
+          transformedFile,
+        );
+      }
+      if (config.public.wellKnown.webAppOriginAssociation) {
+        const transformedFile = jsonTransformer.transformer(
+          JSON.stringify(config.public.wellKnown.webAppOriginAssociation),
+        );
+        fs.writeFileSync(
+          getPath(`${wellKnownDir}/web-app-origin-association`),
+          transformedFile,
+        );
+      }
+    }
     // Copy public path - Omit to copy service worker - will be transformed after
-    if (build.initialOptions.outdir)
-      copy(config.public.path, build.initialOptions.outdir, transformers, [
-        jsAndTsRegex,
-      ]);
+    copy(
+      config.public.path,
+      outdir,
+      transformers,
+      [jsAndTsRegex],
+    );
 
     let firstLoad = true;
     build.onEnd(() => {
       // first-load sw - Omit to copy any other non-js file
-      if (firstLoad && build.initialOptions.outdir) {
-        copy(config.public.path, build.initialOptions.outdir, transformers, [
-          notJsAndTsRegex,
-        ]);
+      if (firstLoad) {
+        copy(
+          config.public.path,
+          outdir,
+          transformers,
+          [notJsAndTsRegex],
+        );
         if (config.watch)
           syncDirs(
             config.public.path,

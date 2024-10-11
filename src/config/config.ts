@@ -5,7 +5,6 @@ import { getPath } from "../utils/getPath.js";
 import { userConfig } from "./userConfig.js";
 import type http from "http";
 import { resolve } from "path";
-import { jsonTransformer } from "../actions/start/transformers.js";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { counterPlugin } from "./plugins/counter.js";
@@ -98,54 +97,6 @@ const config = {
     plugins: [
       ...(userConfig.esbuildOptions?.plugins ?? []),
       publicFolderPlugin,
-      {
-        name: "michijs-dev-server",
-        setup(build) {
-          // Clean outdir
-          if (build.initialOptions.outdir) {
-            if (fs.existsSync(build.initialOptions.outdir)) {
-              fs.rmSync(build.initialOptions.outdir, { recursive: true });
-            }
-            fs.mkdirSync(build.initialOptions.outdir, { recursive: true });
-          }
-
-          if (config.public.manifest?.options && config.public.manifest.name) {
-            const transformedFile = jsonTransformer.transformer(
-              JSON.stringify(config.public.manifest.options, null, 2),
-            );
-            fs.writeFileSync(
-              getPath(
-                `${build.initialOptions.outdir}/${config.public.manifest.name}`,
-              ),
-              transformedFile,
-            );
-          }
-
-          if (config.public.wellKnown) {
-            const wellKnownDir = `${build.initialOptions.outdir}/.well-known`;
-            if (!fs.existsSync(wellKnownDir)) fs.mkdirSync(wellKnownDir);
-
-            if (config.public.wellKnown.assetsLinks) {
-              const transformedFile = jsonTransformer.transformer(
-                JSON.stringify(config.public.wellKnown.assetsLinks),
-              );
-              fs.writeFileSync(
-                getPath(`${wellKnownDir}/assetlinks.json`),
-                transformedFile,
-              );
-            }
-            if (config.public.wellKnown.webAppOriginAssociation) {
-              const transformedFile = jsonTransformer.transformer(
-                JSON.stringify(config.public.wellKnown.webAppOriginAssociation),
-              );
-              fs.writeFileSync(
-                getPath(`${wellKnownDir}/web-app-origin-association`),
-                transformedFile,
-              );
-            }
-          }
-        },
-      },
       counterPlugin,
     ],
     define: {
