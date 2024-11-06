@@ -16,13 +16,10 @@ export const publicFolderPlugin: Plugin = {
   setup(build) {
     const outdir = build.initialOptions.outdir;
     // Clean outdir
-    if (!outdir)
-        return;
-    if (fs.existsSync(outdir))
-        fs.rmSync(outdir, { recursive: true });
+    if (!outdir) return;
+    if (fs.existsSync(outdir)) fs.rmSync(outdir, { recursive: true });
     fs.mkdirSync(outdir, { recursive: true });
-    if (!fs.existsSync(config.public.path))
-        return;
+    if (!fs.existsSync(config.public.path)) return;
 
     if (config.public.manifest?.options && config.public.manifest.name) {
       const transformedFile = jsonTransformer.transformer(
