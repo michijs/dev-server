@@ -6,14 +6,14 @@
     "type": "git",
     "url": "https://github.com/michijs/dev-server.git"
   },
-  "main": "bin/index",
+  "main": "bin/src/index",
   "exports": {
-    "types": "./bin/index.d.ts",
-    "default": "./bin/index.js",
-    "constants": "./bin/constants.js"
+    "types": "./bin/src/index.d.ts",
+    "default": "./bin/src/index.js",
+    "constants": "./bin/src/constants.js"
   },
   "bin": {
-    "michi-server": "bin/index.js"
+    "michi-server": "bin/src/index.js"
   },
   "description": "Development server based on esbuild",
   "files": [
