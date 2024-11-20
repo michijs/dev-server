@@ -10,10 +10,10 @@ import { chromium, type PageScreenshotOptions } from "playwright-core";
 import type { PageCallback, Viewport } from "../types.js";
 import { exec } from "child_process";
 import { getColor } from "colorthief";
-import packagejson from "../../package.json";
+import { packageJson } from "../utils/packageJson.js";
 
 export async function installPlaywright() {
-  const playwrightVersion = `playwright@${packagejson.dependencies["playwright-core"]}`;
+  const playwrightVersion = `playwright@${packageJson.dependencies["playwright-core"]}`;
   console.log(`Installing ${playwrightVersion}...`);
 
   return new Promise<void>((resolve, reject) => {
