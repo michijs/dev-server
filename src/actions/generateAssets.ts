@@ -10,15 +10,17 @@ import { chromium, type PageScreenshotOptions } from "playwright-core";
 import type { PageCallback, Viewport } from "../types.js";
 import { exec } from "child_process";
 import { getColor } from "colorthief";
+import packagejson from '../../package.json'
 
-async function installPlaywright() {
-  console.log("Installing Playwright...");
+export async function installPlaywright() {
+  const playwrightVersion = `playwright@${packagejson.dependencies["playwright-core"]}`;
+  console.log(`Installing ${playwrightVersion}...`);
 
   return new Promise<void>((resolve, reject) => {
     const runners = ["bunx", "npx"];
     exec(
       runners
-        .map((x) => `${x} playwright install chromium --with-deps`)
+        .map((x) => `${x} ${playwrightVersion} install chromium --with-deps`)
         .join(" || "),
       (error, stdout, stderr) => {
         if (error) {
@@ -33,6 +35,7 @@ async function installPlaywright() {
     );
   });
 }
+
 
 const generatedPath = getPath(
   `${config.public.path}/${config.public.assets.path}/generated`,
