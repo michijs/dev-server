@@ -100,16 +100,19 @@ const config = {
       publicFolderPlugin,
       counterPlugin,
     ],
-    define: 'define' in (userConfig.esbuildOptions ?? {}) ? userConfig.esbuildOptions!.define : {
-      // Intentionally added before process
-      michiProcess: JSON.stringify({
-        env: {
-          NODE_ENV: process.env.NODE_ENV,
-          COMMIT_SHA: commitSha,
-          ...(userConfig.env ?? {}),
-        },
-      }),
-    },
+    define:
+      "define" in (userConfig.esbuildOptions ?? {})
+        ? userConfig.esbuildOptions!.define
+        : {
+            // Intentionally added before process
+            michiProcess: JSON.stringify({
+              env: {
+                NODE_ENV: process.env.NODE_ENV,
+                COMMIT_SHA: commitSha,
+                ...(userConfig.env ?? {}),
+              },
+            }),
+          },
     inject: [
       ...devServerListener,
       ...(userConfig.esbuildOptions?.inject ?? []),
