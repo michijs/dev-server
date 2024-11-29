@@ -65,6 +65,7 @@ const config = {
     minifyWhitespace: minify,
     sourcemap: process.env.NODE_ENV === "DEVELOPMENT",
     splitting: true,
+    treeShaking: true,
     bundle: process.env.NODE_ENV !== "DISTRIBUTION",
     keepNames: minify,
     entryPoints: [defaultEntryPoint],
@@ -99,7 +100,7 @@ const config = {
       publicFolderPlugin,
       counterPlugin,
     ],
-    define: {
+    define: 'define' in (userConfig.esbuildOptions ?? {}) ? userConfig.esbuildOptions!.define : {
       // Intentionally added before process
       michiProcess: JSON.stringify({
         env: {
@@ -113,7 +114,6 @@ const config = {
       ...devServerListener,
       ...(userConfig.esbuildOptions?.inject ?? []),
     ],
-    ...(userConfig.esbuildOptions?.define ?? {}),
   },
 } satisfies Config;
 
