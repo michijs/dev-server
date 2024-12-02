@@ -61,8 +61,7 @@ const config = {
   esbuildOptions: {
     outdir: "build",
     tsconfig: "tsconfig.json",
-    minifySyntax: minify,
-    minifyWhitespace: minify,
+    minify,
     sourcemap: process.env.NODE_ENV === "DEVELOPMENT",
     splitting: true,
     treeShaking: true,
