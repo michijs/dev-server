@@ -55,7 +55,7 @@
   "dependencies": {
     "colorthief": "2.6.0",
     "@types/web-app-manifest": "1.0.8",
-    "esbuild": "0.24.0",
+    "esbuild": "0.24.2",
     "node-watch": "0.7.4",
     "open": "10.1.0",
     "playwright-core": "1.49.0",
