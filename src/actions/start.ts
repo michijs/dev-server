@@ -10,7 +10,7 @@ import { getLocalURL } from "../utils/getLocalURL.js";
 
 export const start = async (callback: (selectedPort: number) => void) => {
   const buildContext = await context(config.esbuildOptions);
-  const { host: esbuildHost, port: esbuildPort } = await buildContext.serve({
+  const { hosts: [esbuildHost], port: esbuildPort } = await buildContext.serve({
     servedir: config.esbuildOptions.outdir,
   });
 
