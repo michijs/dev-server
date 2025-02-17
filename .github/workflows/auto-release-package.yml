@@ -16,5 +16,4 @@ jobs:
     with:
       release-type: "prerelease"
       release-notes: "Automatic release"
-      visibility: "restricted"
     secrets: inherit
