@@ -1,7 +1,7 @@
 import { config } from "../../config/config.js";
 import type { Transformer } from "../../utils/copy.js";
 import { minifyXMLLike } from "../../utils/minify.js";
-import { serviceWorkerTransformer } from "../../utils/serviceWorkerTransformer.js";
+import { workerTransformer } from "../../utils/workerTransformer.js";
 import { transformSync as esbuild } from "esbuild";
 
 export const jsAndTsRegex = /.*\.(?:ts|js)/;
@@ -33,7 +33,7 @@ export const transformers: Transformer[] = [
   },
   {
     fileRegex: jsAndTsRegex,
-    transformer: serviceWorkerTransformer,
+    transformer: workerTransformer,
     pathTransformer: (destPath) => destPath.replace(".ts", ".js"),
   },
   cssTransformer,
