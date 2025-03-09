@@ -2,6 +2,7 @@ import type { BuildOptions } from "esbuild";
 import type { ImageResource, WebAppManifest } from "web-app-manifest";
 import type { assetsSizes } from "./constants.js";
 import type { Page } from "playwright-core";
+import type { OutgoingHttpHeader, OutgoingHttpHeaders } from "http";
 
 export interface Viewport {
   width: number;
@@ -191,6 +192,10 @@ export interface Config {
   showLinkedPackages?: boolean;
   /** Documentation: https://esbuild.github.io/plugins/#build-options */
   esbuildOptions?: BuildOptions;
+  /**
+   * Headers to send from the development server
+   */
+  aditionalHeaders?: OutgoingHttpHeaders | OutgoingHttpHeader[]
 }
 
 // type DeepPartial<T> = {

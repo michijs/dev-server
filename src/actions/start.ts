@@ -31,7 +31,7 @@ export const start = async (callback: (selectedPort: number) => void) => {
     const proxyReq = http.request(esbuildProxyRequestOptions, (proxyRes) => {
       // If esbuild returns "not found", send a custom 404 page
       if (!proxyRes.statusCode || proxyRes.statusCode === 404) {
-        res.writeHead(200, { "Content-Type": "text/html" });
+        res.writeHead(200, { "Content-Type": "text/html", ...config.aditionalHeaders });
         // TODO: Find a better way to do this
         res.end(
           fs.readFileSync(
@@ -44,7 +44,7 @@ export const start = async (callback: (selectedPort: number) => void) => {
       }
 
       // Otherwise, forward the response from esbuild to the client
-      res.writeHead(proxyRes.statusCode, proxyRes.headers);
+      res.writeHead(proxyRes.statusCode, {...proxyRes.headers, ...config.aditionalHeaders});
       proxyRes.pipe(res, { end: true });
     });
 
