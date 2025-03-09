@@ -195,7 +195,7 @@ export interface Config {
   /**
    * Headers to send from the development server
    */
-  aditionalHeaders?: OutgoingHttpHeaders | OutgoingHttpHeader[]
+  additionalHeaders?: OutgoingHttpHeaders | OutgoingHttpHeader[]
 }
 
 // type DeepPartial<T> = {

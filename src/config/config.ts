@@ -32,7 +32,7 @@ const config = {
   port: 3000,
   openBrowser: process.env.NODE_ENV === "DEVELOPMENT",
   showLinkedPackages: true,
-  aditionalHeaders: {},
+  additionalHeaders: {},
   watch: process.env.NODE_ENV === "DEVELOPMENT",
   ...userConfig,
   // protocol: 'http',
