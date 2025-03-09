@@ -32,7 +32,7 @@
     "@michijs/tsconfig": "0.0.4",
     "@types/node": "22.13.9",
     "@types/yargs": "17.0.33",
-    "typescript": "5.7.3"
+    "typescript": "5.8.2"
   },
   "keywords": [
     "react",
