@@ -5,7 +5,6 @@ import { workerTransformer } from "../../utils/workerTransformer.js";
 import { transformSync as esbuild } from "esbuild";
 
 export const jsAndTsRegex = /.*\.(?:ts|js)/;
-export const notJsAndTsRegex = /.*\.(?!ts|js)/;
 
 export const jsonTransformer = {
   fileRegex: /.*\.(?:json)/,

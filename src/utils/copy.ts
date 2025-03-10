@@ -15,28 +15,31 @@ export function copyFile(
   omit?: RegExp[],
 ) {
   const srcPath = getPath(`${src}/${fileName}`);
-  if (!omit?.find((x) => x.test(srcPath))) {
-    const destPath = getPath(`${dest}/${fileName}`);
-    if (fs.lstatSync(srcPath).isDirectory()) {
-      copy(srcPath, destPath, transformers, omit);
-    } else {
-      const fileTransformer = transformers?.filter((x) =>
-        x.fileRegex.test(fileName),
-      );
-      if (fileTransformer.length > 0) {
-        fileTransformer.forEach(async (x) => {
-          const srcFileContent = fs.readFileSync(srcPath, {
-            encoding: "utf-8",
-          });
-          const finalDestPath = x.pathTransformer?.(destPath) ?? destPath;
-          try {
-            const transformedFile = x.transformer(srcFileContent, srcPath);
-            fs.writeFileSync(finalDestPath, transformedFile);
-          } catch {}
-        });
-      } else fs.copyFileSync(srcPath, destPath, fs.constants.COPYFILE_FICLONE);
-    }
-  }
+  const destPath = getPath(`${dest}/${fileName}`);
+
+  if (fs.lstatSync(srcPath).isDirectory())
+    return copy(srcPath, destPath, transformers, omit);
+
+  if (omit?.find((x) => x.test(srcPath)))
+    return;
+  
+  const fileTransformer = transformers?.filter((x) =>
+    x.fileRegex.test(fileName),
+  );
+
+  if (fileTransformer.length === 0)
+    return fs.copyFileSync(srcPath, destPath, fs.constants.COPYFILE_FICLONE);
+
+  fileTransformer.forEach(async (x) => {
+    const srcFileContent = fs.readFileSync(srcPath, {
+      encoding: "utf-8",
+    });
+    const finalDestPath = x.pathTransformer?.(destPath) ?? destPath;
+    try {
+      const transformedFile = x.transformer(srcFileContent, srcPath);
+      fs.writeFileSync(finalDestPath, transformedFile);
+    } catch { }
+  });
 }
 
 export function copy(
@@ -48,7 +51,7 @@ export function copy(
   const srcDir = fs.readdirSync(src);
   try {
     fs.mkdirSync(dest);
-  } catch {}
+  } catch { }
   srcDir.forEach((fileName) =>
     copyFile(src, fileName, dest, transformers, omit),
   );

@@ -2,7 +2,6 @@ import type { Plugin } from "esbuild";
 import { config, connections } from "../config.js";
 import {
   jsAndTsRegex,
-  notJsAndTsRegex,
   transformers,
 } from "../../actions/start/transformers.js";
 import { syncDirs } from "../../utils/syncDirs.js";
@@ -54,14 +53,12 @@ export const publicFolderPlugin: Plugin = {
         );
       }
     }
-    // Copy public path - Omit to copy service worker - will be transformed after
-    copy(config.public.path, outdir, transformers, [jsAndTsRegex]);
+    copy(config.public.path, outdir, transformers);
 
     let firstLoad = true;
     build.onEnd(() => {
-      // first-load sw - Omit to copy any other non-js file
       if (firstLoad) {
-        copy(config.public.path, outdir, transformers, [notJsAndTsRegex]);
+        copy(config.public.path, outdir, transformers);
         if (config.watch)
           syncDirs(
             config.public.path,
