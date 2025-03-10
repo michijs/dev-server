@@ -20,9 +20,8 @@ export function copyFile(
   if (fs.lstatSync(srcPath).isDirectory())
     return copy(srcPath, destPath, transformers, omit);
 
-  if (omit?.find((x) => x.test(srcPath)))
-    return;
-  
+  if (omit?.find((x) => x.test(srcPath))) return;
+
   const fileTransformer = transformers?.filter((x) =>
     x.fileRegex.test(fileName),
   );
@@ -38,7 +37,7 @@ export function copyFile(
     try {
       const transformedFile = x.transformer(srcFileContent, srcPath);
       fs.writeFileSync(finalDestPath, transformedFile);
-    } catch { }
+    } catch {}
   });
 }
 
@@ -51,7 +50,7 @@ export function copy(
   const srcDir = fs.readdirSync(src);
   try {
     fs.mkdirSync(dest);
-  } catch { }
+  } catch {}
   srcDir.forEach((fileName) =>
     copyFile(src, fileName, dest, transformers, omit),
   );
