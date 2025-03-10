@@ -1,9 +1,6 @@
 import type { Plugin } from "esbuild";
 import { config, connections } from "../config.js";
-import {
-  jsAndTsRegex,
-  transformers,
-} from "../../actions/start/transformers.js";
+import { transformers } from "../../actions/start/transformers.js";
 import { syncDirs } from "../../utils/syncDirs.js";
 import { copy } from "../../utils/copy.js";
 import fs from "fs";
