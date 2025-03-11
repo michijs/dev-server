@@ -3,7 +3,10 @@ import { getPath } from "./getPath.js";
 
 export type Transformer = {
   fileRegex: RegExp;
-  transformer: (fileContent: string, path?: string) => Promise<Buffer | string> | Buffer | string;
+  transformer: (
+    fileContent: string,
+    path?: string,
+  ) => Promise<Buffer | string> | Buffer | string;
   pathTransformer?: (destPath: string) => string;
 };
 
