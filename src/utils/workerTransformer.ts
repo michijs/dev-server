@@ -1,18 +1,18 @@
 import { config } from "../config/config.js";
 import { getAllFiles } from "./getAllFiles.js";
-import { buildSync as esbuild } from "esbuild";
+import { build as esbuild } from "esbuild";
 import { getCurrentCommitSha } from "./getCurrentCommitSha.js";
 import type { Transformer } from "./copy.js";
 const commitSha = getCurrentCommitSha();
 
-export const workerTransformer: Transformer["transformer"] = (
+export const workerTransformer: Transformer["transformer"] = async (
   _serviceWorkerCode: string,
   srcPath,
-): string | Buffer => {
+): Promise<string | Buffer> => {
   const { outdir, define } = config.esbuildOptions;
   try {
     const allFiles = getAllFiles(outdir!, ".");
-    const result = esbuild({
+    const result = await esbuild({
       ...config.esbuildOptions,
       splitting: false,
       outdir: undefined,
@@ -22,6 +22,8 @@ export const workerTransformer: Transformer["transformer"] = (
       entryPoints: [srcPath!],
       legalComments: "inline",
       define: {
+        // For compatibility with some modules - should be fixed eventually
+        "import.meta.url": `""`,
         "michiProcess.env.BUILD_FILES": `${JSON.stringify(allFiles)}`,
         // Time at GMT+0
         "michiProcess.env.CACHE_NAME":

@@ -3,7 +3,7 @@ import { getPath } from "./getPath.js";
 
 export type Transformer = {
   fileRegex: RegExp;
-  transformer: (fileContent: string, path?: string) => Buffer | string;
+  transformer: (fileContent: string, path?: string) => Promise<Buffer | string> | Buffer | string;
   pathTransformer?: (destPath: string) => string;
 };
 
@@ -35,7 +35,7 @@ export function copyFile(
     });
     const finalDestPath = x.pathTransformer?.(destPath) ?? destPath;
     try {
-      const transformedFile = x.transformer(srcFileContent, srcPath);
+      const transformedFile = await x.transformer(srcFileContent, srcPath);
       fs.writeFileSync(finalDestPath, transformedFile);
     } catch {}
   });
