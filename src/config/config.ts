@@ -10,6 +10,7 @@ import { fileURLToPath } from "url";
 import { counterPlugin } from "./plugins/counter.js";
 import { getCurrentCommitSha } from "../utils/getCurrentCommitSha.js";
 import { publicFolderPlugin } from "./plugins/publicFolder.js";
+import { cssPlugin } from "./plugins/css.js";
 
 const minify = process.env.NODE_ENV === "PRODUCTION";
 const devServerListener =
@@ -97,6 +98,7 @@ const config = {
     // ],
     plugins: [
       ...(userConfig.esbuildOptions?.plugins ?? []),
+      cssPlugin,
       publicFolderPlugin,
       counterPlugin,
     ],
