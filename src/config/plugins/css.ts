@@ -2,7 +2,7 @@ import { build as esbuild } from "esbuild";
 import { config } from "../config.js";
 
 export const cssPlugin = {
-  name: 'css import assertions',
+  name: "css import assertions",
   setup(build) {
     build.onLoad({ filter: /\.css$/ }, async (args) => {
       try {
@@ -16,7 +16,12 @@ export const cssPlugin = {
           entryPoints: [args.path!],
           legalComments: "inline",
           // TODO: Add other image formats
-          loader: { '.svg': 'dataurl', '.gif': 'dataurl', '.png': 'dataurl', '.webp': 'dataurl' },
+          loader: {
+            ".svg": "dataurl",
+            ".gif": "dataurl",
+            ".png": "dataurl",
+            ".webp": "dataurl",
+          },
           define: undefined,
         });
         const contents = `
@@ -28,7 +33,6 @@ export const cssPlugin = {
         console.error(ex);
         throw ex;
       }
-    }
-    )
-  }
-}
+    });
+  },
+};
