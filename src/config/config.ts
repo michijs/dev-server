@@ -68,7 +68,7 @@ const config = {
     splitting: true,
     treeShaking: true,
     bundle: process.env.NODE_ENV !== "DISTRIBUTION",
-    keepNames: minify,
+    keepNames: !minify,
     entryPoints: [defaultEntryPoint],
     legalComments: "external",
     format: "esm",
