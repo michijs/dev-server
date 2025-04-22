@@ -4,7 +4,7 @@ import { config } from "../config.js";
 import path from "path";
 
 export const cssPlugin: Plugin = {
-  name: 'css import assertions',
+  name: "css import assertions",
   setup(build) {
     build.onLoad({ filter: /\.css$/ }, async (args) => {
       try {
@@ -20,15 +20,23 @@ export const cssPlugin: Plugin = {
           entryPoints: [args.path],
           legalComments: "inline",
           // TODO: Add other image formats
-          loader: { '.svg': 'dataurl', '.gif': 'dataurl', '.png': 'dataurl', '.webp': 'dataurl' },
+          loader: {
+            ".svg": "dataurl",
+            ".gif": "dataurl",
+            ".png": "dataurl",
+            ".webp": "dataurl",
+          },
           define: undefined,
         });
         const processedCss = result.outputFiles?.[0].text ?? "";
-        if (!processedCss.includes('@layer')) {
+        if (!processedCss.includes("@layer")) {
           const parts = args.path.split(path.sep);
-          const nodeModulesIndex = parts.lastIndexOf('node_modules');
+          const nodeModulesIndex = parts.lastIndexOf("node_modules");
           if (nodeModulesIndex !== -1 && parts[nodeModulesIndex + 1])
-            layerName = parts[nodeModulesIndex + 1].replace(/[^a-zA-Z0-9_-]/g, '-'); // Sanitize name
+            layerName = parts[nodeModulesIndex + 1].replace(
+              /[^a-zA-Z0-9_-]/g,
+              "-",
+            ); // Sanitize name
         }
         const contents = `const styles = new CSSStyleSheet();
 styles.replaceSync(\`${layerName ? `@layer ${layerName} {\n${processedCss}\n}` : processedCss}\`);
@@ -38,7 +46,6 @@ export default styles;`;
         console.error(ex);
         throw ex;
       }
-    }
-    )
-  }
-}
+    });
+  },
+};
