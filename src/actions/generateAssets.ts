@@ -6,7 +6,7 @@ import { fileURLToPath } from "url";
 import { basename, dirname, resolve } from "path";
 import { getLocalURL } from "../utils/getLocalURL.js";
 import { assetsSizes } from "../constants.js";
-import { chromium, type PageScreenshotOptions } from "playwright-core";
+import { chromium, type Browser, type PageScreenshotOptions } from "playwright-core";
 import type { PageCallback, Viewport } from "../types.js";
 import { exec } from "child_process";
 import { getColor } from "colorthief";
@@ -71,9 +71,7 @@ interface TakeScreenshotsParams {
 
 config.watch = false;
 config.openBrowser = false;
-const browser = await chromium.launch({
-  headless: true,
-});
+let browser: Browser;
 
 const port = await new Promise<number>(async (resolve) => {
   const { start } = await import("./start.js");
@@ -202,6 +200,9 @@ export async function generateScreenshots() {
 
 export async function generateAssets(callback: () => void, src: string) {
   await installPlaywright();
+  browser = await chromium.launch({
+    headless: true,
+  });
 
   const { default: sharp } = await import("sharp");
   rmSync(generatedPath, { recursive: true, force: true });
