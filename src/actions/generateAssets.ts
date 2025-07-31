@@ -6,7 +6,11 @@ import { fileURLToPath } from "url";
 import { basename, dirname, resolve } from "path";
 import { getLocalURL } from "../utils/getLocalURL.js";
 import { assetsSizes } from "../constants.js";
-import { chromium, type Browser, type PageScreenshotOptions } from "playwright-core";
+import {
+  chromium,
+  type Browser,
+  type PageScreenshotOptions,
+} from "playwright-core";
 import type { PageCallback, Viewport } from "../types.js";
 import { exec } from "child_process";
 import { getColor } from "colorthief";

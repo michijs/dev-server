@@ -1,7 +1,7 @@
 {
   "name": "@michijs/dev-server",
   "license": "MIT",
-  "version": "0.8.6-beta.11",
+  "version": "0.8.7-beta.8",
   "repository": {
     "type": "git",
     "url": "https://github.com/michijs/dev-server.git"
@@ -29,8 +29,8 @@
     "link": "bunx concurrently bun:dist-w bun:bun-link"
   },
   "devDependencies": {
-    "@michijs/tsconfig": "0.0.4",
-    "@types/node": "22.15.29",
+    "@michijs/tsconfig": "0.0.5",
+    "@types/node": "24.0.15",
     "@types/yargs": "17.0.33",
     "typescript": "5.8.3"
   },
@@ -55,11 +55,11 @@
   "dependencies": {
     "colorthief": "2.6.0",
     "@types/web-app-manifest": "1.0.9",
-    "esbuild": "0.25.5",
+    "esbuild": "0.25.8",
     "node-watch": "0.7.4",
-    "open": "10.1.2",
-    "playwright-core": "1.52.0",
-    "sharp": "0.34.2",
+    "open": "10.2.0",
+    "playwright-core": "1.54.1",
+    "sharp": "0.34.3",
     "yargs": "18.0.0"
   }
 }
