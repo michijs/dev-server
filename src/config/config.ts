@@ -96,6 +96,10 @@ const config = {
     //     },
     //   }
     // ],
+    external: [
+      '/index.html', '/assets/*', '/manifest.json', '/favicon.ico',
+      ...(userConfig.esbuildOptions?.external ?? [])
+    ],
     plugins: [
       ...(userConfig.esbuildOptions?.plugins ?? []),
       cssPlugin,
