@@ -58,7 +58,7 @@
     "esbuild": "0.25.9",
     "node-watch": "0.7.4",
     "open": "10.2.0",
-    "playwright-core": "1.54.2",
+    "playwright-core": "1.55.0",
     "sharp": "0.34.3",
     "yargs": "18.0.0"
   }
