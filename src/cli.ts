@@ -3,6 +3,7 @@ import yargs from "yargs";
 import { Timer } from "./classes/Timer.js";
 import { hideBin } from "yargs/helpers";
 import { packageJson } from "./utils/packageJson.js";
+import { config } from "./config/config.js";
 const version = packageJson.version;
 
 export async function cli() {
@@ -65,7 +66,7 @@ export async function cli() {
         : "DEVELOPMENT");
 
   const generateAssets =
-    args.generateAssets === "" ? "public/assets/icon.svg" : args.generateAssets;
+    args.generateAssets === "" ? `${config.public.path}/assets/icon.svg` : args.generateAssets;
   if (generateAssets) {
     const action = await import("./actions/generateAssets.js");
     await action.generateAssets(showReadyMessage, generateAssets);
