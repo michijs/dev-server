@@ -1,3 +1,1 @@
-[
-          { "script": "dist", "name": "Typescript" }
-        ]
+[{ "script": "dist", "name": "Typescript" }]
