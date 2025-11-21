@@ -71,6 +71,6 @@ export async function dist(callback: () => void, watchOption = false) {
         );
       });
   } else {
-    throw new Error(`Your tsconfig needs an outdir`);
+    throw new Error("Your tsconfig needs an outdir");
   }
 }

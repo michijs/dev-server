@@ -23,13 +23,14 @@ export function globToRegex(glob: string) {
         .map((char) => {
           if (char === "*") {
             return ".*";
-          } else if (char === "?") {
-            return ".";
-          } else if (regexSpecialChars.includes(char)) {
-            return "\\" + char;
-          } else {
-            return char;
           }
+          if (char === "?") {
+            return ".";
+          }
+          if (regexSpecialChars.includes(char)) {
+            return "\\" + char;
+          }
+          return char;
         })
         .join("") +
       "$",

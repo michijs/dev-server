@@ -60,7 +60,7 @@ export const start = async (callback: (selectedPort: number) => void) => {
 
   let selectedPort: number = config.port;
   server.on("error", (e) => {
-    // @ts-ignore
+    // @ts-expect-error
     if (e.code === "EADDRINUSE") {
       selectedPort++;
       server.listen(selectedPort);
