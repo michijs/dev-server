@@ -77,8 +77,8 @@ config.watch = false;
 config.openBrowser = false;
 let browser: Browser;
 
-const port = await new Promise<number>(async (resolve) => {
-  const { start } = await import("./start.js");
+const { start } = await import("./start.js");
+const port = await new Promise<number>((resolve) => {
   start((port) => resolve(port));
 });
 
