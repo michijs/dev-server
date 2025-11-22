@@ -3,7 +3,6 @@ Development server built on top of esbuild.
 <!-- TODO: To generate feature-image require to install roboto -->
 
 ![npm][version] [![license][github-license]][github-license-url] ![npm][npm-downloads] ![npm][repo-size]
-  [![Tests](https://github.com/michijs/dev-server/actions/workflows/tests.yml/badge.svg)](https://github.com/michijs/dev-server/actions/workflows/tests.yml)
 
 ## Main features
 - Configure esbuild options with Typescript
