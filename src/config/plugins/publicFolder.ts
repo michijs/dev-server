@@ -71,7 +71,7 @@ export const publicFolderPlugin: Plugin = {
                     removed: event === "remove" ? [fileChangedPath] : [],
                     updated: event === "update" ? [fileChangedPath] : [],
                   })}\n\n`,
-                )
+                );
             },
           );
         firstLoad = false;

@@ -4,13 +4,8 @@
     "outDir": "bin",
     "moduleResolution": "NodeNext",
     "module": "NodeNext",
-    "target": "esnext",
+    "target": "esnext"
   },
-  "exclude": [
-      "bin",
-      "node_modules"
-  ],
-  "include": [
-      "src"
-  ]
+  "exclude": ["bin", "node_modules"],
+  "include": ["src"]
 }

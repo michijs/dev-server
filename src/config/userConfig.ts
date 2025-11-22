@@ -26,7 +26,7 @@ if (fs.existsSync("michi.config.ts")) {
     logLevel: "error",
     target: ["node16"],
   });
-  // @ts-ignore
+  // @ts-expect-error
   const michiConfig = await import("./michi.config.cjs");
   config = (michiConfig.default.default as ServerConfigFactory)({
     ...defaultProductionConfig,
