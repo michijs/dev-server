@@ -41,7 +41,7 @@ export async function dist(callback: () => void, watchOption = false) {
     const omit = tsconfig.exclude.map((x) => globToRegex(getPath(x)));
 
     for (const x of tsconfig.include) {
-      copy(x, outDir, transformers, omit)
+      copy(x, outDir, transformers, omit);
     }
     exec(
       // outDir takes the dir from the extended tsconfig...
@@ -73,6 +73,6 @@ export async function dist(callback: () => void, watchOption = false) {
         );
       });
   } else {
-    throw new Error(`Your tsconfig needs an outdir`);
+    throw new Error("Your tsconfig needs an outdir");
   }
 }

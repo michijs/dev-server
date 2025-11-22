@@ -54,6 +54,6 @@ export function copy(
   try {
     fs.mkdirSync(dest);
   } catch {}
-  for(const fileName of srcDir)
+  for (const fileName of srcDir)
     copyFile(src, fileName, dest, transformers, omit);
 }
