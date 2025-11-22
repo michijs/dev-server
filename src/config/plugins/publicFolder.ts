@@ -64,15 +64,14 @@ export const publicFolderPlugin: Plugin = {
             undefined,
             undefined,
             (event, fileChangedPath) => {
-              connections.forEach((x) =>
+              for (const x of connections)
                 x.write(
                   `event: change\ndata: ${JSON.stringify({
                     added: [],
                     removed: event === "remove" ? [fileChangedPath] : [],
                     updated: event === "update" ? [fileChangedPath] : [],
                   })}\n\n`,
-                ),
-              );
+                )
             },
           );
         firstLoad = false;

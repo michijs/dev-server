@@ -16,7 +16,7 @@ import { exec } from "child_process";
 import { getColor } from "colorthief";
 import { packageJson } from "../utils/packageJson.js";
 
-export async function installPlaywright() {
+export function installPlaywright() {
   const playwrightVersion = `playwright@${packageJson.dependencies["playwright-core"]}`;
   console.log(`Installing ${playwrightVersion}...`);
 

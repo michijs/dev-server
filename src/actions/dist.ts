@@ -40,7 +40,9 @@ export async function dist(callback: () => void, watchOption = false) {
     if (fs.existsSync(outDir)) fs.rmSync(outDir, { recursive: true });
     const omit = tsconfig.exclude.map((x) => globToRegex(getPath(x)));
 
-    tsconfig.include.forEach((x) => copy(x, outDir, transformers, omit));
+    for (const x of tsconfig.include) {
+      copy(x, outDir, transformers, omit)
+    }
     exec(
       // outDir takes the dir from the extended tsconfig...
       `tsc ${watchOption ? "-w --incremental" : ""} --emitDeclarationOnly --project ${config.esbuildOptions.tsconfig} --outDir ${outDir}`,
