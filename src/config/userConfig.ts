@@ -29,9 +29,7 @@ if (fs.existsSync("michi.config.ts")) {
   // @ts-expect-error
   const imported = await import("./michi.config.cjs");
   const configFactory: ServerConfigFactory =
-    imported.default?.default ||
-    imported.default ||
-    imported; // fallback if Bun unwraps differently
+    imported.default?.default || imported.default || imported; // fallback if Bun unwraps differently
 
   config = configFactory({
     ...defaultProductionConfig,
