@@ -15,8 +15,8 @@ export async function pngToIco(files: Buffer[], iconSizes: number[]) {
     // Every png header
     ...files.map((x, i) => {
       const buffer = Buffer.from([
-        iconSizes[i],
-        iconSizes[i],
+        iconSizes[i]!,
+        iconSizes[i]!,
         0,
         0,
         0,

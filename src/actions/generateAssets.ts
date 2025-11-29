@@ -138,15 +138,15 @@ export async function generateFeatureImage(src: string) {
     .toString()
     .replace(
       "{{phone-href}}",
-      `data:image/png;base64,${screenshots[0].toString("base64")}`,
+      `data:image/png;base64,${screenshots[0]!.toString("base64")}`,
     )
     .replace(
       "{{tablet-href}}",
-      `data:image/png;base64,${screenshots[1].toString("base64")}`,
+      `data:image/png;base64,${screenshots[1]!.toString("base64")}`,
     )
     .replace(
       "{{pc-href}}",
-      `data:image/png;base64,${screenshots[2].toString("base64")}`,
+      `data:image/png;base64,${screenshots[2]!.toString("base64")}`,
     )
     .replace(
       "{{icon-href}}",

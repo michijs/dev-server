@@ -28,12 +28,12 @@ export const cssPlugin: Plugin = {
           },
           define: undefined,
         });
-        const processedCss = result.outputFiles?.[0].text ?? "";
+        const processedCss = result.outputFiles?.[0]!.text ?? "";
         if (!processedCss.includes("@layer")) {
           const parts = args.path.split(path.sep);
           const nodeModulesIndex = parts.lastIndexOf("node_modules");
           if (nodeModulesIndex !== -1 && parts[nodeModulesIndex + 1])
-            layerName = parts[nodeModulesIndex + 1].replace(
+            layerName = parts[nodeModulesIndex + 1]!.replace(
               /[^a-zA-Z0-9_-]/g,
               "-",
             ); // Sanitize name

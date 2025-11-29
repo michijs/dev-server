@@ -35,7 +35,7 @@ export const workerTransformer: Transformer["transformer"] = async (
         ...define,
       },
     });
-    return result.outputFiles?.[0].text ?? "";
+    return result.outputFiles?.[0]?.text ?? "";
   } catch (ex) {
     console.error(ex);
     throw ex;
