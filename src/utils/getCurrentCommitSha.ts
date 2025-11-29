@@ -10,7 +10,8 @@ export const getCurrentCommitSha = () => {
       const ref = headContent.split(" ")?.[1];
       if (ref) {
         const refPath = join(".git", ref);
-        return fs.readFileSync(refPath, "utf-8").trim(); }
+        return fs.readFileSync(refPath, "utf-8").trim();
+      }
     }
     return headContent;
   } catch {
