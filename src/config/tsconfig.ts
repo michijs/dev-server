@@ -56,7 +56,7 @@ function getFullConfig(filePath: string): TsConfig {
     const parentConfigPath = path.resolve(
       path.dirname(filePath),
       config.extends.startsWith("@")
-        ? `node_modules/${config.extends.endsWith('.json') ? config.extends: `${config.extends}.json`}`
+        ? `node_modules/${config.extends.endsWith(".json") ? config.extends : `${config.extends}.json`}`
         : config.extends,
     );
     const parentConfig = getFullConfig(parentConfigPath);
