@@ -27,8 +27,13 @@ if (fs.existsSync("michi.config.ts")) {
     target: ["node16"],
   });
   // @ts-expect-error
-  const michiConfig = await import("./michi.config.cjs");
-  config = (michiConfig.default.default as ServerConfigFactory)({
+  const imported = await import("./michi.config.cjs");
+  const configFactory: ServerConfigFactory =
+    imported.default?.default ||
+    imported.default ||
+    imported; // fallback if Bun unwraps differently
+
+  config = configFactory({
     ...defaultProductionConfig,
     environment: process.env.NODE_ENV as DefaultEnvironment,
   });
