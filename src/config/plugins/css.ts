@@ -28,7 +28,7 @@ export const cssPlugin: Plugin = {
           },
           define: undefined,
         });
-        const processedCss = result.outputFiles?.[0]!.text ?? "";
+        const processedCss = result.outputFiles?.[0]?.text ?? "";
         if (!processedCss.includes("@layer")) {
           const parts = args.path.split(path.sep);
           const nodeModulesIndex = parts.lastIndexOf("node_modules");
