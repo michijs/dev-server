@@ -3,7 +3,6 @@ import yargs from "yargs";
 import { Timer } from "./classes/Timer.js";
 import { hideBin } from "yargs/helpers";
 import { packageJson } from "./utils/packageJson.js";
-import { config } from "./config/config.js";
 const version = packageJson.version;
 
 export async function cli() {
@@ -64,6 +63,8 @@ export async function cli() {
       : args.dist || args.testTsc
         ? "DISTRIBUTION"
         : "DEVELOPMENT");
+
+  const { config } = await import("./config/config.js");
 
   const generateAssets =
     args.generateAssets === ""
