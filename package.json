@@ -1,7 +1,7 @@
 {
   "name": "@michijs/dev-server",
   "license": "MIT",
-  "version": "0.8.10",
+  "version": "0.8.11",
   "repository": {
     "type": "git",
     "url": "https://github.com/michijs/dev-server.git"
@@ -29,8 +29,7 @@
     "link": "bunx concurrently bun:dist-w bun:bun-link"
   },
   "devDependencies": {
-    "@michijs/shared-configs": "0.0.29",
-    "@michijs/tsconfig": "0.0.5",
+    "@michijs/shared-configs": "0.0.30",
     "@types/node": "24.3.0",
     "@types/yargs": "17.0.33",
     "typescript": "5.9.2"
