@@ -142,7 +142,7 @@ export interface PublicOptions {
     /**
      * startup parameters and application defaults for when a web application is launched.
      */
-    options?: ServerWebAppManifest;
+    options?: ServerWebAppManifest | chrome.runtime.ManifestV3;
   };
 }
 
