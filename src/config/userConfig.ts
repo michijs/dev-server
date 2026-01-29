@@ -3,6 +3,7 @@ import type {
   DefaultEnvironment,
   ServerConfigFactory,
   ServerConfig,
+  ServerWebAppManifest,
 } from "../types.js";
 import { buildSync as esbuild } from "esbuild";
 import { dirname } from "path";
@@ -35,10 +36,12 @@ if (fs.existsSync("michi.config.ts")) {
     ...defaultProductionConfig,
     environment: process.env.NODE_ENV as DefaultEnvironment,
   });
-  config.public?.manifest?.options?.file_handlers?.forEach((fileHandler) => {
-    Object.entries(fileHandler.accept).forEach(([name, value]) => {
-      fileHandler.accept[name] = Array.from(value);
+  const options = config.public?.manifest ?? {};
+  if ('file_handlers' in options)
+    (options as ServerWebAppManifest)?.file_handlers?.forEach((fileHandler) => {
+      Object.entries(fileHandler.accept).forEach(([name, value]) => {
+        fileHandler.accept[name] = Array.from(value);
+      });
     });
-  });
 }
 export const userConfig = config;
