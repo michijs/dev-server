@@ -1,7 +1,7 @@
 import type { ServerConfigFactoryProps, Viewport } from "./types.js";
 export const assetsSizes = {
   webp: [24, 48, 72, 96, 128, 256, 512],
-  png: [300, 512, 1080],
+  png: [128, 300, 512, 1080],
   screenshots: [
     // Phone 9:16
     { width: 720, height: 1280 },
