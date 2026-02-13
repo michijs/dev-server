@@ -124,7 +124,7 @@ const config = {
             }),
           },
     inject: [
-      ...(userConfig.liveReloading ? devServerListener: []),
+      ...(userConfig.liveReloading ? devServerListener : []),
       ...(userConfig.esbuildOptions?.inject ?? []),
     ],
   },
