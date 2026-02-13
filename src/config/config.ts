@@ -34,6 +34,7 @@ const config = {
   openBrowser: process.env.NODE_ENV === "DEVELOPMENT",
   showLinkedPackages: true,
   additionalHeaders: {},
+  liveReloading: true,
   watch: process.env.NODE_ENV === "DEVELOPMENT",
   ...userConfig,
   // protocol: 'http',
@@ -123,7 +124,7 @@ const config = {
             }),
           },
     inject: [
-      ...devServerListener,
+      ...(userConfig.liveReloading ? devServerListener: []),
       ...(userConfig.esbuildOptions?.inject ?? []),
     ],
   },

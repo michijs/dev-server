@@ -172,6 +172,11 @@ export interface Config {
    * @default true
    */
   watch?: boolean;
+  /**
+   * If the server should enable live reloading
+   * @default true
+   */
+  liveReloading?: boolean;
   // protocol: 'http' | 'https';
   /**
    * Port to run dev server on
