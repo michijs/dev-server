@@ -29,8 +29,8 @@
     "link": "bunx concurrently bun:dist-w bun:bun-link"
   },
   "devDependencies": {
-    "@michijs/shared-configs": "0.0.35",
-    "@types/node": "25.2.0",
+    "@michijs/shared-configs": "0.0.36",
+    "@types/node": "25.2.3",
     "@types/yargs": "17.0.35",
     "typescript": "5.9.3"
   },
@@ -56,10 +56,10 @@
     "@types/chrome": "^0.1.36",
     "colorthief": "2.6.0",
     "@types/web-app-manifest": "1.0.9",
-    "esbuild": "0.27.2",
+    "esbuild": "0.27.3",
     "node-watch": "0.7.4",
     "open": "11.0.0",
-    "playwright-core": "1.58.1",
+    "playwright-core": "1.58.2",
     "sharp": "0.34.5",
     "yargs": "18.0.0"
   }
