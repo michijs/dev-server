@@ -3,6 +3,7 @@ import { getAllFiles } from "./getAllFiles.js";
 import { build as esbuild } from "esbuild";
 import { getCurrentCommitSha } from "./getCurrentCommitSha.js";
 import type { Transformer } from "./copy.js";
+import { cssPlugin } from "../config/plugins/css.js";
 const commitSha = getCurrentCommitSha();
 
 export const workerTransformer: Transformer["transformer"] = async (
@@ -17,7 +18,7 @@ export const workerTransformer: Transformer["transformer"] = async (
       splitting: false,
       outdir: undefined,
       inject: undefined,
-      plugins: undefined,
+      plugins: [cssPlugin],
       write: false,
       entryPoints: [srcPath!],
       legalComments: "inline",
