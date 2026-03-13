@@ -26,7 +26,7 @@ export function installPlaywright() {
       runners
         .map((x) => `${x} ${playwrightVersion} install chromium --with-deps`)
         .join(" || "),
-      (error, stdout, stderr) => {
+      (error, stdout) => {
         if (error) {
           console.error(
             `Error during Playwright installation: ${error.message}`,
@@ -218,13 +218,10 @@ export async function generateAssets(callback: () => void, src: string) {
     `${generatedPath}/${fileNameWithoutExtension}-temp.png`,
   );
   await image.png().toFile(tempFileName);
-  const dominantColor = await getColor(tempFileName, 1);
+  const dominantColor = await getColor(tempFileName);
+  
   rmSync(tempFileName, { force: true });
-  const color = {
-    r: dominantColor[0],
-    g: dominantColor[1],
-    b: dominantColor[2],
-  };
+  const color = dominantColor?.rgb();
   const flattenImage = image.clone().flatten({ background: color });
 
   await Promise.all([
