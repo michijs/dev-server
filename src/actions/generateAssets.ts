@@ -219,7 +219,7 @@ export async function generateAssets(callback: () => void, src: string) {
   );
   await image.png().toFile(tempFileName);
   const dominantColor = await getColor(tempFileName);
-  
+
   rmSync(tempFileName, { force: true });
   const color = dominantColor?.rgb();
   const flattenImage = image.clone().flatten({ background: color });
