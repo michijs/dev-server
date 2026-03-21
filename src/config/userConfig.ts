@@ -20,6 +20,7 @@ if (fs.existsSync("michi.config.ts")) {
         out: "michi.config",
       },
     ],
+    external: ['esbuild'],
     outExtension: { ".js": ".cjs" },
     outdir: dirname(fileURLToPath(import.meta.url)),
     format: "cjs",
