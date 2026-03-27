@@ -53,7 +53,7 @@
     "node": ">=14.16"
   },
   "dependencies": {
-    "@types/chrome": "^0.1.37",
+    "@types/chrome": "^0.1.38",
     "colorthief": "3.3.1",
     "@types/web-app-manifest": "1.0.9",
     "esbuild": "0.27.4",
