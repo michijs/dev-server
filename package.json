@@ -29,10 +29,10 @@
     "link": "bun run --parallel dist-w bun-link"
   },
   "devDependencies": {
-    "@michijs/shared-configs": "0.0.36",
+    "@michijs/shared-configs": "0.0.37",
     "@types/node": "25.5.0",
     "@types/yargs": "17.0.35",
-    "typescript": "5.9.3"
+    "typescript": "6.0.2"
   },
   "keywords": [
     "react",
