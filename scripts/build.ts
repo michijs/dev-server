@@ -4,7 +4,13 @@
  * targets and emits a `.d.ts` next to each binary so consumers still get type
  * support for the public API surface.
  */
-import { rmSync, mkdirSync, existsSync, chmodSync, copyFileSync } from "node:fs";
+import {
+  rmSync,
+  mkdirSync,
+  existsSync,
+  chmodSync,
+  copyFileSync,
+} from "node:fs";
 import { resolve } from "node:path";
 
 const root = resolve(import.meta.dir, "..");
