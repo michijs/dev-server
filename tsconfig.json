@@ -6,11 +6,8 @@
     "moduleResolution": "NodeNext",
     "module": "NodeNext",
     "target": "esnext",
-    "declaration": true,
-    "emitDeclarationOnly": true,
-    "noEmit": false,
     "types": ["bun", "node", "chrome"]
   },
-  "exclude": ["bin", "node_modules", "scripts"],
+  "exclude": ["bin", "node_modules"],
   "include": ["src"]
 }

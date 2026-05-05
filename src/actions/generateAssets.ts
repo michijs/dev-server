@@ -2,11 +2,9 @@ import { getPath } from "../utils/getPath.js";
 import { config } from "../config/config.js";
 import { mkdirSync, existsSync, writeFileSync, readFileSync, rmSync } from "fs";
 import { pngToIco } from "../utils/pngToIco.js";
-import { basename } from "path";
+import { fileURLToPath } from "url";
+import { basename, dirname, resolve } from "path";
 import { getLocalURL } from "../utils/getLocalURL.js";
-import featureImageTemplate from "../../feature-image-template.svg" with {
-  type: "text",
-};
 import { assetsSizes } from "../constants.js";
 import {
   chromium,
@@ -51,6 +49,10 @@ const generatedPath = getPath(
   `${config.public.path}/${config.public.assets.path}/generated`,
 );
 const screenshotsPath = getPath(`${generatedPath}/screenshots`);
+const svgPath = resolve(
+  getPath(dirname(fileURLToPath(import.meta.url))),
+  "../..",
+);
 
 /**
  * Loads `src` (raster or SVG) into a Bun.Image. SVG inputs are first
@@ -130,6 +132,7 @@ async function takeScreenshots({
 }
 
 export async function generateFeatureImage(src: string) {
+  const svgFilePath = getPath(`${svgPath}/feature-image-template.svg`);
   const [screenshots, icon] = await Promise.all([
     takeScreenshots({
       viewports: [
@@ -149,7 +152,10 @@ export async function generateFeatureImage(src: string) {
     })(),
   ]);
 
-  const svgString = featureImageTemplate
+  const svg = readFileSync(svgFilePath);
+
+  const svgString = svg
+    .toString()
     .replace(
       "{{phone-href}}",
       `data:image/png;base64,${screenshots[0]!.toString("base64")}`,

@@ -1,7 +1,11 @@
-import packageJsonData from "../../package.json" with { type: "json" };
+import { readFileSync } from "fs";
+import { dirname, resolve } from "path";
+import { fileURLToPath } from "url";
 
-export const packageJson = packageJsonData as {
-  version: string;
-  dependencies: Record<string, string>;
-  [key: string]: unknown;
-};
+// Intentionally not using import because typescript generates a src folder inside bin
+export const packageJson = JSON.parse(
+  readFileSync(
+    resolve(dirname(fileURLToPath(import.meta.url)), "../..", "package.json"),
+    { encoding: "utf-8" },
+  ),
+);

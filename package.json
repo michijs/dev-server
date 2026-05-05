@@ -1,42 +1,41 @@
 {
   "name": "@michijs/dev-server",
   "license": "MIT",
-  "version": "0.8.30-beta.0",
+  "version": "0.8.29",
   "repository": {
     "type": "git",
     "url": "https://github.com/michijs/dev-server.git"
   },
-  "types": "./bin/index.d.ts",
+  "main": "bin/index",
   "exports": {
-    ".": {
-      "types": "./bin/index.d.ts"
-    },
-    "./constants": {
-      "types": "./bin/constants.d.ts"
-    }
+    "types": "./bin/index.d.ts",
+    "default": "./bin/index.js",
+    "constants": "./bin/constants.js"
   },
   "bin": {
-    "michi-server": "bin/michi-server.mjs"
+    "michi-server": "bin/index.js"
   },
-  "description": "Development server based on esbuild, distributed as standalone Bun executables",
+  "description": "Development server based on esbuild",
   "files": [
-    "bin/"
+    "bin/",
+    "feature-image-template.svg"
   ],
   "type": "module",
   "baseUrl": "./src",
   "scripts": {
-    "dist": "bun run scripts/build.ts",
-    "types": "tsc --emitDeclarationOnly --outDir bin",
-    "types-w": "tsc --emitDeclarationOnly --outDir bin -w",
+    "dist": "tsc",
+    "dist-w": "tsc -w",
     "bun-link": "bun link --force",
-    "link": "bun run --parallel types-w bun-link"
+    "link": "bun run --parallel dist-w bun-link"
   },
   "devDependencies": {
-    "@michijs/shared-configs": "0.0.37",
+    "@michijs/shared-configs": "0.0.36",
     "@types/bun": "1.3.13",
-    "@types/node": "25.5.0",
     "@types/yargs": "17.0.35",
     "typescript": "5.9.3"
+  },
+  "peerDependencies": {
+    "bun": ">=1.3.0"
   },
   "keywords": [
     "react",
@@ -54,7 +53,7 @@
     "development"
   ],
   "engines": {
-    "node": ">=18"
+    "node": ">=14.16"
   },
   "dependencies": {
     "@types/chrome": "^0.1.38",
