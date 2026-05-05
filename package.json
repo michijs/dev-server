@@ -25,7 +25,7 @@
   "type": "module",
   "baseUrl": "./src",
   "scripts": {
-    "build": "bun run scripts/build.ts",
+    "dist": "bun run scripts/build.ts",
     "types": "tsc --emitDeclarationOnly --outDir bin",
     "types-w": "tsc --emitDeclarationOnly --outDir bin -w",
     "bun-link": "bun link --force",
