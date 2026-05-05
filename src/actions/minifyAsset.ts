@@ -4,14 +4,13 @@ import { basename, dirname } from "path";
 
 async function minifyImage(src: string) {
   if (!src.endsWith("webp")) {
-    const { default: sharp } = await import("sharp");
-    const image = sharp(src);
     const fileNameWithoutExtension = basename(src).split(".")[0];
     const newDirname = dirname(src);
 
-    await image
+    await Bun.file(src)
+      .image()
       .webp()
-      .toFile(getPath(`${newDirname}/${fileNameWithoutExtension}.webp`));
+      .write(getPath(`${newDirname}/${fileNameWithoutExtension}.webp`));
 
     rmSync(src);
   }

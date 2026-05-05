@@ -2,9 +2,11 @@ import { getPath } from "../utils/getPath.js";
 import { config } from "../config/config.js";
 import { mkdirSync, existsSync, writeFileSync, readFileSync, rmSync } from "fs";
 import { pngToIco } from "../utils/pngToIco.js";
-import { fileURLToPath } from "url";
-import { basename, dirname, resolve } from "path";
+import { basename } from "path";
 import { getLocalURL } from "../utils/getLocalURL.js";
+import featureImageTemplate from "../../feature-image-template.svg" with {
+  type: "text",
+};
 import { assetsSizes } from "../constants.js";
 import {
   chromium,
@@ -15,6 +17,11 @@ import type { PageCallback, Viewport } from "../types.js";
 import { exec } from "child_process";
 import { getColor } from "colorthief";
 import { packageJson } from "../utils/packageJson.js";
+import {
+  flattenWithBackground,
+  isSvgPath,
+  rasterizeSvg,
+} from "../utils/imageHelpers.js";
 
 export function installPlaywright() {
   const playwrightVersion = `playwright@${packageJson.dependencies["playwright-core"]}`;
@@ -44,19 +51,32 @@ const generatedPath = getPath(
   `${config.public.path}/${config.public.assets.path}/generated`,
 );
 const screenshotsPath = getPath(`${generatedPath}/screenshots`);
-const svgPath = resolve(
-  getPath(dirname(fileURLToPath(import.meta.url))),
-  "../..",
-);
 
-const generateFavicon = async (src: string, dest: string) => {
-  const { default: sharp } = await import("sharp");
-  const image = await sharp(src);
+/**
+ * Loads `src` (raster or SVG) into a Bun.Image. SVG inputs are first
+ * rasterized to PNG via Playwright since `Bun.Image` only handles raster
+ * formats.
+ */
+async function loadImage(src: string, browser: Browser): Promise<Bun.Image> {
+  if (isSvgPath(src)) {
+    const svgString = readFileSync(src, "utf-8");
+    // Rasterize at a generous size so subsequent resizes stay sharp.
+    const pngBuffer = await rasterizeSvg(browser, svgString, 1080, 1080);
+    return new Bun.Image(pngBuffer);
+  }
+  return Bun.file(src).image();
+}
 
+const generateFavicon = async (
+  src: string,
+  dest: string,
+  browser: Browser,
+) => {
   const iconSizes = [16, 24, 32, 48, 64, 128, 256];
   const resizedBuffers = await Promise.all(
-    iconSizes.map((size) => {
-      return image.resize(size, size).png().toBuffer();
+    iconSizes.map(async (size) => {
+      const image = await loadImage(src, browser);
+      return await image.resize(size, size).png().buffer();
     }),
   );
 
@@ -114,8 +134,6 @@ async function takeScreenshots({
 }
 
 export async function generateFeatureImage(src: string) {
-  const svgFilePath = getPath(`${svgPath}/feature-image-template.svg`);
-  const { default: sharp } = await import("sharp");
   const [screenshots, icon] = await Promise.all([
     takeScreenshots({
       viewports: [
@@ -129,13 +147,13 @@ export async function generateFeatureImage(src: string) {
       path: config.public.assets.featureImage.path,
       pageCallback: config.public.assets.featureImage.pageCallback,
     }),
-    sharp(src).resize(512, 512).png().toBuffer(),
+    (async () => {
+      const image = await loadImage(src, browser);
+      return await image.resize(512, 512).png().buffer();
+    })(),
   ]);
 
-  const svg = readFileSync(svgFilePath);
-
-  const svgString = svg
-    .toString()
+  const svgString = featureImageTemplate
     .replace(
       "{{phone-href}}",
       `data:image/png;base64,${screenshots[0]!.toString("base64")}`,
@@ -160,10 +178,9 @@ export async function generateFeatureImage(src: string) {
 
   writeFileSync(getPath(`${generatedPath}/feature-image.svg`), svgString);
 
-  await sharp(Buffer.from(svgString))
-    .resize(1024, 500)
-    .png()
-    .toFile(getPath(`${generatedPath}/feature-image.png`));
+  // Rasterize the assembled SVG at the requested size and write the PNG.
+  const featurePng = await rasterizeSvg(browser, svgString, 1024, 500);
+  writeFileSync(getPath(`${generatedPath}/feature-image.png`), featurePng);
 }
 
 export async function generateScreenshots() {
@@ -208,48 +225,81 @@ export async function generateAssets(callback: () => void, src: string) {
     headless: true,
   });
 
-  const { default: sharp } = await import("sharp");
   rmSync(generatedPath, { recursive: true, force: true });
   if (!existsSync(generatedPath))
     mkdirSync(screenshotsPath, { recursive: true });
-  const image = sharp(src);
+
   const fileNameWithoutExtension = basename(src).split(".")[0];
   const tempFileName = getPath(
     `${generatedPath}/${fileNameWithoutExtension}-temp.png`,
   );
-  await image.png().toFile(tempFileName);
-  const dominantColor = await getColor(tempFileName);
+
+  // Materialize a normalized PNG of the source so colorthief (which expects a
+  // file path) and the maskable variants can both read from it.
+  {
+    const image = await loadImage(src, browser);
+    await image.png().write(tempFileName);
+  }
+  const dominantColor = (await getColor(tempFileName)) as unknown as
+    | [number, number, number]
+    | null;
+  const [r, g, b] = dominantColor ?? [0, 0, 0];
+  const color = { r, g, b };
+
+  // Pre-flatten the source against the dominant color once. The result is the
+  // base for every "-maskable" variant (just resized below).
+  const baseFlattenedPng = await flattenWithBackground(
+    browser,
+    readFileSync(tempFileName),
+    color,
+  );
 
   rmSync(tempFileName, { force: true });
-  const color = dominantColor?.rgb();
-  const flattenImage = image.clone().flatten({ background: color });
+
+  const writeVariant = async (
+    sizeFn: (img: Bun.Image) => Bun.Image,
+    formatFn: (img: Bun.Image) => Bun.Image,
+    dest: string,
+    sourceBuffer?: Buffer | Uint8Array,
+  ) => {
+    const image = sourceBuffer
+      ? new Bun.Image(sourceBuffer)
+      : await loadImage(src, browser);
+    await formatFn(sizeFn(image)).write(dest);
+  };
 
   await Promise.all([
-    ...assetsSizes.webp.flatMap((x) =>
-      [image, flattenImage].map((y) =>
-        y
-          .resize(x, x)
-          .webp()
-          .toFile(
-            getPath(
-              `${generatedPath}/${fileNameWithoutExtension}-${x}${y === flattenImage ? "-maskable" : ""}.webp`,
-            ),
-          ),
+    ...assetsSizes.webp.flatMap((x) => [
+      writeVariant(
+        (img) => img.resize(x, x),
+        (img) => img.webp(),
+        getPath(`${generatedPath}/${fileNameWithoutExtension}-${x}.webp`),
       ),
-    ),
-    ...assetsSizes.png.flatMap((x) =>
-      [image, flattenImage].map((y) =>
-        y
-          .resize(x, x)
-          .png()
-          .toFile(
-            getPath(
-              `${generatedPath}/${fileNameWithoutExtension}-${x}${y === flattenImage ? "-maskable" : ""}.png`,
-            ),
-          ),
+      writeVariant(
+        (img) => img.resize(x, x),
+        (img) => img.webp(),
+        getPath(
+          `${generatedPath}/${fileNameWithoutExtension}-${x}-maskable.webp`,
+        ),
+        baseFlattenedPng,
       ),
-    ),
-    generateFavicon(src, getPath(`${config.public.path}/favicon.ico`)),
+    ]),
+    ...assetsSizes.png.flatMap((x) => [
+      writeVariant(
+        (img) => img.resize(x, x),
+        (img) => img.png(),
+        getPath(`${generatedPath}/${fileNameWithoutExtension}-${x}.png`),
+      ),
+      writeVariant(
+        (img) => img.resize(x, x),
+        (img) => img.png(),
+        getPath(
+          `${generatedPath}/${fileNameWithoutExtension}-${x}-maskable.png`,
+        ),
+        baseFlattenedPng,
+      ),
+    ]),
+    generateFavicon(src, getPath(`${config.public.path}/favicon.ico`), browser),
     generateFeatureImage(src),
     generateScreenshots(),
   ]);

@@ -2,10 +2,15 @@
   "extends": "@michijs/shared-configs/tsconfig",
   "compilerOptions": {
     "outDir": "bin",
+    "rootDir": "src",
     "moduleResolution": "NodeNext",
     "module": "NodeNext",
-    "target": "esnext"
+    "target": "esnext",
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "noEmit": false,
+    "types": ["bun", "node", "chrome"]
   },
-  "exclude": ["bin", "node_modules"],
+  "exclude": ["bin", "node_modules", "scripts"],
   "include": ["src"]
 }
