@@ -15,9 +15,12 @@ export async function rasterizeSvg(
     deviceScaleFactor: 1,
   });
   const html = `<!doctype html><html><head><style>html,body{margin:0;padding:0;background:transparent}svg{display:block;width:${width}px;height:${height}px}</style></head><body>${svgString}</body></html>`;
-  await page.goto(`data:text/html;base64,${Buffer.from(html).toString("base64")}`, {
-    waitUntil: "load",
-  });
+  await page.goto(
+    `data:text/html;base64,${Buffer.from(html).toString("base64")}`,
+    {
+      waitUntil: "load",
+    },
+  );
   const screenshot = await page.screenshot({
     type: "png",
     omitBackground: true,
@@ -51,9 +54,12 @@ export async function flattenWithBackground(
     deviceScaleFactor: 1,
   });
   const html = `<!doctype html><html><head><style>html,body{margin:0;padding:0;background:${bg}}img{display:block;width:${width}px;height:${height}px}</style></head><body><img src="${dataUrl}"/></body></html>`;
-  await page.goto(`data:text/html;base64,${Buffer.from(html).toString("base64")}`, {
-    waitUntil: "load",
-  });
+  await page.goto(
+    `data:text/html;base64,${Buffer.from(html).toString("base64")}`,
+    {
+      waitUntil: "load",
+    },
+  );
   const screenshot = await page.screenshot({
     type: "png",
     omitBackground: false,
