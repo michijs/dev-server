@@ -67,11 +67,7 @@ async function loadImage(src: string, browser: Browser): Promise<Bun.Image> {
   return Bun.file(src).image();
 }
 
-const generateFavicon = async (
-  src: string,
-  dest: string,
-  browser: Browser,
-) => {
+const generateFavicon = async (src: string, dest: string, browser: Browser) => {
   const iconSizes = [16, 24, 32, 48, 64, 128, 256];
   const resizedBuffers = await Promise.all(
     iconSizes.map(async (size) => {
