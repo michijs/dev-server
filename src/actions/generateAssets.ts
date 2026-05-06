@@ -5,6 +5,7 @@ import { pngToIco } from "../utils/pngToIco.js";
 import { fileURLToPath } from "url";
 import { basename, dirname, resolve } from "path";
 import { getLocalURL } from "../utils/getLocalURL.js";
+import { Image, file as bunFile } from "bun";
 import { assetsSizes } from "../constants.js";
 import {
   chromium,
@@ -66,14 +67,14 @@ const svgPath = resolve(
  * rasterized to PNG via Playwright since `Bun.Image` only handles raster
  * formats.
  */
-async function loadImage(src: string, browser: Browser): Promise<Bun.Image> {
+async function loadImage(src: string, browser: Browser): Promise<Image> {
   if (isSvgPath(src)) {
     const svgString = readFileSync(src, "utf-8");
     // Rasterize at a generous size so subsequent resizes stay sharp.
     const pngBuffer = await rasterizeSvg(browser, svgString, 1080, 1080);
-    return new Bun.Image(pngBuffer);
+    return new Image(pngBuffer);
   }
-  return Bun.file(src).image();
+  return bunFile(src).image();
 }
 
 const generateFavicon = async (src: string, dest: string, browser: Browser) => {
@@ -266,13 +267,13 @@ export async function generateAssets(callback: () => void, src: string) {
   rmSync(tempFileName, { force: true });
 
   const writeVariant = async (
-    sizeFn: (img: Bun.Image) => Bun.Image,
-    formatFn: (img: Bun.Image) => Bun.Image,
+    sizeFn: (img: Image) => Image,
+    formatFn: (img: Image) => Image,
     dest: string,
     sourceBuffer?: Buffer | Uint8Array,
   ) => {
     const image = sourceBuffer
-      ? new Bun.Image(sourceBuffer)
+      ? new Image(sourceBuffer)
       : await loadImage(src, browser);
     await formatFn(sizeFn(image)).write(dest);
   };

@@ -1,4 +1,5 @@
 import type { Browser } from "playwright-core";
+import { Image } from "bun";
 
 /**
  * Rasterizes an SVG (provided as a string) to a PNG buffer using a Playwright
@@ -46,7 +47,7 @@ export async function flattenWithBackground(
       : `rgb(${background.r},${background.g},${background.b})`;
 
   // We need to know the source dimensions; decode via Bun.Image metadata.
-  const { width, height } = await new Bun.Image(pngBuffer).metadata();
+  const { width, height } = await new Image(pngBuffer).metadata();
   const dataUrl = `data:image/png;base64,${Buffer.from(pngBuffer).toString("base64")}`;
 
   const page = await browser.newPage({
