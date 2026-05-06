@@ -43,9 +43,7 @@ export function installPlaywright() {
   return new Promise<void>((resolve, reject) => {
     exec(commands.join(" || "), (error, stdout) => {
       if (error) {
-        console.error(
-          `Error during Playwright installation: ${error.message}`,
-        );
+        console.error(`Error during Playwright installation: ${error.message}`);
         return reject(error);
       }
       console.log(stdout);
