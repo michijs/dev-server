@@ -37,7 +37,7 @@ if (fs.existsSync("michi.config.ts")) {
     ...defaultProductionConfig,
     environment: process.env.NODE_ENV as DefaultEnvironment,
   });
-  const options = config.public?.manifest ?? {};
+  const options = config.public?.manifest?.options ?? {};
   if ("file_handlers" in options)
     (options as ServerWebAppManifest)?.file_handlers?.forEach((fileHandler) => {
       Object.entries(fileHandler.accept).forEach(([name, value]) => {
