@@ -16,8 +16,7 @@ export async function generateFeatureImage(callback: () => void, src: string) {
   const ctx = await createBrowserContext();
   const { browser, takeScreenshots } = ctx;
 
-  if (!existsSync(generatedPath))
-    mkdirSync(generatedPath, { recursive: true });
+  if (!existsSync(generatedPath)) mkdirSync(generatedPath, { recursive: true });
 
   const svgFilePath = getPath(`${svgPath}/feature-image-template.svg`);
   const [screenshots, icon] = await Promise.all([
