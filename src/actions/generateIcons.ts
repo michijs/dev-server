@@ -58,9 +58,7 @@ export async function generateIcons(callback: () => void, src: string) {
     dest: string,
     sourceBuffer?: Buffer | Uint8Array,
   ) => {
-    const image = sourceBuffer
-      ? new Image(sourceBuffer)
-      : await loadImage(src);
+    const image = sourceBuffer ? new Image(sourceBuffer) : await loadImage(src);
     await formatFn(sizeFn(image)).write(dest);
   };
 
