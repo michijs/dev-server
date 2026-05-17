@@ -1,43 +1,35 @@
-import type { Browser } from "playwright-core";
 import { Image } from "bun";
+import { Resvg } from "@resvg/resvg-js";
 
 /**
- * Rasterizes an SVG (provided as a string) to a PNG buffer using a Playwright
- * browser instance. Used as a replacement for `sharp(Buffer.from(svgString))`.
+ * Rasterizes an SVG (provided as a string) to a PNG buffer using resvg.
+ * No browser required.
  */
 export async function rasterizeSvg(
-  browser: Browser,
   svgString: string,
   width: number,
   height: number,
 ): Promise<Buffer> {
-  const page = await browser.newPage({
-    viewport: { width, height },
-    deviceScaleFactor: 1,
+  const resvg = new Resvg(svgString, {
+    fitTo: { mode: "width", value: width },
+    background: "rgba(0,0,0,0)",
   });
-  const html = `<!doctype html><html><head><style>html,body{margin:0;padding:0;background:transparent}svg{display:block;width:${width}px;height:${height}px}</style></head><body>${svgString}</body></html>`;
-  await page.goto(
-    `data:text/html;base64,${Buffer.from(html).toString("base64")}`,
-    {
-      waitUntil: "load",
-    },
-  );
-  const screenshot = await page.screenshot({
-    type: "png",
-    omitBackground: true,
-    fullPage: false,
-    clip: { x: 0, y: 0, width, height },
-  });
-  await page.close();
-  return Buffer.from(screenshot);
+  // Note: resvg fits by width preserving aspect ratio. For our use cases the
+  // SVGs declare width/height explicitly so the output matches `width`x`height`.
+  // `height` is kept in the signature for callers that previously relied on it
+  // (e.g. feature-image template, which has a 1024x500 aspect ratio that
+  // matches the SVG viewBox).
+  void height;
+  const pngData = resvg.render().asPng();
+  return Buffer.from(pngData);
 }
 
 /**
  * Composites a PNG buffer onto a solid background color, returning a new PNG
- * buffer. Used as a replacement for `sharp().flatten({ background })`.
+ * buffer. Implemented by wrapping the PNG in an SVG with a background rect and
+ * rasterizing with resvg.
  */
 export async function flattenWithBackground(
-  browser: Browser,
   pngBuffer: Buffer | Uint8Array,
   background: { r: number; g: number; b: number } | string,
 ): Promise<Buffer> {
@@ -46,29 +38,15 @@ export async function flattenWithBackground(
       ? background
       : `rgb(${background.r},${background.g},${background.b})`;
 
-  // We need to know the source dimensions; decode via Bun.Image metadata.
   const { width, height } = await new Image(pngBuffer).metadata();
   const dataUrl = `data:image/png;base64,${Buffer.from(pngBuffer).toString("base64")}`;
 
-  const page = await browser.newPage({
-    viewport: { width, height },
-    deviceScaleFactor: 1,
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><rect width="100%" height="100%" fill="${bg}"/><image href="${dataUrl}" width="${width}" height="${height}"/></svg>`;
+
+  const resvg = new Resvg(svg, {
+    fitTo: { mode: "width", value: width },
   });
-  const html = `<!doctype html><html><head><style>html,body{margin:0;padding:0;background:${bg}}img{display:block;width:${width}px;height:${height}px}</style></head><body><img src="${dataUrl}"/></body></html>`;
-  await page.goto(
-    `data:text/html;base64,${Buffer.from(html).toString("base64")}`,
-    {
-      waitUntil: "load",
-    },
-  );
-  const screenshot = await page.screenshot({
-    type: "png",
-    omitBackground: false,
-    fullPage: false,
-    clip: { x: 0, y: 0, width, height },
-  });
-  await page.close();
-  return Buffer.from(screenshot);
+  return Buffer.from(resvg.render().asPng());
 }
 
 /**
