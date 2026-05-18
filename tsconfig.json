@@ -6,7 +6,7 @@
     "moduleResolution": "NodeNext",
     "module": "NodeNext",
     "target": "esnext",
-    "types": ["bun", "node", "chrome"]
+    "types": ["node", "chrome"]
   },
   "exclude": ["bin", "node_modules"],
   "include": ["src"]
