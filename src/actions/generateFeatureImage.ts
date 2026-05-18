@@ -3,9 +3,7 @@ import { config } from "../config/config.js";
 import { mkdirSync, existsSync, writeFileSync, readFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, resolve } from "path";
-import { rasterizeSvg } from "../utils/imageHelpers.js";
-import { generatedPath, loadImage } from "./assetsShared.js";
-import { createBrowserContext } from "./browserContext.js";
+import { createBrowserContext, generatedPath } from "./browserContext.js";
 
 const svgPath = resolve(
   getPath(dirname(fileURLToPath(import.meta.url))),
@@ -15,6 +13,7 @@ const svgPath = resolve(
 export async function generateFeatureImage(callback: () => void, src: string) {
   const ctx = await createBrowserContext();
   const { browser, takeScreenshots } = ctx;
+  const { default: sharp } = await import("sharp");
 
   if (!existsSync(generatedPath)) mkdirSync(generatedPath, { recursive: true });
 
@@ -32,10 +31,7 @@ export async function generateFeatureImage(callback: () => void, src: string) {
       path: config.public.assets.featureImage.path,
       pageCallback: config.public.assets.featureImage.pageCallback,
     }),
-    (async () => {
-      const image = await loadImage(src);
-      return await image.resize(512, 512).png().buffer();
-    })(),
+    sharp(src).resize(512, 512).png().toBuffer(),
   ]);
 
   const svg = readFileSync(svgFilePath);
@@ -66,9 +62,10 @@ export async function generateFeatureImage(callback: () => void, src: string) {
 
   writeFileSync(getPath(`${generatedPath}/feature-image.svg`), svgString);
 
-  // Rasterize the assembled SVG at the requested size and write the PNG.
-  const featurePng = await rasterizeSvg(svgString, 1024, 500);
-  writeFileSync(getPath(`${generatedPath}/feature-image.png`), featurePng);
+  await sharp(Buffer.from(svgString))
+    .resize(1024, 500)
+    .png()
+    .toFile(getPath(`${generatedPath}/feature-image.png`));
 
   callback();
   await browser.close();

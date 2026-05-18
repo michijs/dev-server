@@ -1,3 +1,4 @@
+import { getPath } from "../utils/getPath.js";
 import { config } from "../config/config.js";
 import { getLocalURL } from "../utils/getLocalURL.js";
 import {
@@ -9,34 +10,32 @@ import type { PageCallback, Viewport } from "../types.js";
 import { exec } from "child_process";
 import { packageJson } from "../utils/packageJson.js";
 
+export const generatedPath = getPath(
+  `${config.public.path}/${config.public.assets.path}/generated`,
+);
+export const screenshotsPath = getPath(`${generatedPath}/screenshots`);
+
 export function installPlaywright() {
   const playwrightVersion = `playwright@${packageJson.dependencies["playwright-core"]}`;
   console.log(`Installing ${playwrightVersion}...`);
 
-  // Try, in order:
-  //   1. bunx without --with-deps (Chromium binary only, any OS, no sudo)
-  //   2. bunx with --with-deps (Debian/Ubuntu only, needs sudo)
-  //   3. npx without --with-deps
-  //   4. npx with --with-deps
-  // The first one that succeeds wins. We try the dep-less variant first so the
-  // common case (system libs already present) doesn't prompt for sudo or fail
-  // on distros where Playwright can't drive apt-get.
-  const baseCmd = `${playwrightVersion} install chromium`;
-  const runners = ["bunx", "npx"];
-  const commands = runners.flatMap((runner) => [
-    `${runner} ${baseCmd}`,
-    `${runner} ${baseCmd} --with-deps`,
-  ]);
-
   return new Promise<void>((resolve, reject) => {
-    exec(commands.join(" || "), (error, stdout) => {
-      if (error) {
-        console.error(`Error during Playwright installation: ${error.message}`);
-        return reject(error);
-      }
-      console.log(stdout);
-      resolve();
-    });
+    const runners = ["bunx", "npx"];
+    exec(
+      runners
+        .map((x) => `${x} ${playwrightVersion} install chromium --with-deps`)
+        .join(" || "),
+      (error, stdout) => {
+        if (error) {
+          console.error(
+            `Error during Playwright installation: ${error.message}`,
+          );
+          return reject(error);
+        }
+        console.log(stdout);
+        resolve();
+      },
+    );
   });
 }
 

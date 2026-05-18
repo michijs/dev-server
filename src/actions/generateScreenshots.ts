@@ -2,8 +2,11 @@ import { getPath } from "../utils/getPath.js";
 import { config } from "../config/config.js";
 import { mkdirSync, existsSync } from "fs";
 import { assetsSizes } from "../constants.js";
-import { screenshotsPath } from "./assetsShared.js";
-import { createBrowserContext, type BrowserContext } from "./browserContext.js";
+import {
+  createBrowserContext,
+  screenshotsPath,
+  type BrowserContext,
+} from "./browserContext.js";
 
 async function runScreenshots(ctx: BrowserContext) {
   const { takeScreenshots } = ctx;

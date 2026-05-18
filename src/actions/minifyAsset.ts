@@ -1,17 +1,17 @@
 import { getPath } from "../utils/getPath.js";
 import { readdirSync, rmSync, statSync } from "fs";
 import { basename, dirname } from "path";
-import { file as bunFile } from "bun";
 
 async function minifyImage(src: string) {
   if (!src.endsWith("webp")) {
+    const { default: sharp } = await import("sharp");
+    const image = sharp(src);
     const fileNameWithoutExtension = basename(src).split(".")[0];
     const newDirname = dirname(src);
 
-    await bunFile(src)
-      .image()
+    await image
       .webp()
-      .write(getPath(`${newDirname}/${fileNameWithoutExtension}.webp`));
+      .toFile(getPath(`${newDirname}/${fileNameWithoutExtension}.webp`));
 
     rmSync(src);
   }
