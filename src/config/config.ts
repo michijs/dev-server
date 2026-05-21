@@ -29,12 +29,13 @@ const defaultEntryPoint = fs.existsSync("src/index.tsx")
   : fs.existsSync("src/index.ts")
     ? "src/index.ts"
     : "src/index.js";
+const liveReloading = userConfig.liveReloading ?? true;
 const config = {
   port: 3000,
   openBrowser: process.env.NODE_ENV === "DEVELOPMENT",
   showLinkedPackages: true,
   additionalHeaders: {},
-  liveReloading: true,
+  liveReloading,
   watch: process.env.NODE_ENV === "DEVELOPMENT",
   ...userConfig,
   // protocol: 'http',
@@ -124,7 +125,7 @@ const config = {
             }),
           },
     inject: [
-      ...(userConfig.liveReloading ? devServerListener : []),
+      ...(liveReloading ? devServerListener : []),
       ...(userConfig.esbuildOptions?.inject ?? []),
     ],
   },
