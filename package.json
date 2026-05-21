@@ -1,7 +1,7 @@
 {
   "name": "@michijs/dev-server",
   "license": "MIT",
-  "version": "0.8.30",
+  "version": "0.8.30-beta.8",
   "repository": {
     "type": "git",
     "url": "https://github.com/michijs/dev-server.git"
@@ -30,9 +30,9 @@
   },
   "devDependencies": {
     "@michijs/shared-configs": "0.0.37",
-    "@types/node": "25.5.0",
+    "@types/node": "^25.8.0",
     "@types/yargs": "17.0.35",
-    "typescript": "5.9.3"
+    "typescript": "6.0.3"
   },
   "keywords": [
     "react",
@@ -53,9 +53,9 @@
     "node": ">=14.16"
   },
   "dependencies": {
-    "@types/chrome": "^0.1.38",
-    "colorthief": "3.3.1",
+    "@types/chrome": "^0.1.42",
     "@types/web-app-manifest": "1.0.9",
+    "colorthief": "3.3.1",
     "esbuild": "0.27.4",
     "node-watch": "0.7.4",
     "open": "11.0.0",

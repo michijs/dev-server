@@ -45,7 +45,17 @@ You have the following CLI commands:
     <tr>
       <td>generate-icons</td>
       <td>-</td>
-      <td>Allows to generate a full set of icons from a src icon.</td>
+      <td>Allows to generate a full set of icons (including favicon and maskable variants) from a src icon.</td>
+    </tr>
+    <tr>
+      <td>generate-feature-image</td>
+      <td>-</td>
+      <td>Allows to generate the feature image from a src icon (requires running the dev server).</td>
+    </tr>
+    <tr>
+      <td>generate-screenshots</td>
+      <td>-</td>
+      <td>Allows to generate the configured screenshots from the running app.</td>
     </tr>
   </tbody>
 </table>

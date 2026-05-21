@@ -35,10 +35,21 @@ export async function cli() {
       default: false,
       description: "Allows to test typescript files without emitting files.",
     })
-    .option("generate-assets", {
+    .option("generate-icons", {
       type: "string",
       description:
-        "Allows to generate a full set of icons and screenshots from a src icon.",
+        "Allows to generate a full set of icons (including favicon and maskable variants) from a src icon.",
+    })
+    .option("generate-feature-image", {
+      type: "string",
+      description:
+        "Allows to generate the feature image from a src icon (requires running the dev server).",
+    })
+    .option("generate-screenshots", {
+      type: "boolean",
+      default: false,
+      description:
+        "Allows to generate the configured screenshots from the running app.",
     })
     .option("minify-asset", {
       type: "string",
@@ -66,13 +77,23 @@ export async function cli() {
 
   const { config } = await import("./config/config.js");
 
-  const generateAssets =
-    args.generateAssets === ""
-      ? `${config.public.path}/assets/icon.svg`
-      : args.generateAssets;
-  if (generateAssets) {
-    const action = await import("./actions/generateAssets.js");
-    await action.generateAssets(showReadyMessage, generateAssets);
+  const defaultIconPath = `${config.public.path}/assets/icon.svg`;
+  const generateIcons =
+    args.generateIcons === "" ? defaultIconPath : args.generateIcons;
+  const generateFeatureImage =
+    args.generateFeatureImage === ""
+      ? defaultIconPath
+      : args.generateFeatureImage;
+
+  if (generateIcons) {
+    const action = await import("./actions/generateIcons.js");
+    await action.generateIcons(showReadyMessage, generateIcons);
+  } else if (generateFeatureImage) {
+    const action = await import("./actions/generateFeatureImage.js");
+    await action.generateFeatureImage(showReadyMessage, generateFeatureImage);
+  } else if (args.generateScreenshots) {
+    const action = await import("./actions/generateScreenshots.js");
+    await action.generateScreenshots(showReadyMessage);
   } else
     console.log(coloredString(`  Running in ${process.env.NODE_ENV} mode`));
 
