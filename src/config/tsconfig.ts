@@ -1,10 +1,9 @@
 import { config } from "./config.js";
 import fs from "fs";
 import path from "path";
-import type { CompilerOptions } from "typescript";
 
 interface TsConfig {
-  compilerOptions: CompilerOptions;
+  compilerOptions: { outDir?: string };
   include: string[];
   exclude: string[];
   files: string[];
