@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@michijs/shared-configs": "0.0.37",
-    "@types/node": "26.1.1",
+    "@types/node": "26.1.2",
     "@types/yargs": "17.0.35",
     "typescript": "7.0.2"
   },
@@ -53,14 +53,14 @@
     "node": ">=14.16"
   },
   "dependencies": {
-    "@types/chrome": "^0.2.2",
-    "colorthief": "3.4.0",
+    "@types/chrome": "^0.2.5",
+    "colorthief": "3.5.0",
     "@types/web-app-manifest": "1.0.9",
     "esbuild": "0.28.1",
     "node-watch": "0.7.4",
     "open": "11.0.0",
-    "playwright-core": "1.61.1",
+    "playwright-core": "1.62.1",
     "sharp": "0.35.3",
-    "yargs": "18.0.0"
+    "yargs": "18.1.0"
   }
 }
