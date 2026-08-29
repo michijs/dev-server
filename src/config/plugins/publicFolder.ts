@@ -6,7 +6,7 @@ import { copy } from "../../utils/copy.js";
 import fs from "fs";
 import { jsonTransformer } from "../../actions/start/transformers.js";
 import { getPath } from "../../utils/getPath.js";
-import path from 'path'
+import path from "path";
 
 export const publicFolderPlugin: Plugin = {
   name: "michijs-dev-server-public-folder",
@@ -14,7 +14,8 @@ export const publicFolderPlugin: Plugin = {
     const outdir = build.initialOptions.outdir;
     // Clean outdir
     if (!outdir) return;
-    if (fs.existsSync(path.resolve(outdir))) fs.rmSync(path.resolve(outdir), { recursive: true });
+    if (fs.existsSync(path.resolve(outdir)))
+      fs.rmSync(path.resolve(outdir), { recursive: true });
     fs.mkdirSync(outdir, { recursive: true });
     if (!fs.existsSync(config.public.path)) return;
 
