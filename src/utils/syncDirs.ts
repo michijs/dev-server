@@ -38,10 +38,10 @@ export const syncDirs = (
               if (x.fileRegex.test(fileChangedPath)) {
                 const finalPathToRemove =
                   x.pathTransformer?.(pathToRemove) ?? pathToRemove;
-                fs.rmSync(finalPathToRemove, { force: true, recursive: true });
+                fs.rmSync(path.resolve(finalPathToRemove), { force: true, recursive: true });
               }
             });
-          } else fs.rmSync(pathToRemove, { force: true, recursive: true });
+          } else fs.rmSync(path.resolve(pathToRemove), { force: true, recursive: true });
         } else {
           copyFile(fileSrcDir, fileName, fileOutDir, transformers, omit);
         }

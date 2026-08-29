@@ -4,13 +4,14 @@ import { Timer } from "../classes/Timer.js";
 import coloredString from "../utils/coloredString.js";
 import { config } from "../config/config.js";
 import { exec } from "child_process";
+import path from 'path'
 
 export function dist(callback: () => void, watchOption = false) {
   const { outDir } = tsconfig.compilerOptions;
   if (outDir) {
     const timer = new Timer();
     timer.startTimer();
-    if (fs.existsSync(outDir)) fs.rmSync(outDir, { recursive: true });
+    if (fs.existsSync(outDir)) fs.rmSync(path.resolve(outDir), { recursive: true });
 
     exec(
       // outDir takes the dir from the extended tsconfig...
