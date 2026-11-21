@@ -27,9 +27,7 @@ export interface AssetDescriptorIos {
 }
 
 export type AssetDescriptor =
-  | AssetDescriptorWeb
-  | AssetDescriptorAndroid
-  | AssetDescriptorIos;
+  AssetDescriptorWeb | AssetDescriptorAndroid | AssetDescriptorIos;
 
 export interface AssetLink {
   /**
